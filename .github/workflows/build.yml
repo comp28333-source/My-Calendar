@@ -25,14 +25,14 @@ jobs:
       - name: Install Cordova globally
         run: npm install -g cordova
 
-      - name: Create Cordova project and configure icon/splash
+      - name: Create Cordova project and configure splash
         run: |
           cordova create my-app com.dejurstvo.app Dejurstvo
           cd my-app
           cordova platform add android
           cp ../index.html www/index.html
           
-          # Настройка иконки
+          # Установка иконки приложения
           if [ -f "../icon.png" ]; then
             mkdir -p platforms/android/app/src/main/res/mipmap-xxhdpi/
             cp ../icon.png platforms/android/app/src/main/res/mipmap-xxhdpi/icon.png
@@ -40,13 +40,21 @@ jobs:
             sed -i '/<\/widget>/i \    <icon src="../icon.png" />' config.xml
           fi
 
-          # Настройка заставки (Splash Screen)
+          # Принудительная замена заставки (Splash Screen) во всех плотностях Android
           if [ -f "../splash.png" ]; then
-            mkdir -p platforms/android/app/src/main/res/drawable/
-            cp ../splash.png platforms/android/app/src/main/res/drawable/splash.png
-            sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="splash" />' config.xml
-            sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="2000" />' config.xml
+            # Создаем папки для всех разрешений экрана Android и раскидываем вашу картинку
+            for dir in drawable-port-ldpi drawable-port-mdpi drawable-port-hdpi drawable-port-xhdpi drawable-port-xxhdpi drawable-port-xxxhdpi drawable; do
+              mkdir -p platforms/android/app/src/main/res/$dir/
+              cp ../splash.png platforms/android/app/src/main/res/$dir/screen.png
+              cp ../splash.png platforms/android/app/src/main/res/$dir/splash.png
+            done
+
+            # Прописываем параметры заставки в config.xml
+            sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="screen" />' config.xml
+            sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />' config.xml
             sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
+            sed -i '/<\/widget>/i \    <preference name="FadeSplashScreen" value="true" />' config.xml
+            sed -i '/<\/widget>/i \    <preference name="FadeSplashScreenDuration" value="500" />' config.xml
           fi
 
           cordova build android
