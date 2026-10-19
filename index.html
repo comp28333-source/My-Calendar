@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>КАЛЕНДАРЬ С ЗАМЕТКАМИ</title>
+    <style>
+        :root {
+            --month-cell-color: #ececec;
+            --weekday-cell-color: #d6d6d6;
+            --day-cell-color: #e4e4e4;
+            --today-cell-color: #29b6f6;
+            --other-cell-color: #dddddd;
+            
+            --month-font-size: 16px;
+            --month-font-color: #1a1a1a;
+            --month-font-bold: bold;
+
+            --weekday-font-size: 15px;
+            --weekday-font-color: #1a1a1a;
+            --weekday-font-bold: bold;
+
+            --day-font-size: 13px;
+            --day-font-color: #111111;
+            --day-font-bold: bold;
+
+            --today-font-size: 13px;
+            --today-font-color: #ffffff;
+            --today-font-bold: bold;
+
+            --other-day-font-size: 13px;
+            --other-day-font-color: #888888;
+            --other-day-font-bold: bold;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+        body { background-color: #ececec; display: flex; flex-direction: column; height: 100vh; padding: 8px; overflow: hidden; }
+
+        /* Верхняя панель */
+        .nav-frame {
+            background-color: var(--month-cell-color);
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+        .center-nav { display: flex; align-items: center; gap: 8px; flex-grow: 1; justify-content: center; }
+        .btn { background: #e4e4e4; border: 2px solid #ccc; border-radius: 4px; padding: 6px 14px; cursor: pointer; font-weight: bold; font-size: 14px; }
+        .btn:active { background: #d0d0d0; }
+        .btn-close { background: #ff5252; color: white; border: 2px solid #d32f2f; padding: 6px 10px; }
+        
+        #header-label {
+            font-size: var(--month-font-size);
+            color: var(--month-font-color);
+            font-weight: var(--month-font-bold);
+            text-align: center;
+        }
+
+        /* Главный блок */
+        .main-frame { background: #cccccc; border: 2px groove #bbb; border-radius: 6px; padding: 6px; flex-grow: 1; display: flex; flex-direction: column; overflow-y: auto; }
+        
+        /* Сетка календаря */
+        .cal-frame { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+        .cal-header-cell {
+            background-color: var(--weekday-cell-color);
+            color: var(--weekday-font-color);
+            font-size: var(--weekday-font-size);
+            font-weight: var(--weekday-font-bold);
+            text-align: center;
+            padding: 8px 0;
+            border: 2px solid #bbb;
+            border-radius: 4px;
+        }
+        .cal-day-cell {
+            background-color: var(--day-cell-color);
+            color: var(--day-font-color);
+            font-size: var(--day-font-size);
+            font-weight: var(--day-font-bold);
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #bbb;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+        .cal-day-cell.other-month {
+            background-color: var(--other-cell-color);
+            color: var(--other-day-font-color);
+            font-size: var(--other-day-font-size);
+            font-weight: var(--other-day-font-bold);
+        }
+        .cal-day-cell.today { 
+            background-color: var(--today-cell-color) !important; 
+            color: var(--today-font-color) !important; 
+            font-size: var(--today-font-size) !important;
+            font-weight: var(--today-font-bold) !important;
+        }
+        
+        /* Таблица */
+        .table-frame { background: #e0e0e0; border: 1px solid #999; border-radius: 4px; padding: 4px; margin-bottom: 6px; width: 100%; border-collapse: collapse; }
+        .table-frame th, .table-frame td { border: 1px solid #bbb; padding: 5px; text-align: center; font-size: 11px; }
+        .table-frame th { background: #b0b0b0; font-weight: bold; }
+        .table-frame input { width: 100%; text-align: center; border: 1px solid #888; border-radius: 2px; font-size: 11px; padding: 3px; }
+        .highlight-row { background-color: #fff9c4 !important; }
+
+        /* Нижняя панель */
+        .ctrl-frame { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding: 4px; }
+        .left-actions { display: flex; gap: 6px; }
+        
+        /* Шестеренка (иконка) */
+        .gear-btn {
+            width: 50px;
+            height: 46px;
+            background: #e4e4e4;
+            border: 2px solid #aaaaaa;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Модальные окна */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: #ececec; padding: 16px; border-radius: 8px; width: 92%; max-width: 420px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; border: 2px solid #888; }
+        
+        .palette { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 8px; }
+        .color-btn { width: 100%; aspect-ratio: 1.5; border-radius: 4px; border: 1px solid #555; cursor: pointer; }
+        .color-btn.selected { border: 2px solid #000; transform: scale(1.05); }
+        
+        textarea { width: 100%; height: 90px; padding: 6px; font-size: 12px; border: 1px solid #888; border-radius: 4px; resize: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Верхняя панель -->
+    <div class="nav-frame" id="nav-frame">
+        <div class="center-nav">
+            <button class="btn" onclick="prevMonth()">&lt;</button>
+            <div id="header-label">ЯНВАРЬ 2026</div>
+            <button class="btn" onclick="nextMonth()">&gt;</button>
+        </div>
+        <button class="btn btn-close" onclick="window.close()">✕</button>
+    </div>
+
+    <!-- Главный блок -->
+    <div class="main-frame">
+        <div class="cal-frame" id="cal-frame"></div>
+
+        <!-- Таблица статистики -->
+        <table class="table-frame" id="stats-table">
+            <thead>
+                <tr>
+                    <th>МЕСЯЦ</th><th>С -</th><th>- ПО</th><th>С -</th><th>- ПО</th><th>КОЛ-ВО</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+            <tfoot>
+                <tr>
+                    <td style="background:#d0d0d0; font-weight:bold; color:#D32F2F;">ВСЕГО:</td>
+                    <td colspan="5" id="total-year-days" style="background:#d0d0d0; font-weight:bold; color:#D32F2F; text-align:center;">0</td>
+                </tr>
+                <tr>
+                    <td style="background:#c0c0c0; font-weight:bold; color:#1565C0;">ЗА ВСЕ ВРЕМЯ:</td>
+                    <td colspan="5" id="total-all-days" style="background:#c0c0c0; font-weight:bold; color:#1565C0; text-align:center;">0</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Нижняя панель управления -->
+    <div class="ctrl-frame">
+        <div class="left-actions">
+            <button class="btn" onclick="exportData()">ЭКСПОРТ</button>
+            <button class="btn" onclick="importDataTrigger()">ИМПОРТ</button>
+            <button class="btn" style="background:#ffcdd2; color:#b71c1c;" onclick="clearMonth()">ОЧИСТИТЬ</button>
+            <input type="file" id="import-file" style="display:none" onchange="importData(event)">
+        </div>
+        <div class="gear-btn" onclick="openSettings()">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="#333333">
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Модальное окно заметки -->
+    <div class="modal" id="note-modal">
+        <div class="modal-content">
+            <h3 id="modal-date-title" style="font-size: 13px;">Заметка</h3>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">ЦВЕТ ТОЧКИ:</label>
+                <div class="palette" id="color-palette"></div>
+            </div>
+            <textarea id="note-text" placeholder="Введите заметку..."></textarea>
+            <button class="btn" style="background:#2E7D32; color:white; height:36px;" onclick="saveNote()">СОХРАНИТЬ</button>
+            <button class="btn" onclick="closeNoteModal()">ОТМЕНА</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно настроек -->
+    <div class="modal" id="settings-modal">
+        <div class="modal-content" style="max-width: 480px;">
+            <h3>НАСТРОЙКИ КАЛЕНДАРЯ</h3>
+            <div style="font-size: 11px; color: #555;">Настройте внешний вид под себя:</div>
+            <div style="display:flex; flex-direction:column; gap:8px;" id="settings-controls"></div>
+            <button class="btn" style="background:#2E7D32; color:white; height:38px;" onclick="saveSettings()">СОХРАНИТЬ</button>
+            <button class="btn" style="background:#C62828; color:white;" onclick="closeSettings()">ОТМЕНИТЬ</button>
+        </div>
+    </div>
+
+    <script>
+        const RUSSIAN_MONTHS = ["ЯНВАРЬ", "ФЕВРАЛЬ", "МАРТ", "АПРЕЛЬ", "МАЙ", "ИЮНЬ", "ИЮЛЬ", "АВГУСТ", "СЕНТЯБРЬ", "ОКТЯБРЬ", "НОЯБРЬ", "ДЕКАБРЬ"];
+        const DOT_COLORS = ["#00E676", "#29B6F6", "#EF5350", "#FFEE58", "#AB47BC", "#FFA726", "#26A69A", "#EC407A", "#8D6E63", "#78909C", "#FF7043", "#66BB6A", "#42A5F5", "#E57373", "#FFF176", "#BA68C8", "#FFB74D", "#4DB6AC", "#F06292", "#A1887F", "#90A4AE", "#FF8A65"];
+        
+        let currentDate = new Date();
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth() + 1;
+        let selectedDateStr = "";
+        let selectedColor = DOT_COLORS[0];
+
+        let db = JSON.parse(localStorage.getItem('calendar_db')) || { notes: {}, table_ranges: {} };
+        let settings = JSON.parse(localStorage.getItem('calendar_settings')) || {
+            month_font_size: 16, month_font_color: "#1a1a1a", month_font_bold: true,
+            weekday_font_size: 15, weekday_font_color: "#1a1a1a", weekday_font_bold: true,
+            day_font_size: 13, day_font_color: "#111111", day_font_bold: true,
+            today_font_size: 13, today_font_color: "#ffffff", today_font_bold: true,
+            other_day_font_size: 13, other_day_font_color: "#888888", other_day_font_bold: true,
+            month_cell_color: "#ececec", weekday_cell_color: "#d6d6d6", day_cell_color: "#e4e4e4", today_cell_color: "#29b6f6", other_cell_color: "#dddddd",
+            dot_size: 14, dot_relief_sunken: 1, dot_relief_raised: 2, dot_3d_style: "Сфера с бликом", note_display_mode: "Цветные точки", note_font_size: 10
+        };
+
+        function applySettings() {
+            let r = document.documentElement;
+            for (let key in settings) {
+                if (key.includes('bold')) {
+                    r.style.setProperty(`--${key}`, settings[key] ? 'bold' : 'normal');
+                } else if (key.includes('size')) {
+                    r.style.setProperty(`--${key}`, settings[key] + 'px');
+                } else {
+                    r.style.setProperty(`--${key}`, settings[key]);
+                }
+            }
+        }
+
+        function initTable() {
+            let tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            for (let i = 1; i <= 12; i++) {
+                let tr = document.createElement('tr');
+                tr.id = `row-month-${i}`;
+                tr.innerHTML = `
+                    <td style="font-weight:bold; background:#fff; text-align:left; padding-left:6px;">${RUSSIAN_MONTHS[i-1]}</td>
+                    <td><input type="number" id="f1_${i}" oninput="saveTableData()"></td>
+                    <td><input type="number" id="t1_${i}" oninput="saveTableData()"></td>
+                    <td><input type="number" id="f2_${i}" oninput="saveTableData()"></td>
+                    <td><input type="number" id="t2_${i}" oninput="saveTableData()"></td>
+                    <td id="res_${i}" style="font-weight:bold;"></td>
+                `;
+                tbody.appendChild(tr);
+            }
+            loadTableData();
+        }
+
+        function renderCalendar() {
+            applySettings();
+            document.getElementById('header-label').innerText = `${RUSSIAN_MONTHS[month-1]} ${year}`;
+            document.getElementById('nav-frame').style.backgroundColor = settings.month_cell_color;
+            let calFrame = document.getElementById('cal-frame');
+            calFrame.innerHTML = '';
+
+            let daysOfWeek = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
+            daysOfWeek.forEach(d => {
+                let div = document.createElement('div');
+                div.className = 'cal-header-cell';
+                div.innerText = d;
+                calFrame.appendChild(div);
+            });
+
+            let firstDayIndex = (new Date(year, month - 1, 1).getDay() + 6) % 7;
+            let totalDays = new Date(year, month, 0).getDate();
+            let prevTotalDays = new Date(year, month - 1, 0).getDate();
+            let now = new Date();
+
+            for (let i = firstDayIndex - 1; i >= 0; i--) {
+                let d = prevTotalDays - i;
+                let prevM = month === 1 ? 12 : month - 1;
+                let prevY = month === 1 ? year - 1 : year;
+                createDayCell(calFrame, d, prevY, prevM, true);
+            }
+
+            for (let d = 1; d <= totalDays; d++) {
+                let isToday = (d === now.getDate() && month === now.getMonth() + 1 && year === now.getFullYear());
+                createDayCell(calFrame, d, year, month, false, isToday);
+            }
+
+            let remainingCells = 42 - (firstDayIndex + totalDays);
+            for (let d = 1; d <= remainingCells; d++) {
+                let nextM = month === 12 ? 1 : month + 1;
+                let nextY = month === 12 ? year + 1 : year;
+                createDayCell(calFrame, d, nextY, nextM, true);
+            }
+
+            highlightActiveTableRow();
+            loadTableData();
+        }
+
+        function createDayCell(parent, day, y, m, isOther, isToday = false) {
+            let cell = document.createElement('div');
+            cell.className = `cal-day-cell ${isOther ? 'other-month' : ''} ${isToday ? 'today' : ''}`;
+            
+            let dateStr = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            let noteInfo = db.notes[dateStr];
+            let hasNote = false;
+            let noteText = "";
+            let dotColor = "#00E676";
+
+            if (noteInfo) {
+                if (typeof noteInfo === 'object') {
+                    noteText = noteInfo.text || "";
+                    dotColor = noteInfo.color || "#00E676";
+                    if (noteText.trim() !== "") hasNote = true;
+                } else if (typeof noteInfo === 'string' && noteInfo.trim() !== "") {
+                    hasNote = true;
+                    noteText = noteInfo.trim();
+                }
+            }
+
+            if (settings.note_display_mode === "Текст заметки" && hasNote && !isOther) {
+                cell.innerHTML = `
+                    <div style="font-size:var(--day-font-size); font-weight:var(--day-font-bold);">${day}</div>
+                    <div style="font-size:${settings.note_font_size}px; font-weight:bold; color:${dotColor}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:95%;">${noteText}</div>
+                `;
+            } else {
+                cell.innerText = day;
+                if (hasNote && settings.note_display_mode === "Цветные точки") {
+                    let canvas = document.createElement('canvas');
+                    let sz = settings.dot_size + 4;
+                    canvas.width = sz;
+                    canvas.height = sz;
+                    canvas.style.position = 'absolute';
+                    canvas.style.bottom = '4px';
+                    canvas.style.left = '50%';
+                    canvas.style.transform = 'translateX(-50%)';
+                    
+                    let ctx = canvas.getContext('2d');
+                    let r = settings.dot_size / 2;
+                    let cx = sz / 2, cy = sz / 2;
+                    
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+                    ctx.fillStyle = dotColor;
+                    ctx.fill();
+                    if (settings.dot_relief_sunken > 0) {
+                        ctx.lineWidth = settings.dot_relief_sunken;
+                        ctx.strokeStyle = "#444444";
+                        ctx.stroke();
+                    }
+                    if (settings.dot_3d_style === "Сфера с бликом" && settings.dot_relief_raised > 0) {
+                        ctx.beginPath();
+                        ctx.arc(cx - r/3, cy - r/3, r/3, 0, 2 * Math.PI);
+                        ctx.fillStyle = "#ffffff";
+                        ctx.fill();
+                    }
+                    cell.appendChild(canvas);
+                }
+            }
+
+            cell.onclick = () => openNoteModal(dateStr);
+            parent.appendChild(cell);
+        }
+
+        function prevMonth() {
+            month--;
+            if (month < 1) { month = 12; year--; loadTableData(); }
+            else { highlightActiveTableRow(); }
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            month++;
+            if (month > 12) { month = 1; year++; loadTableData(); }
+            else { highlightActiveTableRow(); }
+            renderCalendar();
+        }
+
+        function openNoteModal(dateStr) {
+            selectedDateStr = dateStr;
+            document.getElementById('modal-date-title').innerText = `ЗАМЕТКА НА ${dateStr}`;
+            let noteData = db.notes[dateStr] || { text: '', color: DOT_COLORS[0] };
+            document.getElementById('note-text').value = typeof noteData === 'object' ? noteData.text : noteData;
+            selectedColor = typeof noteData === 'object' ? noteData.color : DOT_COLORS[0];
+
+            let palette = document.getElementById('color-palette');
+            palette.innerHTML = '';
+            DOT_COLORS.forEach(color => {
+                let btn = document.createElement('div');
+                btn.className = `color-btn ${color === selectedColor ? 'selected' : ''}`;
+                btn.style.background = color;
+                btn.onclick = () => {
+                    selectedColor = color;
+                    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                };
+                palette.appendChild(btn);
+            });
+            document.getElementById('note-modal').style.display = 'flex';
+        }
+
+        function closeNoteModal() { document.getElementById('note-modal').style.display = 'none'; }
+
+        function saveNote() {
+            let text = document.getElementById('note-text').value.trim();
+            if (text) {
+                db.notes[selectedDateStr] = { text: text, color: selectedColor };
+            } else {
+                delete db.notes[selectedDateStr];
+            }
+            localStorage.setItem('calendar_db', JSON.stringify(db));
+            closeNoteModal();
+            renderCalendar();
+        }
+
+        function saveTableData() {
+            let yearStr = year.toString();
+            if (!db.table_ranges[yearStr]) db.table_ranges[yearStr] = {};
+            let totalYear = 0;
+
+            for (let i = 1; i <= 12; i++) {
+                let f1 = document.getElementById(`f1_${i}`).value.trim();
+                let t1 = document.getElementById(`t1_${i}`).value.trim();
+                let f2 = document.getElementById(`f2_${i}`).value.trim();
+                let t2 = document.getElementById(`t2_${i}`).value.trim();
+
+                if (f1 || t1 || f2 || t2) {
+                    db.table_ranges[yearStr][i] = { from1: f1, to1: t1, from2: f2, to2: t2 };
+                } else {
+                    delete db.table_ranges[yearStr][i];
+                }
+
+                let monthSum = calcMonthDays(i, f1, t1, f2, t2);
+                document.getElementById(`res_${i}`).innerText = monthSum > 0 ? monthSum : '';
+                totalYear += monthSum;
+            }
+
+            document.getElementById('total-year-days').innerText = totalYear;
+            calcAllTime();
+            localStorage.setItem('calendar_db', JSON.stringify(db));
+        }
+
+        function calcMonthDays(m, f1, t1, f2, t2) {
+            let sum = 0;
+            if (f1 && t1) {
+                let d1 = new Date(year, m - 1, parseInt(f1));
+                let d2 = new Date(year, m - 1, parseInt(t1));
+                if (d1 <= d2) sum += Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+            }
+            if (f2 && t2) {
+                let d3 = new Date(year, m - 1, parseInt(f2));
+                let d4 = new Date(year, m - 1, parseInt(t2));
+                if (d3 <= d4) sum += Math.round((d4 - d3) / (1000 * 60 * 60 * 24)) + 1;
+            }
+            return sum;
+        }
+
+        function loadTableData() {
+            let yearStr = year.toString();
+            let yearData = db.table_ranges[yearStr] || {};
+            for (let i = 1; i <= 12; i++) {
+                let mData = yearData[i] || {};
+                document.getElementById(`f1_${i}`).value = mData.from1 || '';
+                document.getElementById(`t1_${i}`).value = mData.to1 || '';
+                document.getElementById(`f2_${i}`).value = mData.from2 || '';
+                document.getElementById(`t2_${i}`).value = mData.to2 || '';
+            }
+            saveTableData();
+        }
+
+        function calcAllTime() {
+            let allTime = 0;
+            for (let yStr in db.table_ranges) {
+                let yVal = parseInt(yStr);
+                for (let mStr in db.table_ranges[yStr]) {
+                    let mVal = parseInt(mStr);
+                    let r = db.table_ranges[yStr][mStr];
+                    let f1 = r.from1, t1 = r.to1, f2 = r.from2, t2 = r.to2;
+                    if (f1 && t1) {
+                        let d1 = new Date(yVal, mVal - 1, parseInt(f1));
+                        let d2 = new Date(yVal, mVal - 1, parseInt(t1));
+                        if (d1 <= d2) allTime += Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+                    }
+                    if (f2 && t2) {
+                        let d3 = new Date(yVal, mVal - 1, parseInt(f2));
+                        let d4 = new Date(yVal, mVal - 1, parseInt(t2));
+                        if (d3 <= d4) allTime += Math.round((d4 - d3) / (1000 * 60 * 60 * 24)) + 1;
+                    }
+                }
+            }
+            document.getElementById('total-all-days').innerText = allTime;
+        }
+
+        function highlightActiveTableRow() {
+            for (let i = 1; i <= 12; i++) {
+                let row = document.getElementById(`row-month-${i}`);
+                if (i === month) row.classList.add('highlight-row');
+                else row.classList.remove('highlight-row');
+            }
+        }
+
+        function clearMonth() {
+            if (!confirm(`Удалить все заметки за ${RUSSIAN_MONTHS[month-1]} ${year}?`)) return;
+            let prefix = `${year}-${String(month).padStart(2, '0')}-`;
+            for (let k in db.notes) {
+                if (k.startsWith(prefix)) delete db.notes[k];
+            }
+            localStorage.setItem('calendar_db', JSON.stringify(db));
+            renderCalendar();
+        }
+
+        function exportData() {
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 4));
+            let dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "calendar_backup.json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importDataTrigger() { document.getElementById('import-file').click(); }
+        function importData(e) {
+            let file = e.target.files[0];
+            if (!file) return;
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    let imported = JSON.parse(event.target.result);
+                    db = imported;
+                    localStorage.setItem('calendar_db', JSON.stringify(db));
+                    renderCalendar();
+                    loadTableData();
+                    alert("Данные успешно импортированы!");
+                } catch(err) { alert("Ошибка чтения файла!"); }
+            };
+            reader.readAsText(file);
+        }
+
+        function openSettings() {
+            let container = document.getElementById('settings-controls');
+            container.innerHTML = '';
+            
+            let items = [
+                { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_bold" },
+                { label: "Шрифт дней недели", sz: "weekday_font_size", col: "weekday_font_color", b: "weekday_font_bold" },
+                { label: "Шрифт чисел календаря", sz: "day_font_size", col: "day_font_color", b: "day_font_bold" },
+                { label: "Шрифт текущего дня", sz: "today_font_size", col: "today_font_color", b: "today_font_bold" },
+                { label: "Шрифт чужих дней", sz: "other_day_font_size", col: "other_day_font_color", b: "other_day_font_bold" },
+                { label: "Цвет ячейки месяца", cell: "month_cell_color" },
+                { label: "Цвет ячейки дней недели", cell: "weekday_cell_color" },
+                { label: "Цвет ячейки чисел", cell: "day_cell_color" },
+                { label: "Цвет ячейки текущего дня", cell: "today_cell_color" },
+                { label: "Цвет ячейки чужих дней", cell: "other_cell_color" },
+            ];
+
+            items.forEach(item => {
+                let div = document.createElement('div');
+                div.style.background = "#e0e0e0";
+                div.style.padding = "6px";
+                div.style.borderRadius = "4px";
+                div.innerHTML = `<b style="font-size:11px;">${item.label}</b><br>`;
+                
+                if (item.sz) {
+                    div.innerHTML += `
+                        Размер: <input type="number" id="st_${item.sz}" value="${settings[item.sz]}" style="width:45px;">
+                        Жирный: <input type="checkbox" id="st_${item.b}" ${settings[item.b] ? 'checked' : ''}>
+                        HEX: <input type="text" id="st_${item.col}" value="${settings[item.col]}" style="width:75px;">
+                    `;
+                } else {
+                    div.innerHTML += `HEX цвет: <input type="text" id="st_${item.cell}" value="${settings[item.cell]}" style="width:90px;">`;
+                }
+                container.appendChild(div);
+            });
+
+            // Доп. настройки точек
+            let dotDiv = document.createElement('div');
+            dotDiv.style.background = "#e0e0e0";
+            dotDiv.style.padding = "6px";
+            dotDiv.style.borderRadius = "4px";
+            dotDiv.innerHTML = `
+                <b style="font-size:11px;">Параметры заметок на календаре</b><br>
+                Режим: <select id="st_note_display_mode"><option ${settings.note_display_mode==="Цветные точки"?"selected":""}>Цветные точки</option><option ${settings.note_display_mode==="Текст заметки"?"selected":""}>Текст заметки</option></select><br>
+                Размер точки: <input type="number" id="st_dot_size" value="${settings.dot_size}" style="width:45px;">
+                Шрифт текста: <input type="number" id="st_note_font_size" value="${settings.note_font_size}" style="width:45px;">
+            `;
+            container.appendChild(dotDiv);
+
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+
+        function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
+
+        function saveSettings() {
+            let keys = [
+                "month_font_size", "month_font_color", "month_font_bold",
+                "weekday_font_size", "weekday_font_color", "weekday_font_bold",
+                "day_font_size", "day_font_color", "day_font_bold",
+                "today_font_size", "today_font_color", "today_font_bold",
+                "other_day_font_size", "other_day_font_color", "other_day_font_bold",
+                "month_cell_color", "weekday_cell_color", "day_cell_color", "today_cell_color", "other_cell_color",
+                "dot_size", "note_font_size"
+            ];
+
+            keys.forEach(key => {
+                let el = document.getElementById(`st_${key}`);
+                if (el) {
+                    if (key.includes('bold')) settings[key] = el.checked;
+                    else if (key.includes('size')) settings[key] = parseInt(el.value) || 12;
+                    else settings[key] = el.value;
+                }
+            });
+
+            let modeEl = document.getElementById('st_note_display_mode');
+            if (modeEl) settings.note_display_mode = modeEl.value;
+
+            localStorage.setItem('calendar_settings', JSON.stringify(settings));
+            closeSettings();
+            renderCalendar();
+        }
+
+        initTable();
+        renderCalendar();
+    </script>
+</body>
+</html>
