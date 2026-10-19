@@ -52,9 +52,9 @@
         .btn-close { background: #ff5252; color: white; border: 2px solid #d32f2f; padding: 6px 10px; }
         
         #header-label {
-            font-size: var(--month-font-size);
-            color: var(--month-font-color);
-            font-weight: var(--month-font-weight);
+            font-size: var(--month-font-size) !important;
+            color: var(--month-font-color) !important;
+            font-weight: var(--month-font-weight) !important;
             text-align: center;
         }
 
@@ -63,21 +63,23 @@
         
         /* Сетка календаря */
         .cal-frame { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 6px; }
+        
         .cal-header-cell {
             background-color: var(--weekday-cell-color);
             color: var(--weekday-font-color);
-            font-size: var(--weekday-font-size);
-            font-weight: var(--weekday-font-weight);
+            font-size: var(--weekday-font-size) !important;
+            font-weight: var(--weekday-font-weight) !important;
             text-align: center;
             padding: 8px 0;
             border: 2px solid #bbb;
             border-radius: 4px;
         }
+
         .cal-day-cell {
             background-color: var(--day-cell-color);
             color: var(--day-font-color);
-            font-size: var(--day-font-size);
-            font-weight: var(--day-font-weight);
+            font-size: var(--day-font-size) !important;
+            font-weight: var(--day-font-weight) !important;
             aspect-ratio: 1;
             display: flex;
             flex-direction: column;
@@ -88,12 +90,14 @@
             cursor: pointer;
             position: relative;
         }
+
         .cal-day-cell.other-month {
             background-color: var(--other-cell-color);
             color: var(--other-day-font-color);
-            font-size: var(--other-day-font-size);
-            font-weight: var(--other-day-font-weight);
+            font-size: var(--other-day-font-size) !important;
+            font-weight: var(--other-day-font-weight) !important;
         }
+
         .cal-day-cell.today { 
             background-color: var(--today-cell-color) !important; 
             color: var(--today-font-color) !important; 
@@ -112,7 +116,6 @@
         .ctrl-frame { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding: 4px; }
         .left-actions { display: flex; gap: 6px; }
         
-        /* Шестеренка (иконка) */
         .gear-btn {
             width: 50px;
             height: 46px;
@@ -125,7 +128,6 @@
             justify-content: center;
         }
 
-        /* Модальные окна */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: #ececec; padding: 16px; border-radius: 8px; width: 92%; max-width: 420px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; border: 2px solid #888; }
         
@@ -138,7 +140,6 @@
 </head>
 <body>
 
-    <!-- Верхняя панель -->
     <div class="nav-frame" id="nav-frame">
         <div class="center-nav">
             <button class="btn" onclick="prevMonth()">&lt;</button>
@@ -148,11 +149,9 @@
         <button class="btn btn-close" onclick="window.close()">✕</button>
     </div>
 
-    <!-- Главный блок -->
     <div class="main-frame">
         <div class="cal-frame" id="cal-frame"></div>
 
-        <!-- Таблица статистики -->
         <table class="table-frame" id="stats-table">
             <thead>
                 <tr>
@@ -173,7 +172,6 @@
         </table>
     </div>
 
-    <!-- Нижняя панель управления -->
     <div class="ctrl-frame">
         <div class="left-actions">
             <button class="btn" onclick="exportData()">ЭКСПОРТ</button>
@@ -188,7 +186,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно заметки -->
     <div class="modal" id="note-modal">
         <div class="modal-content">
             <h3 id="modal-date-title" style="font-size: 13px;">Заметка</h3>
@@ -202,7 +199,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно настроек -->
     <div class="modal" id="settings-modal">
         <div class="modal-content" style="max-width: 480px;">
             <h3>НАСТРОЙКИ КАЛЕНДАРЯ</h3>
@@ -224,28 +220,78 @@
         let selectedColor = DOT_COLORS[0];
 
         let db = JSON.parse(localStorage.getItem('calendar_db')) || { notes: {}, table_ranges: {} };
-        let settings = JSON.parse(localStorage.getItem('calendar_settings')) || {
-            month_font_size: 16, month_font_color: "#1a1a1a", month_font_bold: true,
-            weekday_font_size: 15, weekday_font_color: "#1a1a1a", weekday_font_bold: true,
-            day_font_size: 13, day_font_color: "#111111", day_font_bold: true,
-            today_font_size: 13, today_font_color: "#ffffff", today_font_bold: true,
-            other_day_font_size: 13, other_day_font_color: "#888888", other_day_font_bold: true,
+        
+        let savedSettings = JSON.parse(localStorage.getItem('calendar_settings'));
+        let settings = savedSettings && typeof savedSettings === 'object' ? {
+            month_font_size: Number(savedSettings.month_font_size) || 16,
+            month_font_color: savedSettings.month_font_color || "#1a1a1a",
+            month_font_weight: Boolean(savedSettings.month_font_weight),
+            
+            weekday_font_size: Number(savedSettings.weekday_font_size) || 15,
+            weekday_font_color: savedSettings.weekday_font_color || "#1a1a1a",
+            weekday_font_weight: Boolean(savedSettings.weekday_font_weight),
+            
+            day_font_size: Number(savedSettings.day_font_size) || 13,
+            day_font_color: savedSettings.day_font_color || "#111111",
+            day_font_weight: Boolean(savedSettings.day_font_weight),
+            
+            today_font_size: Number(savedSettings.today_font_size) || 13,
+            today_font_color: savedSettings.today_font_color || "#ffffff",
+            today_font_weight: Boolean(savedSettings.today_font_weight),
+            
+            other_day_font_size: Number(savedSettings.other_day_font_size) || 13,
+            other_day_font_color: savedSettings.other_day_font_color || "#888888",
+            other_day_font_weight: Boolean(savedSettings.other_day_font_weight),
+            
+            month_cell_color: savedSettings.month_cell_color || "#ececec",
+            weekday_cell_color: savedSettings.weekday_cell_color || "#d6d6d6",
+            day_cell_color: savedSettings.day_cell_color || "#e4e4e4",
+            today_cell_color: savedSettings.today_cell_color || "#29b6f6",
+            other_cell_color: savedSettings.other_cell_color || "#dddddd",
+            
+            dot_size: Number(savedSettings.dot_size) || 14,
+            dot_relief_sunken: Number(savedSettings.dot_relief_sunken) || 1,
+            dot_relief_raised: Number(savedSettings.dot_relief_raised) || 2,
+            dot_3d_style: savedSettings.dot_3d_style || "Сфера с бликом",
+            note_display_mode: savedSettings.note_display_mode || "Цветные точки",
+            note_font_size: Number(savedSettings.note_font_size) || 10
+        } : {
+            month_font_size: 16, month_font_color: "#1a1a1a", month_font_weight: true,
+            weekday_font_size: 15, weekday_font_color: "#1a1a1a", weekday_font_weight: true,
+            day_font_size: 13, day_font_color: "#111111", day_font_weight: true,
+            today_font_size: 13, today_font_color: "#ffffff", today_font_weight: true,
+            other_day_font_size: 13, other_day_font_color: "#888888", other_day_font_weight: true,
             month_cell_color: "#ececec", weekday_cell_color: "#d6d6d6", day_cell_color: "#e4e4e4", today_cell_color: "#29b6f6", other_cell_color: "#dddddd",
             dot_size: 14, dot_relief_sunken: 1, dot_relief_raised: 2, dot_3d_style: "Сфера с бликом", note_display_mode: "Цветные точки", note_font_size: 10
         };
 
         function applySettings() {
             let r = document.documentElement;
-            for (let key in settings) {
-                let val = settings[key];
-                if (key.includes('bold')) {
-                    r.style.setProperty(`--${key.replace('_bold', '_weight')}`, val ? 'bold' : 'normal');
-                } else if (key.includes('size')) {
-                    r.style.setProperty(`--${key}`, val + 'px');
-                } else {
-                    r.style.setProperty(`--${key}`, val);
-                }
-            }
+            r.style.setProperty('--month-cell-color', settings.month_cell_color);
+            r.style.setProperty('--weekday-cell-color', settings.weekday_cell_color);
+            r.style.setProperty('--day-cell-color', settings.day_cell_color);
+            r.style.setProperty('--today-cell-color', settings.today_cell_color);
+            r.style.setProperty('--other-cell-color', settings.other_cell_color);
+
+            r.style.setProperty('--month-font-size', settings.month_font_size + 'px');
+            r.style.setProperty('--month-font-color', settings.month_font_color);
+            r.style.setProperty('--month-font-weight', settings.month_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--weekday-font-size', settings.weekday_font_size + 'px');
+            r.style.setProperty('--weekday-font-color', settings.weekday_font_color);
+            r.style.setProperty('--weekday-font-weight', settings.weekday_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--day-font-size', settings.day_font_size + 'px');
+            r.style.setProperty('--day-font-color', settings.day_font_color);
+            r.style.setProperty('--day-font-weight', settings.day_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--today-font-size', settings.today_font_size + 'px');
+            r.style.setProperty('--today-font-color', settings.today_font_color);
+            r.style.setProperty('--today-font-weight', settings.today_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--other-day-font-size', settings.other_day_font_size + 'px');
+            r.style.setProperty('--other-day-font-color', settings.other_day_font_color);
+            r.style.setProperty('--other-day-font-weight', settings.other_day_font_weight ? 'bold' : 'normal');
         }
 
         function initTable() {
@@ -555,11 +601,11 @@
             container.innerHTML = '';
             
             let items = [
-                { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_bold" },
-                { label: "Шрифт дней недели", sz: "weekday_font_size", col: "weekday_font_color", b: "weekday_font_bold" },
-                { label: "Шрифт чисел календаря", sz: "day_font_size", col: "day_font_color", b: "day_font_bold" },
-                { label: "Шрифт текущего дня", sz: "today_font_size", col: "today_font_color", b: "today_font_bold" },
-                { label: "Шрифт чужих дней", sz: "other_day_font_size", col: "other_day_font_color", b: "other_day_font_bold" },
+                { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_weight" },
+                { label: "Шрифт дней недели", sz: "weekday_font_size", col: "weekday_font_color", b: "weekday_font_weight" },
+                { label: "Шрифт чисел календаря", sz: "day_font_size", col: "day_font_color", b: "day_font_weight" },
+                { label: "Шрифт текущего дня", sz: "today_font_size", col: "today_font_color", b: "today_font_weight" },
+                { label: "Шрифт чужих дней", sz: "other_day_font_size", col: "other_day_font_color", b: "other_day_font_weight" },
                 { label: "Цвет ячейки месяца", cell: "month_cell_color" },
                 { label: "Цвет ячейки дней недели", cell: "weekday_cell_color" },
                 { label: "Цвет ячейки чисел", cell: "day_cell_color" },
@@ -605,11 +651,11 @@
 
         function saveSettings() {
             let keys = [
-                "month_font_size", "month_font_color", "month_font_bold",
-                "weekday_font_size", "weekday_font_color", "weekday_font_bold",
-                "day_font_size", "day_font_color", "day_font_bold",
-                "today_font_size", "today_font_color", "today_font_bold",
-                "other_day_font_size", "other_day_font_color", "other_day_font_bold",
+                "month_font_size", "month_font_color", "month_font_weight",
+                "weekday_font_size", "weekday_font_color", "weekday_font_weight",
+                "day_font_size", "day_font_color", "day_font_weight",
+                "today_font_size", "today_font_color", "today_font_weight",
+                "other_day_font_size", "other_day_font_color", "other_day_font_weight",
                 "month_cell_color", "weekday_cell_color", "day_cell_color", "today_cell_color", "other_cell_color",
                 "dot_size", "note_font_size"
             ];
@@ -617,7 +663,7 @@
             keys.forEach(key => {
                 let el = document.getElementById(`st_${key}`);
                 if (el) {
-                    if (key.includes('bold')) settings[key] = el.checked;
+                    if (key.includes('weight')) settings[key] = el.checked;
                     else if (key.includes('size')) settings[key] = parseInt(el.value) || 12;
                     else settings[key] = el.value;
                 }
