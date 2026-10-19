@@ -25,14 +25,13 @@ jobs:
       - name: Install Cordova globally
         run: npm install -g cordova
 
-      - name: Create Cordova project and force custom splash
+      - name: Create Cordova project and disable splash
         run: |
           cordova create my-app com.dejurstvo.app Dejurstvo
           cd my-app
           cordova platform add android
           cp ../index.html www/index.html
           
-          # Установка иконки приложения
           if [ -f "../icon.png" ]; then
             mkdir -p platforms/android/app/src/main/res/mipmap-xxhdpi/
             cp ../icon.png platforms/android/app/src/main/res/mipmap-xxhdpi/icon.png
@@ -40,22 +39,8 @@ jobs:
             sed -i '/<\/widget>/i \    <icon src="../icon.png" />' config.xml
           fi
 
-          # Жесткая замена дефолтной заставки на вашу картинку во всех ресурсах Android
-          if [ -f "../splash.png" ]; then
-            # Создаем системные папки drawable и закидываем картинку под именем дефолтного бэкграунда
-            for dir in drawable drawable-port-hdpi drawable-port-xhdpi drawable-port-xxhdpi drawable-port-xxxhdpi; do
-              mkdir -p platforms/android/app/src/main/res/$dir/
-              cp ../splash.png platforms/android/app/src/main/res/$dir/screen.png
-              cp ../splash.png platforms/android/app/src/main/res/$dir/splash.png
-              cp ../splash.png platforms/android/app/src/main/res/$dir/background_color.png
-            done
-
-            # Отключаем плагинные анимации и принудительно включаем вашу картинку в config.xml
-            sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="screen" />' config.xml
-            sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="2000" />' config.xml
-            sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
-            sed -i '/<\/widget>/i \    <preference name="ShowSplashScreen" value="true" />' config.xml
-          fi
+          sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="none" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="SplashMaintainScrollPosition" value="true" />' config.xml
 
           cordova build android
 
