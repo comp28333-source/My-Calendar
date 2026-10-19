@@ -25,7 +25,7 @@ jobs:
       - name: Install Cordova globally
         run: npm install -g cordova
 
-      - name: Create Cordova project and configure splash
+      - name: Create Cordova project and force custom splash
         run: |
           cordova create my-app com.dejurstvo.app Dejurstvo
           cd my-app
@@ -40,21 +40,21 @@ jobs:
             sed -i '/<\/widget>/i \    <icon src="../icon.png" />' config.xml
           fi
 
-          # Принудительная замена заставки (Splash Screen) во всех плотностях Android
+          # Жесткая замена дефолтной заставки на вашу картинку во всех ресурсах Android
           if [ -f "../splash.png" ]; then
-            # Создаем папки для всех разрешений экрана Android и раскидываем вашу картинку
-            for dir in drawable-port-ldpi drawable-port-mdpi drawable-port-hdpi drawable-port-xhdpi drawable-port-xxhdpi drawable-port-xxxhdpi drawable; do
+            # Создаем системные папки drawable и закидываем картинку под именем дефолтного бэкграунда
+            for dir in drawable drawable-port-hdpi drawable-port-xhdpi drawable-port-xxhdpi drawable-port-xxxhdpi; do
               mkdir -p platforms/android/app/src/main/res/$dir/
               cp ../splash.png platforms/android/app/src/main/res/$dir/screen.png
               cp ../splash.png platforms/android/app/src/main/res/$dir/splash.png
+              cp ../splash.png platforms/android/app/src/main/res/$dir/background_color.png
             done
 
-            # Прописываем параметры заставки в config.xml
+            # Отключаем плагинные анимации и принудительно включаем вашу картинку в config.xml
             sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="screen" />' config.xml
-            sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="3000" />' config.xml
+            sed -i '/<\/widget>/i \    <preference name="SplashScreenDelay" value="2000" />' config.xml
             sed -i '/<\/widget>/i \    <preference name="AutoHideSplashScreen" value="true" />' config.xml
-            sed -i '/<\/widget>/i \    <preference name="FadeSplashScreen" value="true" />' config.xml
-            sed -i '/<\/widget>/i \    <preference name="FadeSplashScreenDuration" value="500" />' config.xml
+            sed -i '/<\/widget>/i \    <preference name="ShowSplashScreen" value="true" />' config.xml
           fi
 
           cordova build android
@@ -62,5 +62,5 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Dejurstvo-apk
+          name: dejurstvo-apk
           path: my-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
