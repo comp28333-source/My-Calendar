@@ -25,16 +25,23 @@ jobs:
       - name: Install Cordova globally
         run: npm install -g cordova
 
-      - name: Create Cordova project
+      - name: Create Cordova project and set icon
         run: |
-          cordova create my-app com.calendar.app CalendarApp
+          cordova create my-app com.Calendar.app Calendar
           cd my-app
           cordova platform add android
           cp ../index.html www/index.html
+          
+          # Проверяем и устанавливаем иконку
+          if [ -f "../icon.png" ]; then
+            cp ../icon.png www/icon.png
+            sed -i '/<\/widget>/i \    <icon src="www/icon.png" />' config.xml
+          fi
+
           cordova build android
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: calendar-apk
+          name: Calendar-apk
           path: my-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
