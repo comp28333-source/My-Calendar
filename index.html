@@ -31,6 +31,36 @@
             --other-day-font-size: 13px;
             --other-day-font-color: #888888;
             --other-day-font-weight: bold;
+
+            /* Переменные для таблицы */
+            --table-bg: #e0e0e0;
+            
+            --table-header-bg: #b0b0b0;
+            --table-header-font-size: 11px;
+            --table-header-font-color: #1a1a1a;
+            --table-header-font-weight: bold;
+
+            --table-month-cell-bg: #ffffff;
+            --table-month-font-size: 11px;
+            --table-month-font-color: #111111;
+            --table-month-font-weight: bold;
+
+            --table-cell-bg: #ffffff;
+            --table-cell-font-size: 11px;
+            --table-cell-font-color: #111111;
+            --table-cell-font-weight: normal;
+
+            --table-result-cell-bg: #e0e0e0;
+            --table-result-font-size: 11px;
+            --table-result-font-color: #111111;
+            --table-result-font-weight: bold;
+
+            --table-total-cell-bg: #d0d0d0;
+            --table-total-font-size: 11px;
+            --table-total-font-color: #D32F2F;
+            --table-total-font-weight: bold;
+
+            --table-highlight-row-bg: #fff9c4;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
@@ -105,16 +135,53 @@
             font-weight: var(--today-font-weight) !important;
         }
         
-        /* Таблица */
-        .table-frame { background: #e0e0e0; border: 1px solid #999; border-radius: 4px; padding: 4px; margin-bottom: 6px; width: 100%; border-collapse: collapse; }
-        .table-frame th, .table-frame td { border: 1px solid #bbb; padding: 5px; text-align: center; font-size: 11px; }
-        .table-frame th { background: #b0b0b0; font-weight: bold; }
-        .table-frame input { width: 100%; text-align: center; border: 1px solid #888; border-radius: 2px; font-size: 11px; padding: 3px; }
-        .highlight-row { background-color: #fff9c4 !important; }
+        /* Стили таблицы */
+        .table-frame { background: var(--table-bg); border: 1px solid #999; border-radius: 4px; padding: 4px; width: 100%; border-collapse: collapse; }
+        .table-frame th, .table-frame td { border: 1px solid #bbb; padding: 5px; text-align: center; }
+        
+        .table-frame th { 
+            background: var(--table-header-bg); 
+            font-size: var(--table-header-font-size); 
+            color: var(--table-header-font-color); 
+            font-weight: var(--table-header-font-weight); 
+        }
+
+        .table-month-name {
+            background: var(--table-month-cell-bg) !important;
+            font-size: var(--table-month-font-size) !important;
+            color: var(--table-month-font-color) !important;
+            font-weight: var(--table-month-font-weight) !important;
+            text-align: left !important;
+            padding-left: 6px !important;
+        }
+
+        .table-data-cell {
+            background: var(--table-cell-bg);
+            font-size: var(--table-cell-font-size);
+            color: var(--table-cell-font-color);
+            font-weight: var(--table-cell-font-weight);
+        }
+
+        .table-result-cell {
+            background: var(--table-result-cell-bg);
+            font-size: var(--table-result-font-size);
+            color: var(--table-result-font-color);
+            font-weight: var(--table-result-font-weight);
+        }
+
+        .table-total-cell {
+            background: var(--table-total-cell-bg);
+            font-size: var(--table-total-font-size);
+            color: var(--table-total-font-color);
+            font-weight: var(--table-total-font-weight);
+        }
+
+        .table-frame input { width: 100%; text-align: center; border: 1px solid #888; border-radius: 2px; font-size: inherit; color: inherit; padding: 3px; background: transparent; }
+        .highlight-row { background-color: var(--table-highlight-row-bg) !important; }
 
         /* Нижняя панель */
-        .ctrl-frame { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding: 4px; }
-        .left-actions { display: flex; gap: 6px; }
+        .ctrl-frame { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding: 4px; gap: 4px; flex-wrap: wrap; }
+        .left-actions { display: flex; gap: 6px; flex-wrap: wrap; }
         
         .gear-btn {
             width: 50px;
@@ -128,9 +195,15 @@
             justify-content: center;
         }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+        /* Модальные окна */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 3000; }
         .modal-content { background: #ececec; padding: 16px; border-radius: 8px; width: 92%; max-width: 420px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; border: 2px solid #888; }
         
+        /* Полноэкранное окно таблицы */
+        .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ececec; z-index: 2000; flex-direction: column; padding: 8px; overflow: hidden; }
+        .fullscreen-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: #dfdfdf; padding: 8px; border-radius: 4px; border: 1px solid #bbb; }
+        .fullscreen-body { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+
         .palette { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 8px; }
         .color-btn { width: 100%; aspect-ratio: 1.5; border-radius: 4px; border: 1px solid #555; cursor: pointer; }
         .color-btn.selected { border: 2px solid #000; transform: scale(1.05); }
@@ -146,34 +219,16 @@
             <div id="header-label">ЯНВАРЬ 2026</div>
             <button class="btn" onclick="nextMonth()">&gt;</button>
         </div>
-        <button class="btn btn-close" onclick="window.close()">✕</button>
+        <button class="btn btn-close" onclick="closeApp()">✕</button>
     </div>
 
     <div class="main-frame">
         <div class="cal-frame" id="cal-frame"></div>
-
-        <table class="table-frame" id="stats-table">
-            <thead>
-                <tr>
-                    <th>МЕСЯЦ</th><th>С -</th><th>- ПО</th><th>С -</th><th>- ПО</th><th>КОЛ-ВО</th>
-                </tr>
-            </thead>
-            <tbody id="table-body"></tbody>
-            <tfoot>
-                <tr>
-                    <td style="background:#d0d0d0; font-weight:bold; color:#D32F2F;">ВСЕГО:</td>
-                    <td colspan="5" id="total-year-days" style="background:#d0d0d0; font-weight:bold; color:#D32F2F; text-align:center;">0</td>
-                </tr>
-                <tr>
-                    <td style="background:#c0c0c0; font-weight:bold; color:#1565C0;">ЗА ВСЕ ВРЕМЯ:</td>
-                    <td colspan="5" id="total-all-days" style="background:#c0c0c0; font-weight:bold; color:#1565C0; text-align:center;">0</td>
-                </tr>
-            </tfoot>
-        </table>
     </div>
 
     <div class="ctrl-frame">
         <div class="left-actions">
+            <button class="btn" onclick="openTableModal()" style="background:#e0f7fa; color:#006064;">ТАБЛИЦА</button>
             <button class="btn" onclick="exportData()">ЭКСПОРТ</button>
             <button class="btn" onclick="importDataTrigger()">ИМПОРТ</button>
             <button class="btn" style="background:#ffcdd2; color:#b71c1c;" onclick="clearMonth()">ОЧИСТИТЬ</button>
@@ -186,6 +241,39 @@
         </div>
     </div>
 
+    <!-- Полноэкранное окно таблицы -->
+    <div class="fullscreen-modal" id="table-modal">
+        <div class="fullscreen-header">
+            <div style="display:flex; gap:6px;">
+                <button class="btn" style="background:#2E7D32; color:white;" onclick="saveTableChanges()">СОХРАНИТЬ</button>
+                <button class="btn" style="background:#C62828; color:white;" onclick="closeTableModal()">ОТМЕНИТЬ</button>
+            </div>
+            <div style="font-weight:bold; font-size:14px;" id="table-modal-year-title">ГОД</div>
+            <button class="btn" onclick="openTableSettings()">НАСТРОЙКИ</button>
+        </div>
+        <div class="fullscreen-body">
+            <table class="table-frame" id="stats-table">
+                <thead>
+                    <tr>
+                        <th>МЕСЯЦ</th><th>С -</th><th>- ПО</th><th>С -</th><th>- ПО</th><th>КОЛ-ВО</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+                <tfoot>
+                    <tr>
+                        <td class="table-total-cell" style="text-align:left; padding-left:6px;">ВСЕГО:</td>
+                        <td colspan="5" id="total-year-days" class="table-total-cell" style="text-align:center;">0</td>
+                    </tr>
+                    <tr>
+                        <td class="table-total-cell" style="text-align:left; padding-left:6px; color:#1565C0;">ЗА ВСЕ ВРЕМЯ:</td>
+                        <td colspan="5" id="total-all-days" class="table-total-cell" style="text-align:center; color:#1565C0;">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- Модальное окно заметки -->
     <div class="modal" id="note-modal">
         <div class="modal-content">
             <h3 id="modal-date-title" style="font-size: 13px;">Заметка</h3>
@@ -199,6 +287,7 @@
         </div>
     </div>
 
+    <!-- Модальное окно настроек календаря -->
     <div class="modal" id="settings-modal">
         <div class="modal-content" style="max-width: 480px;">
             <h3>НАСТРОЙКИ КАЛЕНДАРЯ</h3>
@@ -206,6 +295,17 @@
             <div style="display:flex; flex-direction:column; gap:8px;" id="settings-controls"></div>
             <button class="btn" style="background:#2E7D32; color:white; height:38px;" onclick="saveSettings()">СОХРАНИТЬ</button>
             <button class="btn" style="background:#C62828; color:white;" onclick="closeSettings()">ОТМЕНИТЬ</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно настроек таблицы -->
+    <div class="modal" id="table-settings-modal">
+        <div class="modal-content" style="max-width: 480px;">
+            <h3>НАСТРОЙКИ ТАБЛИЦЫ</h3>
+            <div style="font-size: 11px; color: #555;">Настройте внешний вид всех элементов таблицы:</div>
+            <div style="display:flex; flex-direction:column; gap:8px;" id="table-settings-controls"></div>
+            <button class="btn" style="background:#2E7D32; color:white; height:38px;" onclick="saveTableSettings()">СОХРАНИТЬ</button>
+            <button class="btn" style="background:#C62828; color:white;" onclick="closeTableSettings()">ОТМЕНИТЬ</button>
         </div>
     </div>
 
@@ -220,6 +320,7 @@
         let selectedColor = DOT_COLORS[0];
 
         let db = JSON.parse(localStorage.getItem('calendar_db')) || { notes: {}, table_ranges: {} };
+        let tempDbRanges = JSON.parse(JSON.stringify(db.table_ranges));
         
         let savedSettings = JSON.parse(localStorage.getItem('calendar_settings'));
         let settings = savedSettings && typeof savedSettings === 'object' ? {
@@ -265,6 +366,67 @@
             dot_size: 14, dot_relief_sunken: 1, dot_relief_raised: 2, dot_3d_style: "Сфера с бликом", note_display_mode: "Цветные точки", note_font_size: 10
         };
 
+        let savedTableSettings = JSON.parse(localStorage.getItem('table_settings'));
+        let tableSettings = savedTableSettings && typeof savedTableSettings === 'object' ? {
+            table_bg: savedTableSettings.table_bg || "#e0e0e0",
+            table_header_bg: savedTableSettings.table_header_bg || "#b0b0b0",
+            table_header_font_size: Number(savedTableSettings.table_header_font_size) || 11,
+            table_header_font_color: savedTableSettings.table_header_font_color || "#1a1a1a",
+            table_header_font_weight: Boolean(savedTableSettings.table_header_font_weight),
+
+            table_month_cell_bg: savedTableSettings.table_month_cell_bg || "#ffffff",
+            table_month_font_size: Number(savedTableSettings.table_month_font_size) || 11,
+            table_month_font_color: savedTableSettings.table_month_font_color || "#111111",
+            table_month_font_weight: Boolean(savedTableSettings.table_month_font_weight),
+
+            table_cell_bg: savedTableSettings.table_cell_bg || "#ffffff",
+            table_cell_font_size: Number(savedTableSettings.table_cell_font_size) || 11,
+            table_cell_font_color: savedTableSettings.table_cell_font_color || "#111111",
+            table_cell_font_weight: Boolean(savedTableSettings.table_cell_font_weight),
+
+            table_result_cell_bg: savedTableSettings.table_result_cell_bg || "#e0e0e0",
+            table_result_font_size: Number(savedTableSettings.table_result_font_size) || 11,
+            table_result_font_color: savedTableSettings.table_result_font_color || "#111111",
+            table_result_font_weight: Boolean(savedTableSettings.table_result_font_weight),
+
+            table_total_cell_bg: savedTableSettings.table_total_cell_bg || "#d0d0d0",
+            table_total_font_size: Number(savedTableSettings.table_total_font_size) || 11,
+            table_total_font_color: savedTableSettings.table_total_font_color || "#D32F2F",
+            table_total_font_weight: Boolean(savedTableSettings.table_total_font_weight),
+
+            table_highlight_row_bg: savedTableSettings.table_highlight_row_bg || "#fff9c4"
+        } : {
+            table_bg: "#e0e0e0",
+            table_header_bg: "#b0b0b0",
+            table_header_font_size: 11,
+            table_header_font_color: "#1a1a1a",
+            table_header_font_weight: true,
+            table_month_cell_bg: "#ffffff",
+            table_month_font_size: 11,
+            table_month_font_color: "#111111",
+            table_month_font_weight: true,
+            table_cell_bg: "#ffffff",
+            table_cell_font_size: 11,
+            table_cell_font_color: "#111111",
+            table_cell_font_weight: false,
+            table_result_cell_bg: "#e0e0e0",
+            table_result_font_size: 11,
+            table_result_font_color: "#111111",
+            table_result_font_weight: true,
+            table_total_cell_bg: "#d0d0d0",
+            table_total_font_size: 11,
+            table_total_font_color: "#D32F2F",
+            table_total_font_weight: true,
+            table_highlight_row_bg: "#fff9c4"
+        };
+
+        function closeApp() {
+            if (confirm("Вы действительно хотите выйти из приложения?")) {
+                window.location.href = "about:blank";
+                try { window.close(); } catch(e) {}
+            }
+        }
+
         function applySettings() {
             let r = document.documentElement;
             r.style.setProperty('--month-cell-color', settings.month_cell_color);
@@ -292,6 +454,35 @@
             r.style.setProperty('--other-day-font-size', settings.other_day_font_size + 'px');
             r.style.setProperty('--other-day-font-color', settings.other_day_font_color);
             r.style.setProperty('--other-day-font-weight', settings.other_day_font_weight ? 'bold' : 'normal');
+
+            /* Применение настроек таблицы */
+            r.style.setProperty('--table-bg', tableSettings.table_bg);
+            r.style.setProperty('--table-header-bg', tableSettings.table_header_bg);
+            r.style.setProperty('--table-header-font-size', tableSettings.table_header_font_size + 'px');
+            r.style.setProperty('--table-header-font-color', tableSettings.table_header_font_color);
+            r.style.setProperty('--table-header-font-weight', tableSettings.table_header_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--table-month-cell-bg', tableSettings.table_month_cell_bg);
+            r.style.setProperty('--table-month-font-size', tableSettings.table_month_font_size + 'px');
+            r.style.setProperty('--table-month-font-color', tableSettings.table_month_font_color);
+            r.style.setProperty('--table-month-font-weight', tableSettings.table_month_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--table-cell-bg', tableSettings.table_cell_bg);
+            r.style.setProperty('--table-cell-font-size', tableSettings.table_cell_font_size + 'px');
+            r.style.setProperty('--table-cell-font-color', tableSettings.table_cell_font_color);
+            r.style.setProperty('--table-cell-font-weight', tableSettings.table_cell_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--table-result-cell-bg', tableSettings.table_result_cell_bg);
+            r.style.setProperty('--table-result-font-size', tableSettings.table_result_font_size + 'px');
+            r.style.setProperty('--table-result-font-color', tableSettings.table_result_font_color);
+            r.style.setProperty('--table-result-font-weight', tableSettings.table_result_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--table-total-cell-bg', tableSettings.table_total_cell_bg);
+            r.style.setProperty('--table-total-font-size', tableSettings.table_total_font_size + 'px');
+            r.style.setProperty('--table-total-font-color', tableSettings.table_total_font_color);
+            r.style.setProperty('--table-total-font-weight', tableSettings.table_total_font_weight ? 'bold' : 'normal');
+
+            r.style.setProperty('--table-highlight-row-bg', tableSettings.table_highlight_row_bg);
         }
 
         function initTable() {
@@ -301,12 +492,12 @@
                 let tr = document.createElement('tr');
                 tr.id = `row-month-${i}`;
                 tr.innerHTML = `
-                    <td style="font-weight:bold; background:#fff; text-align:left; padding-left:6px;">${RUSSIAN_MONTHS[i-1]}</td>
-                    <td><input type="number" id="f1_${i}" oninput="saveTableData()"></td>
-                    <td><input type="number" id="t1_${i}" oninput="saveTableData()"></td>
-                    <td><input type="number" id="f2_${i}" oninput="saveTableData()"></td>
-                    <td><input type="number" id="t2_${i}" oninput="saveTableData()"></td>
-                    <td id="res_${i}" style="font-weight:bold;"></td>
+                    <td class="table-month-name">${RUSSIAN_MONTHS[i-1]}</td>
+                    <td class="table-data-cell"><input type="number" id="f1_${i}" oninput="onTableInput()"></td>
+                    <td class="table-data-cell"><input type="number" id="t1_${i}" oninput="onTableInput()"></td>
+                    <td class="table-data-cell"><input type="number" id="f2_${i}" oninput="onTableInput()"></td>
+                    <td class="table-data-cell"><input type="number" id="t2_${i}" oninput="onTableInput()"></td>
+                    <td id="res_${i}" class="table-result-cell"></td>
                 `;
                 tbody.appendChild(tr);
             }
@@ -351,9 +542,6 @@
                 let nextY = month === 12 ? year + 1 : year;
                 createDayCell(calFrame, d, nextY, nextM, true);
             }
-
-            highlightActiveTableRow();
-            loadTableData();
         }
 
         function createDayCell(parent, day, y, m, isOther, isToday = false) {
@@ -423,15 +611,13 @@
 
         function prevMonth() {
             month--;
-            if (month < 1) { month = 12; year--; loadTableData(); }
-            else { highlightActiveTableRow(); }
+            if (month < 1) { month = 12; year--; }
             renderCalendar();
         }
 
         function nextMonth() {
             month++;
-            if (month > 12) { month = 1; year++; loadTableData(); }
-            else { highlightActiveTableRow(); }
+            if (month > 12) { month = 1; year++; }
             renderCalendar();
         }
 
@@ -472,10 +658,35 @@
             renderCalendar();
         }
 
-        function saveTableData() {
+        /* Управление окном таблицы */
+        function openTableModal() {
+            tempDbRanges = JSON.parse(JSON.stringify(db.table_ranges));
+            document.getElementById('table-modal-year-title').innerText = `ТАБЛИЦА ДЕЖУРСТВ — ${year} ГОД`;
+            loadTableData();
+            highlightActiveTableRow();
+            document.getElementById('table-modal').style.display = 'flex';
+        }
+
+        function closeTableModal() {
+            document.getElementById('table-modal').style.display = 'none';
+        }
+
+        function saveTableChanges() {
+            collectTableInputsToTemp();
+            db.table_ranges = JSON.parse(JSON.stringify(tempDbRanges));
+            localStorage.setItem('calendar_db', JSON.stringify(db));
+            calcAllTime();
+            closeTableModal();
+        }
+
+        function onTableInput() {
+            collectTableInputsToTemp();
+            updateTableCalculations();
+        }
+
+        function collectTableInputsToTemp() {
             let yearStr = year.toString();
-            if (!db.table_ranges[yearStr]) db.table_ranges[yearStr] = {};
-            let totalYear = 0;
+            if (!tempDbRanges[yearStr]) tempDbRanges[yearStr] = {};
 
             for (let i = 1; i <= 12; i++) {
                 let f1 = document.getElementById(`f1_${i}`).value.trim();
@@ -484,19 +695,27 @@
                 let t2 = document.getElementById(`t2_${i}`).value.trim();
 
                 if (f1 || t1 || f2 || t2) {
-                    db.table_ranges[yearStr][i] = { from1: f1, to1: t1, from2: f2, to2: t2 };
+                    tempDbRanges[yearStr][i] = { from1: f1, to1: t1, from2: f2, to2: t2 };
                 } else {
-                    delete db.table_ranges[yearStr][i];
+                    delete tempDbRanges[yearStr][i];
                 }
+            }
+        }
 
-                let monthSum = calcMonthDays(i, f1, t1, f2, t2);
+        function updateTableCalculations() {
+            let yearStr = year.toString();
+            let yearData = tempDbRanges[yearStr] || {};
+            let totalYear = 0;
+
+            for (let i = 1; i <= 12; i++) {
+                let mData = yearData[i] || {};
+                let monthSum = calcMonthDays(i, mData.from1, mData.to1, mData.from2, mData.to2);
                 document.getElementById(`res_${i}`).innerText = monthSum > 0 ? monthSum : '';
                 totalYear += monthSum;
             }
 
             document.getElementById('total-year-days').innerText = totalYear;
-            calcAllTime();
-            localStorage.setItem('calendar_db', JSON.stringify(db));
+            calcAllTimeFromTemp();
         }
 
         function calcMonthDays(m, f1, t1, f2, t2) {
@@ -516,7 +735,7 @@
 
         function loadTableData() {
             let yearStr = year.toString();
-            let yearData = db.table_ranges[yearStr] || {};
+            let yearData = tempDbRanges[yearStr] || {};
             for (let i = 1; i <= 12; i++) {
                 let mData = yearData[i] || {};
                 document.getElementById(`f1_${i}`).value = mData.from1 || '';
@@ -524,7 +743,7 @@
                 document.getElementById(`f2_${i}`).value = mData.from2 || '';
                 document.getElementById(`t2_${i}`).value = mData.to2 || '';
             }
-            saveTableData();
+            updateTableCalculations();
         }
 
         function calcAllTime() {
@@ -534,20 +753,38 @@
                 for (let mStr in db.table_ranges[yStr]) {
                     let mVal = parseInt(mStr);
                     let r = db.table_ranges[yStr][mStr];
-                    let f1 = r.from1, t1 = r.to1, f2 = r.from2, t2 = r.to2;
-                    if (f1 && t1) {
-                        let d1 = new Date(yVal, mVal - 1, parseInt(f1));
-                        let d2 = new Date(yVal, mVal - 1, parseInt(t1));
-                        if (d1 <= d2) allTime += Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
-                    }
-                    if (f2 && t2) {
-                        let d3 = new Date(yVal, mVal - 1, parseInt(f2));
-                        let d4 = new Date(yVal, mVal - 1, parseInt(t2));
-                        if (d3 <= d4) allTime += Math.round((d4 - d3) / (1000 * 60 * 60 * 24)) + 1;
-                    }
+                    allTime += calcMonthDaysForYear(yVal, mVal, r.from1, r.to1, r.from2, r.to2);
                 }
             }
             document.getElementById('total-all-days').innerText = allTime;
+        }
+
+        function calcAllTimeFromTemp() {
+            let allTime = 0;
+            for (let yStr in tempDbRanges) {
+                let yVal = parseInt(yStr);
+                for (let mStr in tempDbRanges[yStr]) {
+                    let mVal = parseInt(mStr);
+                    let r = tempDbRanges[yStr][mStr];
+                    allTime += calcMonthDaysForYear(yVal, mVal, r.from1, r.to1, r.from2, r.to2);
+                }
+            }
+            document.getElementById('total-all-days').innerText = allTime;
+        }
+
+        function calcMonthDaysForYear(y, m, f1, t1, f2, t2) {
+            let sum = 0;
+            if (f1 && t1) {
+                let d1 = new Date(y, m - 1, parseInt(f1));
+                let d2 = new Date(y, m - 1, parseInt(t1));
+                if (d1 <= d2) sum += Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+            }
+            if (f2 && t2) {
+                let d3 = new Date(y, m - 1, parseInt(f2));
+                let d4 = new Date(y, m - 1, parseInt(t2));
+                if (d3 <= d4) sum += Math.round((d4 - d3) / (1000 * 60 * 60 * 24)) + 1;
+            }
+            return sum;
         }
 
         function highlightActiveTableRow() {
@@ -589,7 +826,7 @@
                     db = imported;
                     localStorage.setItem('calendar_db', JSON.stringify(db));
                     renderCalendar();
-                    loadTableData();
+                    calcAllTime();
                     alert("Данные успешно импортированы!");
                 } catch(err) { alert("Ошибка чтения файла!"); }
             };
@@ -677,8 +914,73 @@
             renderCalendar();
         }
 
+        /* Настройки таблицы */
+        function openTableSettings() {
+            let container = document.getElementById('table-settings-controls');
+            container.innerHTML = '';
+            
+            let items = [
+                { label: "Фон таблицы", cell: "table_bg" },
+                { label: "Шапка таблицы (заголовки)", sz: "table_header_font_size", col: "table_header_font_color", b: "table_header_font_weight", cell: "table_header_bg" },
+                { label: "Ячейки месяцев (левый столбец)", sz: "table_month_font_size", col: "table_month_font_color", b: "table_month_font_weight", cell: "table_month_cell_bg" },
+                { label: "Ячейки диапазона дат (ввод)", sz: "table_cell_font_size", col: "table_cell_font_color", b: "table_cell_font_weight", cell: "table_cell_bg" },
+                { label: "Ячейки результатов (КОЛ-ВО)", sz: "table_result_font_size", col: "table_result_font_color", b: "table_result_font_weight", cell: "table_result_cell_bg" },
+                { label: "Итоговые строки (ВСЕГО / ЗА ВСЕ ВРЕМЯ)", sz: "table_total_font_size", col: "table_total_font_color", b: "table_total_font_weight", cell: "table_total_cell_bg" },
+                { label: "Цвет подсветки текущей строки месяца", cell: "table_highlight_row_bg" }
+            ];
+
+            items.forEach(item => {
+                let div = document.createElement('div');
+                div.style.background = "#e0e0e0";
+                div.style.padding = "6px";
+                div.style.borderRadius = "4px";
+                div.innerHTML = `<b style="font-size:11px;">${item.label}</b><br>`;
+                
+                if (item.sz) {
+                    div.innerHTML += `
+                        Размер: <input type="number" id="tst_${item.sz}" value="${tableSettings[item.sz]}" style="width:45px;">
+                        Жирный: <input type="checkbox" id="tst_${item.b}" ${tableSettings[item.b] ? 'checked' : ''}>
+                        Цвет текста: <input type="text" id="tst_${item.col}" value="${tableSettings[item.col]}" style="width:70px;">
+                        Фон: <input type="text" id="tst_${item.cell}" value="${tableSettings[item.cell]}" style="width:70px;">
+                    `;
+                } else {
+                    div.innerHTML += `HEX цвет: <input type="text" id="tst_${item.cell}" value="${tableSettings[item.cell]}" style="width:90px;">`;
+                }
+                container.appendChild(div);
+            });
+
+            document.getElementById('table-settings-modal').style.display = 'flex';
+        }
+
+        function closeTableSettings() { document.getElementById('table-settings-modal').style.display = 'none'; }
+
+        function saveTableSettings() {
+            let keys = [
+                "table_bg", "table_header_bg", "table_header_font_size", "table_header_font_color", "table_header_font_weight",
+                "table_month_cell_bg", "table_month_font_size", "table_month_font_color", "table_month_font_weight",
+                "table_cell_bg", "table_cell_font_size", "table_cell_font_color", "table_cell_font_weight",
+                "table_result_cell_bg", "table_result_font_size", "table_result_font_color", "table_result_font_weight",
+                "table_total_cell_bg", "table_total_font_size", "table_total_font_color", "table_total_font_weight",
+                "table_highlight_row_bg"
+            ];
+
+            keys.forEach(key => {
+                let el = document.getElementById(`tst_${key}`);
+                if (el) {
+                    if (key.includes('weight')) tableSettings[key] = el.checked;
+                    else if (key.includes('size')) tableSettings[key] = parseInt(el.value) || 11;
+                    else tableSettings[key] = el.value;
+                }
+            });
+
+            localStorage.setItem('table_settings', JSON.stringify(tableSettings));
+            closeTableSettings();
+            applySettings();
+        }
+
         initTable();
         renderCalendar();
+        calcAllTime();
     </script>
 </body>
 </html>
