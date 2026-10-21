@@ -382,7 +382,7 @@
             <button class="btn-3d" onclick="prevMonth()">&lt;</button>
             <div class="header-title-block">
                 <div id="header-label">Март 2025</div>
-                <div class="subtitle-label">Время больших идей ♥</div>
+
             </div>
             <button class="btn-3d" onclick="nextMonth()">&gt;</button>
         </div>
@@ -423,13 +423,13 @@
                 <table class="table-frame" id="stats-table">
                     <thead>
                         <tr>
-                            <th>МЕСЯЦ</th><th>С -</th><th>- ПО</th><th>С -</th><th>- ПО</th><th>КОЛ-ВО</th>
+                            <th>МЕСЯЦ</th><th>С -</th><th>- ПО</th><th>С -</th><th>- ПО</th><th>ДНЕЙ</th>
                         </tr>
                     </thead>
                     <tbody id="table-body"></tbody>
                     <tfoot>
                         <tr>
-                            <td class="table-total-cell" style="text-align:left; padding-left:10px;">ВСЕГО:</td>
+                            <td class="table-total-cell" style="text-align:left; padding-left:10px;">ЗА ГОД:</td>
                             <td colspan="5" id="total-year-days" class="table-total-cell" style="text-align:center;">0</td>
                         </tr>
                         <tr>
@@ -837,7 +837,7 @@
         /* Управление окном таблицы */
         function openTableModal() {
             tempDbRanges = JSON.parse(JSON.stringify(db.table_ranges));
-            document.getElementById('table-modal-year-title').innerText = `ТАБЛИЦА ДЕЖУРСТВ — ${year} ГОД`;
+            document.getElementById('table-modal-year-title').innerText = `${year} ГОД`;
             loadTableData();
             highlightActiveTableRow();
             document.getElementById('table-modal').style.display = 'flex';
