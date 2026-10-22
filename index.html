@@ -12,6 +12,8 @@
             --day-cell-color: #ffffff;
             --today-cell-color: #2b82fb;
             --other-cell-color: #e6e8ec;
+            --weekend-cell-color: #ffe3e3;
+            --weekend-font-color: #9b1c1c;
             
             --month-font-size: 24px;
             --month-font-color: #1c2536;
@@ -35,7 +37,6 @@
 
             /* Переменные для таблицы */
             --table-bg: #ebedf0;
-            
             --table-header-bg: #e1e3e7;
             --table-header-font-size: 12px;
             --table-header-font-color: #2d3748;
@@ -163,6 +164,11 @@
 
         .cal-day-cell:active {
             box-shadow: inset 2px 2px 5px #b8babe, inset -2px -2px 5px #ffffff;
+        }
+
+        .cal-day-cell.weekend {
+            background: var(--weekend-cell-color);
+            color: var(--weekend-font-color);
         }
 
         .cal-day-cell.other-month {
@@ -309,7 +315,7 @@
             padding: 20px; 
             border-radius: 20px; 
             width: 92%; 
-            max-width: 440px; 
+            max-width: 480px; 
             max-height: 90vh; 
             overflow-y: auto; 
             display: flex; 
@@ -387,7 +393,7 @@
         </div>
         <div class="gear-btn" onclick="openSettings()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="#4a5568">
-                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/>
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
             </svg>
         </div>
     </div>
@@ -440,7 +446,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно настроек календаря -->
+    <!-- Модальное окно настроек календаря (в стиле табличных карточек) -->
     <div class="modal" id="settings-modal">
         <div class="modal-content" style="max-width: 480px;">
             <h3 style="color:#1c2536; font-weight:800;">НАСТРОЙКИ КАЛЕНДАРЯ</h3>
@@ -503,6 +509,8 @@
             day_cell_color: savedSettings.day_cell_color || "#ffffff",
             today_cell_color: savedSettings.today_cell_color || "#2b82fb",
             other_cell_color: savedSettings.other_cell_color || "#e6e8ec",
+            weekend_cell_color: savedSettings.weekend_cell_color || "#ffe3e3",
+            weekend_font_color: savedSettings.weekend_font_color || "#9b1c1c",
             
             dot_size: Number(savedSettings.dot_size) || 12,
             dot_relief_sunken: Number(savedSettings.dot_relief_sunken) || 1,
@@ -518,6 +526,7 @@
             today_font_size: 16, today_font_color: "#ffffff", today_font_weight: true,
             other_day_font_size: 15, other_day_font_color: "#a0aec0", other_day_font_weight: true,
             month_cell_color: "#ebedf0", weekday_cell_color: "#ebedf0", day_cell_color: "#ffffff", today_cell_color: "#2b82fb", other_cell_color: "#e6e8ec",
+            weekend_cell_color: "#ffe3e3", weekend_font_color: "#9b1c1c",
             dot_size: 12, dot_relief_sunken: 1, dot_relief_raised: 2, dot_3d_style: "Сфера с бликом", note_display_mode: "Цветные точки", note_font_size: 10
         };
 
@@ -589,6 +598,8 @@
             r.style.setProperty('--day-cell-color', settings.day_cell_color);
             r.style.setProperty('--today-cell-color', settings.today_cell_color);
             r.style.setProperty('--other-cell-color', settings.other_cell_color);
+            r.style.setProperty('--weekend-cell-color', settings.weekend_cell_color);
+            r.style.setProperty('--weekend-font-color', settings.weekend_font_color);
 
             r.style.setProperty('--month-font-size', settings.month_font_size + 'px');
             r.style.setProperty('--month-font-color', settings.month_font_color);
@@ -682,27 +693,31 @@
                 let d = prevTotalDays - i;
                 let prevM = month === 1 ? 12 : month - 1;
                 let prevY = month === 1 ? year - 1 : year;
-                createDayCell(calFrame, d, prevY, prevM, true, false);
+                let colIdx = (firstDayIndex - 1 - i) % 7;
+                createDayCell(calFrame, d, prevY, prevM, true, false, colIdx >= 5);
             }
 
             for (let d = 1; d <= totalDays; d++) {
+                let colIdx = (firstDayIndex + d - 1) % 7;
                 let isToday = (d === now.getDate() && month === now.getMonth() + 1 && year === now.getFullYear());
-                createDayCell(calFrame, d, year, month, false, isToday);
+                createDayCell(calFrame, d, year, month, false, isToday, colIdx >= 5);
             }
 
             let remainingCells = 42 - (firstDayIndex + totalDays);
             for (let d = 1; d <= remainingCells; d++) {
                 let nextM = month === 12 ? 1 : month + 1;
                 let nextY = month === 12 ? year + 1 : year;
-                createDayCell(calFrame, d, nextY, nextM, true, false);
+                let colIdx = (firstDayIndex + totalDays + d - 1) % 7;
+                createDayCell(calFrame, d, nextY, nextM, true, false, colIdx >= 5);
             }
         }
 
-        function createDayCell(parent, day, y, m, isOther, isToday = false) {
+        function createDayCell(parent, day, y, m, isOther, isToday = false, isWeekend = false) {
             let cell = document.createElement('div');
             let classes = ['cal-day-cell'];
             if (isOther) classes.push('other-month');
-            if (isToday) classes.push('today');
+            else if (isToday) classes.push('today');
+            else if (isWeekend) classes.push('weekend');
             
             cell.className = classes.join(' ');
             
@@ -1004,16 +1019,12 @@
             
             let items = [
                 { label: "Общий фон приложения", cell: "bg_main" },
-                { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_weight" },
-                { label: "Шрифт дней недели", sz: "weekday_font_size", col: "weekday_font_color", b: "weekday_font_weight" },
-                { label: "Шрифт чисел календаря", sz: "day_font_size", col: "day_font_color", b: "day_font_weight" },
-                { label: "Шрифт текущего дня", sz: "today_font_size", col: "today_font_color", b: "today_font_weight" },
-                { label: "Шрифт чужих дней", sz: "other_day_font_size", col: "other_day_font_color", b: "other_day_font_weight" },
-                { label: "Цвет панели месяца", cell: "month_cell_color" },
-                { label: "Цвет ячейки дней недели", cell: "weekday_cell_color" },
-                { label: "Цвет ячейки чисел", cell: "day_cell_color" },
-                { label: "Цвет ячейки текущего дня", cell: "today_cell_color" },
-                { label: "Цвет ячейки чужих дней", cell: "other_cell_color" },
+                { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_weight", cell: "month_cell_color" },
+                { label: "Шрифт дней недели", sz: "weekday_font_size", col: "weekday_font_color", b: "weekday_font_weight", cell: "weekday_cell_color" },
+                { label: "Шрифт чисел календаря", sz: "day_font_size", col: "day_font_color", b: "day_font_weight", cell: "day_cell_color" },
+                { label: "Шрифт текущего дня", sz: "today_font_size", col: "today_font_color", b: "today_font_weight", cell: "today_cell_color" },
+                { label: "Шрифт чужих дней", sz: "other_day_font_size", col: "other_day_font_color", b: "other_day_font_weight", cell: "other_cell_color" },
+                { label: "Выходные дни (суббота/воскресенье)", col: "weekend_font_color", cell: "weekend_cell_color" }
             ];
 
             items.forEach(item => {
@@ -1023,14 +1034,22 @@
                 
                 if (item.sz) {
                     div.innerHTML += `
-                        <div style="display:flex; gap:8px; align-items:center; font-size:11px; flex-wrap:wrap;">
-                            Размер: <input type="number" class="modal-input" id="st_${item.sz}" value="${settings[item.sz]}" style="width:50px;">
+                        <div style="display:flex; gap:6px; align-items:center; font-size:11px; flex-wrap:wrap;">
+                            Размер: <input type="number" class="modal-input" id="st_${item.sz}" value="${settings[item.sz]}" style="width:45px;">
                             Жирный: <input type="checkbox" id="st_${item.b}" ${settings[item.b] ? 'checked' : ''}>
-                            HEX: <input type="text" class="modal-input" id="st_${item.col}" value="${settings[item.col]}" style="width:75px;">
+                            Цвет: <input type="text" class="modal-input" id="st_${item.col}" value="${settings[item.col]}" style="width:65px;">
+                            Фон: <input type="text" class="modal-input" id="st_${item.cell}" value="${settings[item.cell]}" style="width:65px;">
+                        </div>
+                    `;
+                } else if (item.col && item.cell) {
+                    div.innerHTML += `
+                        <div style="display:flex; gap:6px; align-items:center; font-size:11px; flex-wrap:wrap;">
+                            Цвет текста: <input type="text" class="modal-input" id="st_${item.col}" value="${settings[item.col]}" style="width:75px;">
+                            Цвет фона: <input type="text" class="modal-input" id="st_${item.cell}" value="${settings[item.cell]}" style="width:75px;">
                         </div>
                     `;
                 } else {
-                    div.innerHTML += `<div style="font-size:11px;">HEX цвет: <input type="text" class="modal-input" id="st_${item.cell}" value="${settings[item.cell]}" style="width:90px;"></div>`;
+                    div.innerHTML += `<div style="font-size:11px;">HEX цвет: <input type="text" class="modal-input" id="st_${item.cell}" value="${settings[item.cell]}" style="width:85px;"></div>`;
                 }
                 container.appendChild(div);
             });
@@ -1055,12 +1074,12 @@
         function saveSettings() {
             let keys = [
                 "bg_main",
-                "month_font_size", "month_font_color", "month_font_weight",
-                "weekday_font_size", "weekday_font_color", "weekday_font_weight",
-                "day_font_size", "day_font_color", "day_font_weight",
-                "today_font_size", "today_font_color", "today_font_weight",
-                "other_day_font_size", "other_day_font_color", "other_day_font_weight",
-                "month_cell_color", "weekday_cell_color", "day_cell_color", "today_cell_color", "other_cell_color",
+                "month_font_size", "month_font_color", "month_font_weight", "month_cell_color",
+                "weekday_font_size", "weekday_font_color", "weekday_font_weight", "weekday_cell_color",
+                "day_font_size", "day_font_color", "day_font_weight", "day_cell_color",
+                "today_font_size", "today_font_color", "today_font_weight", "today_cell_color",
+                "other_day_font_size", "other_day_font_color", "other_day_font_weight", "other_cell_color",
+                "weekend_cell_color", "weekend_font_color",
                 "dot_size", "note_font_size"
             ];
 
