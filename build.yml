@@ -27,7 +27,7 @@ jobs:
 
       - name: Create Cordova project
         run: |
-          cordova create my-app com.calendar.app CalendarApp
+          cordova create my-app com.calendars.app CalendarsApp
           cd my-app
           cordova platform add android
           cp ../index.html www/index.html
