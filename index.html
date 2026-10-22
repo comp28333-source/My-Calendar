@@ -69,11 +69,12 @@
 
         /* Верхняя панель */
         .nav-frame {
-            background-color: transparent;
+            background-color: var(--month-cell-color);
             padding: 4px 8px 12px 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: 14px;
         }
         .center-nav { display: flex; align-items: center; gap: 12px; flex-grow: 1; justify-content: space-between; }
         
@@ -81,13 +82,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .subtitle-label {
-            font-size: 12px;
-            color: #8c97a8;
-            font-weight: 600;
-            margin-top: 2px;
         }
 
         .btn-3d { 
@@ -118,9 +112,9 @@
         }
         
         #header-label {
-            font-size: var(--month-font-size) !important;
-            color: var(--month-font-color) !important;
-            font-weight: var(--month-font-weight) !important;
+            font-size: var(--month-font-size);
+            color: var(--month-font-color);
+            font-weight: var(--month-font-weight);
             text-align: center;
             letter-spacing: -0.5px;
         }
@@ -140,26 +134,21 @@
         .cal-frame { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
         
         .cal-header-cell {
-            background: linear-gradient(145deg, #f0f2f5, #e1e3e7);
+            background: var(--weekday-cell-color);
             color: var(--weekday-font-color);
-            font-size: var(--weekday-font-size) !important;
-            font-weight: var(--weekday-font-weight) !important;
+            font-size: var(--weekday-font-size);
+            font-weight: var(--weekday-font-weight);
             text-align: center;
             padding: 10px 0;
             border-radius: 10px;
             box-shadow: 2px 2px 5px #d1d3d8, -2px -2px 5px #ffffff;
         }
 
-        .cal-header-cell.weekend-hdr {
-            color: #d32f2f !important;
-            background: linear-gradient(145deg, #fde8e8, #f8d7d7);
-        }
-
         .cal-day-cell {
-            background: linear-gradient(145deg, #ffffff, #e6e8ec);
+            background: var(--day-cell-color);
             color: var(--day-font-color);
-            font-size: var(--day-font-size) !important;
-            font-weight: var(--day-font-weight) !important;
+            font-size: var(--day-font-size);
+            font-weight: var(--day-font-weight);
             aspect-ratio: 1.05;
             display: flex;
             flex-direction: column;
@@ -176,21 +165,16 @@
             box-shadow: inset 2px 2px 5px #b8babe, inset -2px -2px 5px #ffffff;
         }
 
-        .cal-day-cell.weekend {
-            background: linear-gradient(145deg, #ffe3e3, #fcc8c8);
-            color: #9b1c1c !important;
-        }
-
         .cal-day-cell.other-month {
-            background: linear-gradient(145deg, #e8eaf0, #dcdfe6);
+            background: var(--other-cell-color);
             color: var(--other-day-font-color);
-            font-size: var(--other-day-font-size) !important;
-            font-weight: var(--other-day-font-weight) !important;
+            font-size: var(--other-day-font-size);
+            font-weight: var(--other-day-font-weight);
             box-shadow: 2px 2px 5px #d1d3d8, -2px -2px 5px #ffffff;
         }
 
         .cal-day-cell.today { 
-            background: linear-gradient(145deg, #3b8cfc, #1f6fd9) !important; 
+            background: var(--today-cell-color) !important; 
             color: var(--today-font-color) !important; 
             font-size: var(--today-font-size) !important;
             font-weight: var(--today-font-weight) !important;
@@ -199,7 +183,7 @@
         
         /* Стили неоморфной таблицы */
         .table-container {
-            background: #ebedf0;
+            background: var(--table-bg);
             padding: 12px;
             border-radius: 18px;
             box-shadow: inset 4px 4px 8px #c8cace, inset -4px -4px 8px #ffffff;
@@ -221,7 +205,7 @@
         }
         
         .table-frame th { 
-            background: linear-gradient(145deg, #ffffff, #dcdfe4); 
+            background: var(--table-header-bg); 
             font-size: var(--table-header-font-size); 
             color: var(--table-header-font-color); 
             font-weight: var(--table-header-font-weight); 
@@ -229,23 +213,23 @@
         }
 
         .table-month-name {
-            background: linear-gradient(145deg, #ffffff, #e6e8ec) !important;
-            font-size: var(--table-month-font-size) !important;
-            color: var(--table-month-font-color) !important;
-            font-weight: var(--table-month-font-weight) !important;
-            text-align: left !important;
-            padding-left: 10px !important;
+            background: var(--table-month-cell-bg);
+            font-size: var(--table-month-font-size);
+            color: var(--table-month-font-color);
+            font-weight: var(--table-month-font-weight);
+            text-align: left;
+            padding-left: 10px;
             box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
         }
 
         .table-data-cell {
-            background: #f0f2f5;
+            background: var(--table-cell-bg);
             box-shadow: inset 2px 2px 4px #c8cace, inset -2px -2px 4px #ffffff;
-            padding: 2px !important;
+            padding: 2px;
         }
 
         .table-result-cell {
-            background: linear-gradient(145deg, #ffffff, #e1e3e7);
+            background: var(--table-result-cell-bg);
             font-size: var(--table-result-font-size);
             color: var(--table-result-font-color);
             font-weight: var(--table-result-font-weight);
@@ -253,7 +237,7 @@
         }
 
         .table-total-cell {
-            background: linear-gradient(145deg, #ffffff, #d6d9de);
+            background: var(--table-total-cell-bg);
             font-size: var(--table-total-font-size);
             color: var(--table-total-font-color);
             font-weight: var(--table-total-font-weight);
@@ -275,6 +259,7 @@
         }
 
         .highlight-row td { 
+            background-color: var(--table-highlight-row-bg) !important;
             box-shadow: 0 0 0 2px #2b82fb inset, 3px 3px 6px #c8cace !important; 
         }
 
@@ -382,7 +367,6 @@
             <button class="btn-3d" onclick="prevMonth()">&lt;</button>
             <div class="header-title-block">
                 <div id="header-label">Март 2025</div>
-
             </div>
             <button class="btn-3d" onclick="nextMonth()">&gt;</button>
         </div>
@@ -403,7 +387,7 @@
         </div>
         <div class="gear-btn" onclick="openSettings()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="#4a5568">
-                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z"/>
             </svg>
         </div>
     </div>
@@ -419,7 +403,7 @@
             <button class="action-btn" onclick="openTableSettings()">НАСТРОЙКИ</button>
         </div>
         <div class="fullscreen-body">
-            <div class="table-container">
+            <div class="table-container" id="table-container-box">
                 <table class="table-frame" id="stats-table">
                     <thead>
                         <tr>
@@ -429,11 +413,11 @@
                     <tbody id="table-body"></tbody>
                     <tfoot>
                         <tr>
-                            <td class="table-total-cell" style="text-align:left; padding-left:10px;">ЗА ГОД:</td>
+                            <td class="table-total-cell" style="text-align:left; padding-left:10px;">ГОД:</td>
                             <td colspan="5" id="total-year-days" class="table-total-cell" style="text-align:center;">0</td>
                         </tr>
                         <tr>
-                            <td class="table-total-cell" style="text-align:left; padding-left:10px; color:#2b82fb;">ЗА ВСЕ ВРЕМЯ:</td>
+                            <td class="table-total-cell" style="text-align:left; padding-left:10px; color:#2b82fb;">ВСЕ ВРЕМЯ:</td>
                             <td colspan="5" id="total-all-days" class="table-total-cell" style="text-align:center; color:#2b82fb;">0</td>
                         </tr>
                     </tfoot>
@@ -479,7 +463,7 @@
     </div>
 
     <script>
-        const DISPLAY_MONTHS = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+        const DISPLAY_MONTHS = ["ЯНВАРЬ", "ФЕВРАЛЬ", "МАРТ", "АПРЕЛЬ", "МАЙ", "ИЮНЬ", "ИЮЛЬ", "АВГУСТ", "СЕНТЯБРЬ", "ОКТЯБРЬ", "НОЯБРЬ", "ДЕКАБРЬ"];
         const DOT_COLORS = ["#00E676", "#29B6F6", "#EF5350", "#FFEE58", "#AB47BC", "#FFA726", "#26A69A", "#EC407A", "#8D6E63", "#78909C", "#FF7043", "#66BB6A", "#42A5F5", "#E57373", "#FFF176", "#BA68C8", "#FFB74D", "#4DB6AC", "#F06292", "#A1887F", "#90A4AE", "#FF8A65"];
         
         let currentDate = new Date();
@@ -493,6 +477,7 @@
         
         let savedSettings = JSON.parse(localStorage.getItem('calendar_settings'));
         let settings = savedSettings && typeof savedSettings === 'object' ? {
+            bg_main: savedSettings.bg_main || "#ebedf0",
             month_font_size: Number(savedSettings.month_font_size) || 24,
             month_font_color: savedSettings.month_font_color || "#1c2536",
             month_font_weight: Boolean(savedSettings.month_font_weight),
@@ -526,6 +511,7 @@
             note_display_mode: savedSettings.note_display_mode || "Цветные точки",
             note_font_size: Number(savedSettings.note_font_size) || 10
         } : {
+            bg_main: "#ebedf0",
             month_font_size: 24, month_font_color: "#1c2536", month_font_weight: true,
             weekday_font_size: 14, weekday_font_color: "#4a5568", weekday_font_weight: true,
             day_font_size: 16, day_font_color: "#1a202c", day_font_weight: true,
@@ -591,13 +577,13 @@
 
         function closeApp() {
             if (confirm("Вы действительно хотите выйти из приложения?")) {
-                window.location.href = "about:blank";
                 try { window.close(); } catch(e) {}
             }
         }
 
         function applySettings() {
             let r = document.documentElement;
+            r.style.setProperty('--bg-main', settings.bg_main);
             r.style.setProperty('--month-cell-color', settings.month_cell_color);
             r.style.setProperty('--weekday-cell-color', settings.weekday_cell_color);
             r.style.setProperty('--day-cell-color', settings.day_cell_color);
@@ -680,9 +666,9 @@
             calFrame.innerHTML = '';
 
             let daysOfWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-            daysOfWeek.forEach((d, idx) => {
+            daysOfWeek.forEach((d) => {
                 let div = document.createElement('div');
-                div.className = `cal-header-cell ${idx >= 5 ? 'weekend-hdr' : ''}`;
+                div.className = 'cal-header-cell';
                 div.innerText = d;
                 calFrame.appendChild(div);
             });
@@ -696,31 +682,27 @@
                 let d = prevTotalDays - i;
                 let prevM = month === 1 ? 12 : month - 1;
                 let prevY = month === 1 ? year - 1 : year;
-                let colIdx = (firstDayIndex - 1 - i) % 7;
-                createDayCell(calFrame, d, prevY, prevM, true, false, colIdx >= 5);
+                createDayCell(calFrame, d, prevY, prevM, true, false);
             }
 
             for (let d = 1; d <= totalDays; d++) {
-                let colIdx = (firstDayIndex + d - 1) % 7;
                 let isToday = (d === now.getDate() && month === now.getMonth() + 1 && year === now.getFullYear());
-                createDayCell(calFrame, d, year, month, false, isToday, colIdx >= 5);
+                createDayCell(calFrame, d, year, month, false, isToday);
             }
 
             let remainingCells = 42 - (firstDayIndex + totalDays);
             for (let d = 1; d <= remainingCells; d++) {
                 let nextM = month === 12 ? 1 : month + 1;
                 let nextY = month === 12 ? year + 1 : year;
-                let colIdx = (firstDayIndex + totalDays + d - 1) % 7;
-                createDayCell(calFrame, d, nextY, nextM, true, false, colIdx >= 5);
+                createDayCell(calFrame, d, nextY, nextM, true, false);
             }
         }
 
-        function createDayCell(parent, day, y, m, isOther, isToday = false, isWeekend = false) {
+        function createDayCell(parent, day, y, m, isOther, isToday = false) {
             let cell = document.createElement('div');
             let classes = ['cal-day-cell'];
             if (isOther) classes.push('other-month');
             if (isToday) classes.push('today');
-            if (isWeekend && !isToday && !isOther) classes.push('weekend');
             
             cell.className = classes.join(' ');
             
@@ -981,7 +963,6 @@
             renderCalendar();
         }
 
-        // Прямой экспорт без вызова внешнего меню и шеринга
         function exportData() {
             let jsonStr = JSON.stringify(db, null, 4);
             let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
@@ -1022,12 +1003,13 @@
             container.innerHTML = '';
             
             let items = [
+                { label: "Общий фон приложения", cell: "bg_main" },
                 { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_weight" },
                 { label: "Шрифт дней недели", sz: "weekday_font_size", col: "weekday_font_color", b: "weekday_font_weight" },
                 { label: "Шрифт чисел календаря", sz: "day_font_size", col: "day_font_color", b: "day_font_weight" },
                 { label: "Шрифт текущего дня", sz: "today_font_size", col: "today_font_color", b: "today_font_weight" },
                 { label: "Шрифт чужих дней", sz: "other_day_font_size", col: "other_day_font_color", b: "other_day_font_weight" },
-                { label: "Цвет ячейки месяца", cell: "month_cell_color" },
+                { label: "Цвет панели месяца", cell: "month_cell_color" },
                 { label: "Цвет ячейки дней недели", cell: "weekday_cell_color" },
                 { label: "Цвет ячейки чисел", cell: "day_cell_color" },
                 { label: "Цвет ячейки текущего дня", cell: "today_cell_color" },
@@ -1072,6 +1054,7 @@
 
         function saveSettings() {
             let keys = [
+                "bg_main",
                 "month_font_size", "month_font_color", "month_font_weight",
                 "weekday_font_size", "weekday_font_color", "weekday_font_weight",
                 "day_font_size", "day_font_color", "day_font_weight",
@@ -1104,12 +1087,12 @@
             container.innerHTML = '';
             
             let items = [
-                { label: "Фон таблицы", cell: "table_bg" },
+                { label: "Фон контейнера таблицы", cell: "table_bg" },
                 { label: "Шапка таблицы (заголовки)", sz: "table_header_font_size", col: "table_header_font_color", b: "table_header_font_weight", cell: "table_header_bg" },
                 { label: "Ячейки месяцев (левый столбец)", sz: "table_month_font_size", col: "table_month_font_color", b: "table_month_font_weight", cell: "table_month_cell_bg" },
                 { label: "Ячейки диапазона дат (ввод)", sz: "table_cell_font_size", col: "table_cell_font_color", b: "table_cell_font_weight", cell: "table_cell_bg" },
-                { label: "Ячейки результатов (КОЛ-ВО)", sz: "table_result_font_size", col: "table_result_font_color", b: "table_result_font_weight", cell: "table_result_cell_bg" },
-                { label: "Итоговые строки (ВСЕГО / ЗА ВСЕ ВРЕМЯ)", sz: "table_total_font_size", col: "table_total_font_color", b: "table_total_font_weight", cell: "table_total_cell_bg" },
+                { label: "Ячейки результатов (ДНЕЙ)", sz: "table_result_font_size", col: "table_result_font_color", b: "table_result_font_weight", cell: "table_result_cell_bg" },
+                { label: "Итоговые строки (ГОД / ВСЕ ВРЕМЯ)", sz: "table_total_font_size", col: "table_total_font_color", b: "table_total_font_weight", cell: "table_total_cell_bg" },
                 { label: "Цвет подсветки текущей строки месяца", cell: "table_highlight_row_bg" }
             ];
 
