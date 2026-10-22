@@ -167,8 +167,8 @@
         }
 
         .cal-day-cell.weekend {
-            background: var(--weekend-cell-color);
-            color: var(--weekend-font-color);
+            background: var(--weekend-cell-color) !important;
+            color: var(--weekend-font-color) !important;
         }
 
         .cal-day-cell.other-month {
@@ -446,7 +446,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно настроек календаря (в стиле табличных карточек) -->
+    <!-- Модальное окно настроек календаря -->
     <div class="modal" id="settings-modal">
         <div class="modal-content" style="max-width: 480px;">
             <h3 style="color:#1c2536; font-weight:800;">НАСТРОЙКИ КАЛЕНДАРЯ</h3>
@@ -978,21 +978,56 @@
             renderCalendar();
         }
 
-        function exportData() {
+        // АДАПТИРОВАННЫЙ ЭКСПОРТ ДЛЯ APK (ANDROID WEBVIEW) И БРАУЗЕРА
+        async function exportData() {
             let jsonStr = JSON.stringify(db, null, 4);
-            let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
-            let url = URL.createObjectURL(blob);
             
-            let dlAnchor = document.createElement('a');
-            dlAnchor.href = url;
-            dlAnchor.download = "calendar_backup.json";
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            
-            setTimeout(() => {
-                document.body.removeChild(dlAnchor);
-                URL.revokeObjectURL(url);
-            }, 100);
+            // Пробуем использовать современный File System Access API (если поддерживается в APK/браузере)
+            if (window.showSaveFilePicker) {
+                try {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: 'calendar_backup.json',
+                        types: [{
+                            description: 'JSON Files',
+                            accept: { 'application/json': ['.json'] },
+                        }],
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(jsonStr);
+                    await writable.close();
+                    alert("Файл успешно сохранен!");
+                    return;
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.log("File Picker отменен или не поддерживается, переходим к запасному варианту");
+                    } else {
+                        return; // Пользователь сам отменил сохранение
+                    }
+                }
+            }
+
+            // Запасной универсальный вариант для Android APK и старых браузеров (через Data URL / Blob)
+            try {
+                let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+                let url = URL.createObjectURL(blob);
+                
+                let dlAnchor = document.createElement('a');
+                dlAnchor.href = url;
+                dlAnchor.download = "calendar_backup.json";
+                dlAnchor.style.display = "none";
+                document.body.appendChild(dlAnchor);
+                
+                // Эмуляция клика для WebView
+                dlAnchor.click();
+                
+                setTimeout(() => {
+                    document.body.removeChild(dlAnchor);
+                    URL.revokeObjectURL(url);
+                }, 200);
+            } catch (e) {
+                // Если стандартный метод заблокирован системой Android WebView, выводим данные в текстовое поле для ручного копирования
+                let userCopy = prompt("Скопируйте JSON-код резервной копии:", jsonStr);
+            }
         }
 
         function importDataTrigger() { document.getElementById('import-file').click(); }
