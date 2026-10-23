@@ -446,20 +446,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно экспорта (Скачать файл и Скопировать) -->
-    <div class="modal" id="export-modal">
-        <div class="modal-content">
-            <h3 style="color:#1c2536; font-weight:800;">ЭКСПОРТ ДАННЫХ</h3>
-            <div style="font-size: 11px; color: #718096;">Скачайте файл бэкапа или скопируйте текст:</div>
-            <textarea id="export-text-area" readonly style="height: 100px;"></textarea>
-            <div style="display: flex; gap: 8px;">
-                <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; flex-grow:1; height:40px;" onclick="downloadBackupFile()">СКАЧАТЬ ФАЙЛ</button>
-                <button class="action-btn" style="background: linear-gradient(145deg, #e0f7fa, #b2ebf2); color:#006064; flex-grow:1; height:40px;" onclick="copyExportText()">СКОПИРОВАТЬ</button>
-            </div>
-            <button class="action-btn" onclick="closeExportModal()">ЗАКРЫТЬ</button>
-        </div>
-    </div>
-
     <!-- Модальное окно настроек календаря -->
     <div class="modal" id="settings-modal">
         <div class="modal-content" style="max-width: 480px;">
@@ -992,62 +978,52 @@
             renderCalendar();
         }
 
-        // ЭКСПОРТ (ПОДГОТОВКА И ОТКРЫТИЕ ОКНА С ТЕКСТОМ)
-        function getFullExportPayload() {
+        // ЭКСПОРТ ВСЕХ ДАННЫХ И НАСТРОЕК В БУФЕР ОБМЕНА
+        function exportData() {
+            // Сохраняем текущие введенные данные из таблицы в базу перед экспортом
             collectTableInputsToTemp();
             db.table_ranges = JSON.parse(JSON.stringify(tempDbRanges));
             localStorage.setItem('calendar_db', JSON.stringify(db));
 
-            return {
+            // Собираем абсолютно всё в единый JSON объект
+            let fullExportData = {
                 calendar_db: db,
                 calendar_settings: settings,
                 table_settings: tableSettings
             };
-        }
 
-        function exportData() {
-            let payload = getFullExportPayload();
-            let jsonStr = JSON.stringify(payload, null, 4);
-            document.getElementById('export-text-area').value = jsonStr;
-            document.getElementById('export-modal').style.display = 'flex';
-        }
+            let jsonStr = JSON.stringify(fullExportData, null, 4);
 
-        function downloadBackupFile() {
-            let payload = getFullExportPayload();
-            let jsonStr = JSON.stringify(payload, null, 4);
-            let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
-            let url = URL.createObjectURL(blob);
-            
-            let dlAnchor = document.createElement('a');
-            dlAnchor.href = url;
-            dlAnchor.download = "calendar_backup.json";
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            
-            setTimeout(() => {
-                document.body.removeChild(dlAnchor);
-                URL.revokeObjectURL(url);
-            }, 200);
-        }
-
-        function copyExportText() {
-            let textArea = document.getElementById('export-text-area');
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-            try {
-                let success = document.execCommand('copy');
-                if (success) {
-                    alert("Резервная копия скопирована в буфер обмена!");
-                } else {
-                    alert("Не удалось скопировать автоматически. Выделите текст в поле выше и скопируйте вручную.");
-                }
-            } catch (err) {
-                alert("Не удалось скопировать автоматически. Выделите текст в поле выше и скопируйте вручную.");
+            // Копируем в буфер обмена
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(jsonStr).then(() => {
+                    alert("Все данные и настройки успешно скопированы в буфер обмена!");
+                }).catch(err => {
+                    fallbackCopy(jsonStr);
+                });
+            } else {
+                fallbackCopy(jsonStr);
             }
         }
 
-        function closeExportModal() {
-            document.getElementById('export-modal').style.display = 'none';
+        function fallbackCopy(text) {
+            let textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            try {
+                let successful = document.execCommand('copy');
+                if (successful) {
+                    alert("Все данные и настройки успешно скопированы в буфер обмена!");
+                } else {
+                    prompt("Не удалось скопировать автоматически. Скопируйте текст вручную:", text);
+                }
+            } catch (err) {
+                prompt("Не удалось скопировать автоматически. Скопируйте текст вручную:", text);
+            }
+            document.body.removeChild(textarea);
         }
 
         function importDataTrigger() { document.getElementById('import-file').click(); }
@@ -1059,6 +1035,7 @@
                 try {
                     let imported = JSON.parse(event.target.result);
                     
+                    // Поддержка как нового полного формата, так и старого бэкапа
                     if (imported.calendar_db) {
                         db = imported.calendar_db;
                         localStorage.setItem('calendar_db', JSON.stringify(db));
