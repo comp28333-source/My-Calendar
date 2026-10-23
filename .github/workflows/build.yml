@@ -27,7 +27,7 @@ jobs:
 
       - name: Create Cordova project and disable splash
         run: |
-          cordova create my-app com.moikalendar.app MoiKalendar
+          cordova create my-app com.dejurstvo.app Dejurstvo
           cd my-app
           cordova platform add android
           cp ../index.html www/index.html
@@ -47,5 +47,5 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: moikalendar-apk
-          path: my-app/platforms/android/app/build/outputs/apk/debug/app-kalendar.apk
+          name: dejurstvo-apk
+          path: my-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
