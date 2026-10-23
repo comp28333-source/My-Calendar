@@ -450,9 +450,8 @@
     <div class="modal" id="export-modal">
         <div class="modal-content">
             <h3 style="color:#1c2536; font-weight:800;">ЭКСПОРТ ДАННЫХ</h3>
-            <div style="font-size: 11px; color: #718096;">Если скачивание файлом не началось автоматически, нажмите кнопку ниже или скопируйте текст:</div>
+            <div style="font-size: 11px; color: #718096;">Нажмите кнопку «СКАЧАТЬ ФАЙЛ» или скопируйте текст ниже:</div>
             <textarea id="export-text-area" readonly style="height: 120px;"></textarea>
-            <a id="download-link" style="display:none;" download="calendar_backup.json">Скачать файл</a>
             <div style="display: flex; gap: 8px;">
                 <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; flex-grow:1; height:40px;" onclick="downloadBackupFile()">СКАЧАТЬ ФАЙЛ</button>
                 <button class="action-btn" style="background: linear-gradient(145deg, #e0f7fa, #b2ebf2); color:#006064; flex-grow:1; height:40px;" onclick="copyExportText()">СКОПИРОВАТЬ</button>
@@ -927,9 +926,9 @@
             for (let i = 1; i <= 12; i++) {
                 let mData = yearData[i] || {};
                 document.getElementById(`f1_${i}`).value = mData.from1 || '';
-                document.getElementById(`t1_${i}`).value = mData.to1 || '';
+                document.getElementById(`t1_${i}`).value = mData.t1 || '';
                 document.getElementById(`f2_${i}`).value = mData.from2 || '';
-                document.getElementById(`t2_${i}`).value = mData.to2 || '';
+                document.getElementById(`t2_${i}`).value = mData.t2 || '';
             }
             updateTableCalculations();
         }
@@ -993,25 +992,25 @@
             renderCalendar();
         }
 
-        // НАДЕЖНЫЙ ЭКСПОРТ ЧЕРЕЗ МОДАЛЬНОЕ ОКНО (100% РАБОТАЕТ В APK И БРАУЗЕРЕ)
+        // АБСОЛЮТНО НАДЕЖНЫЙ ЭКСПОРТ ДЛЯ ANDROID APK (ЧЕРЕЗ DATA URI)
         function exportData() {
             let jsonStr = JSON.stringify(db, null, 4);
             document.getElementById('export-text-area').value = jsonStr;
-            
-            // Автоматически готовим скрытую ссылку для скачивания файла
-            let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
-            let url = URL.createObjectURL(blob);
-            let dlLink = document.getElementById('download-link');
-            dlLink.href = url;
-            dlLink.download = "calendar_backup.json";
-
-            // Открываем окно экспорта
             document.getElementById('export-modal').style.display = 'flex';
         }
 
         function downloadBackupFile() {
-            let dlLink = document.getElementById('download-link');
-            dlLink.click();
+            let jsonStr = JSON.stringify(db, null, 4);
+            let dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(jsonStr);
+            
+            let dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataUri);
+            dlAnchor.setAttribute("download", "calendar_backup.json");
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            setTimeout(() => {
+                document.body.removeChild(dlAnchor);
+            }, 100);
         }
 
         function copyExportText() {
