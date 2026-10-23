@@ -142,7 +142,7 @@
             text-align: center;
             padding: 10px 0;
             border-radius: 10px;
-            box-shadow: 2px 2px 5px #d1d3d8, -2px -2px 5px #ffffff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1), -2px -2px 5px rgba(255,255,255,0.05);
         }
 
         .cal-day-cell {
@@ -158,12 +158,12 @@
             border-radius: 14px;
             cursor: pointer;
             position: relative;
-            box-shadow: 4px 4px 8px #c8cace, -4px -4px 8px #ffffff;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.12), -4px -4px 8px rgba(255,255,255,0.05);
             transition: all 0.1s ease;
         }
 
         .cal-day-cell:active {
-            box-shadow: inset 2px 2px 5px #b8babe, inset -2px -2px 5px #ffffff;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(255,255,255,0.05);
         }
 
         .cal-day-cell.weekend {
@@ -176,7 +176,7 @@
             color: var(--other-day-font-color);
             font-size: var(--other-day-font-size);
             font-weight: var(--other-day-font-weight);
-            box-shadow: 2px 2px 5px #d1d3d8, -2px -2px 5px #ffffff;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1), -2px -2px 5px rgba(255,255,255,0.05);
         }
 
         .cal-day-cell.today { 
@@ -184,7 +184,7 @@
             color: var(--today-font-color) !important; 
             font-size: var(--today-font-size) !important;
             font-weight: var(--today-font-weight) !important;
-            box-shadow: 4px 4px 10px rgba(43, 130, 251, 0.4), -2px -2px 6px #ffffff !important;
+            box-shadow: 4px 4px 10px rgba(43, 130, 251, 0.4), -2px -2px 6px rgba(255,255,255,0.1) !important;
         }
         
         /* Стили неоморфной таблицы */
@@ -192,7 +192,7 @@
             background: var(--table-bg);
             padding: 12px;
             border-radius: 18px;
-            box-shadow: inset 4px 4px 8px #c8cace, inset -4px -4px 8px #ffffff;
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.15), inset -4px -4px 8px rgba(255,255,255,0.05);
             overflow-x: auto;
         }
 
@@ -215,7 +215,7 @@
             font-size: var(--table-header-font-size); 
             color: var(--table-header-font-color); 
             font-weight: var(--table-header-font-weight); 
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.05);
         }
 
         .table-month-name {
@@ -225,12 +225,12 @@
             font-weight: var(--table-month-font-weight);
             text-align: left;
             padding-left: 10px;
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.05);
         }
 
         .table-data-cell {
             background: var(--table-cell-bg);
-            box-shadow: inset 2px 2px 4px #c8cace, inset -2px -2px 4px #ffffff;
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,0.05);
             padding: 2px;
         }
 
@@ -239,7 +239,7 @@
             font-size: var(--table-result-font-size);
             color: var(--table-result-font-color);
             font-weight: var(--table-result-font-weight);
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.05);
         }
 
         .table-total-cell {
@@ -247,7 +247,7 @@
             font-size: var(--table-total-font-size);
             color: var(--table-total-font-color);
             font-weight: var(--table-total-font-weight);
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.05);
         }
 
         .table-frame input { 
@@ -266,7 +266,7 @@
 
         .highlight-row td { 
             background-color: var(--table-highlight-row-bg) !important;
-            box-shadow: 0 0 0 2px #2b82fb inset, 3px 3px 6px #c8cace !important; 
+            box-shadow: 0 0 0 2px #2b82fb inset, 3px 3px 6px rgba(0,0,0,0.1) !important; 
         }
 
         /* Нижняя панель */
@@ -282,11 +282,11 @@
             font-weight: 700;
             font-size: 13px;
             color: #2d3748;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.12), -4px -4px 8px rgba(255,255,255,0.05);
             transition: all 0.1s ease;
         }
         .action-btn:active {
-            box-shadow: inset 2px 2px 5px #c2c4c9, inset -2px -2px 5px #ffffff;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(255,255,255,0.05);
             transform: scale(0.97);
         }
 
@@ -300,18 +300,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.12), -4px -4px 8px rgba(255,255,255,0.05);
             transition: all 0.1s ease;
         }
         .gear-btn:active {
-            box-shadow: inset 2px 2px 5px #c2c4c9, inset -2px -2px 5px #ffffff;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(255,255,255,0.05);
             transform: scale(0.97);
         }
 
         /* Модальные окна */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 3000; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 3000; }
         .modal-content { 
-            background: #ebedf0; 
+            background: var(--bg-main); 
             padding: 20px; 
             border-radius: 20px; 
             width: 92%; 
@@ -321,15 +321,15 @@
             display: flex; 
             flex-direction: column; 
             gap: 12px; 
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.25), -6px -6px 20px #ffffff; 
-            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.3), -6px -6px 20px rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .modal-item-card {
-            background: #ebedf0;
+            background: var(--bg-main);
             padding: 10px;
             border-radius: 12px;
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1), -3px -3px 6px rgba(255,255,255,0.05);
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -338,32 +338,33 @@
         .modal-input {
             border: none;
             outline: none;
-            background: #f0f2f5;
+            background: var(--table-result-cell-bg);
+            color: var(--day-font-color);
             padding: 6px 10px;
             border-radius: 8px;
-            box-shadow: inset 2px 2px 4px #c8cace, inset -2px -2px 4px #ffffff;
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.15), inset -2px -2px 4px rgba(255,255,255,0.05);
             font-size: 12px;
         }
         
         /* Полноэкранное окно таблицы */
-        .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ebedf0; z-index: 2000; flex-direction: column; padding: 12px; overflow: hidden; }
+        .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 2000; flex-direction: column; padding: 12px; overflow: hidden; }
         .fullscreen-header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 12px; 
-            background: #ebedf0; 
+            background: var(--bg-main); 
             padding: 10px 14px; 
             border-radius: 16px; 
-            box-shadow: 5px 5px 10px #d1d3d8, -5px -5px 10px #ffffff; 
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.1), -5px -5px 10px rgba(255,255,255,0.05); 
         }
         .fullscreen-body { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
 
         .palette { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 8px; }
-        .color-btn { width: 100%; aspect-ratio: 1.4; border-radius: 8px; border: none; cursor: pointer; box-shadow: 3px 3px 6px rgba(0,0,0,0.15), -2px -2px 4px #ffffff; }
+        .color-btn { width: 100%; aspect-ratio: 1.4; border-radius: 8px; border: none; cursor: pointer; box-shadow: 3px 3px 6px rgba(0,0,0,0.2), -2px -2px 4px rgba(255,255,255,0.05); }
         .color-btn.selected { border: 2px solid #2d3748; transform: scale(1.08); }
         
-        textarea { width: 100%; height: 95px; padding: 10px; font-size: 13px; border: none; border-radius: 12px; background: #f0f2f5; box-shadow: inset 3px 3px 6px #c8cace, inset -3px -3px 6px #ffffff; resize: none; outline: none; }
+        textarea { width: 100%; height: 95px; padding: 10px; font-size: 13px; border: none; border-radius: 12px; background: var(--table-result-cell-bg); color: var(--day-font-color); box-shadow: inset 3px 3px 6px rgba(0,0,0,0.2), inset -3px -3px 6px rgba(255,255,255,0.05); resize: none; outline: none; }
     </style>
 </head>
 <body>
@@ -392,7 +393,7 @@
             <input type="file" id="import-file" style="display:none" onchange="importData(event)">
         </div>
         <div class="gear-btn" onclick="openSettings()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#4a5568">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
             </svg>
         </div>
@@ -405,7 +406,7 @@
                 <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white;" onclick="saveTableChanges()">СОХРАНИТЬ</button>
                 <button class="action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white;" onclick="closeTableModal()">ОТМЕНИТЬ</button>
             </div>
-            <div style="font-weight:800; font-size:15px; color:#2d3748;" id="table-modal-year-title">ГОД</div>
+            <div style="font-weight:800; font-size:15px;" id="table-modal-year-title">ГОД</div>
             <button class="action-btn" onclick="openTableSettings()">НАСТРОЙКИ</button>
         </div>
         <div class="fullscreen-body">
@@ -435,9 +436,9 @@
     <!-- Модальное окно заметки -->
     <div class="modal" id="note-modal">
         <div class="modal-content">
-            <h3 id="modal-date-title" style="font-size: 15px; color: #1c2536; font-weight:800;">Заметка</h3>
+            <h3 id="modal-date-title" style="font-size: 15px; font-weight:800;">Заметка</h3>
             <div>
-                <label style="font-size: 11px; font-weight: bold; color: #4a5568;">ЦВЕТ ТОЧКИ:</label>
+                <label style="font-size: 11px; font-weight: bold;">ЦВЕТ ТОЧКИ:</label>
                 <div class="palette" id="color-palette" style="margin-top:6px;"></div>
             </div>
             <textarea id="note-text" placeholder="Введите заметку..."></textarea>
@@ -446,11 +447,11 @@
         </div>
     </div>
 
-    <!-- Модальное окно экспорта (гарантированное сохранение для APK) -->
+    <!-- Модальное окно экспорта (гарантированное сохранение для APK через Blob + DataURI) -->
     <div class="modal" id="export-modal">
         <div class="modal-content">
-            <h3 style="color:#1c2536; font-weight:800;">ЭКСПОРТ ДАННЫХ</h3>
-            <div style="font-size: 11px; color: #718096;">Нажмите кнопку «СКАЧАТЬ ФАЙЛ» или скопируйте текст ниже:</div>
+            <h3 style="font-weight:800;">ЭКСПОРТ ДАННЫХ</h3>
+            <div style="font-size: 11px;">Нажмите кнопку «СКАЧАТЬ ФАЙЛ» для сохранения бэкапа:</div>
             <textarea id="export-text-area" readonly style="height: 120px;"></textarea>
             <div style="display: flex; gap: 8px;">
                 <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; flex-grow:1; height:40px;" onclick="downloadBackupFile()">СКАЧАТЬ ФАЙЛ</button>
@@ -463,8 +464,8 @@
     <!-- Модальное окно настроек календаря -->
     <div class="modal" id="settings-modal">
         <div class="modal-content" style="max-width: 480px;">
-            <h3 style="color:#1c2536; font-weight:800;">НАСТРОЙКИ КАЛЕНДАРЯ</h3>
-            <div style="font-size: 11px; color: #718096;">Настройте внешний вид под себя:</div>
+            <h3 style="font-weight:800;">НАСТРОЙКИ КАЛЕНДАРЯ</h3>
+            <div style="font-size: 11px;">Настройте внешний вид под себя:</div>
             <div style="display:flex; flex-direction:column; gap:8px;" id="settings-controls"></div>
             <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:40px;" onclick="saveSettings()">СОХРАНИТЬ</button>
             <button class="action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white;" onclick="closeSettings()">ОТМЕНИТЬ</button>
@@ -474,8 +475,8 @@
     <!-- Модальное окно настроек таблицы -->
     <div class="modal" id="table-settings-modal">
         <div class="modal-content" style="max-width: 480px;">
-            <h3 style="color:#1c2536; font-weight:800;">НАСТРОЙКИ ТАБЛИЦЫ</h3>
-            <div style="font-size: 11px; color: #718096;">Настройте внешний вид элементов таблицы:</div>
+            <h3 style="font-weight:800;">НАСТРОЙКИ ТАБЛИЦЫ</h3>
+            <div style="font-size: 11px;">Настройте внешний вид элементов таблицы:</div>
             <div style="display:flex; flex-direction:column; gap:8px;" id="table-settings-controls"></div>
             <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:40px;" onclick="saveTableSettings()">СОХРАНИТЬ</button>
             <button class="action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white;" onclick="closeTableSettings()">ОТМЕНИТЬ</button>
@@ -497,6 +498,7 @@
         
         let savedSettings = JSON.parse(localStorage.getItem('calendar_settings'));
         let settings = savedSettings && typeof savedSettings === 'object' ? {
+            theme_mode: savedSettings.theme_mode || "Светлая",
             bg_main: savedSettings.bg_main || "#ebedf0",
             month_font_size: Number(savedSettings.month_font_size) || 24,
             month_font_color: savedSettings.month_font_color || "#1c2536",
@@ -533,6 +535,7 @@
             note_display_mode: savedSettings.note_display_mode || "Цветные точки",
             note_font_size: Number(savedSettings.note_font_size) || 10
         } : {
+            theme_mode: "Светлая",
             bg_main: "#ebedf0",
             month_font_size: 24, month_font_color: "#1c2536", month_font_weight: true,
             weekday_font_size: 14, weekday_font_color: "#4a5568", weekday_font_weight: true,
@@ -601,6 +604,60 @@
         function closeApp() {
             if (confirm("Вы действительно хотите выйти из приложения?")) {
                 try { window.close(); } catch(e) {}
+            }
+        }
+
+        function applyThemePreset(mode) {
+            if (mode === "Темная") {
+                settings.bg_main = "#121212";
+                settings.month_cell_color = "#1e1e1e";
+                settings.weekday_cell_color = "#1e1e1e";
+                settings.day_cell_color = "#242424";
+                settings.day_font_color = "#e0e0e0";
+                settings.month_font_color = "#ffffff";
+                settings.weekday_font_color = "#b0b0b0";
+                settings.other_cell_color = "#181818";
+                settings.other_day_font_color = "#666666";
+                settings.weekend_cell_color = "#3a1c1c";
+                settings.weekend_font_color = "#ff8080";
+
+                tableSettings.table_bg = "#121212";
+                tableSettings.table_header_bg = "#1e1e1e";
+                tableSettings.table_header_font_color = "#e0e0e0";
+                tableSettings.table_month_cell_bg = "#242424";
+                tableSettings.table_month_font_color = "#ffffff";
+                tableSettings.table_cell_bg = "#242424";
+                tableSettings.table_cell_font_color = "#e0e0e0";
+                tableSettings.table_result_cell_bg = "#181818";
+                tableSettings.table_result_font_color = "#4da6ff";
+                tableSettings.table_total_cell_bg = "#1e1e1e";
+                tableSettings.table_total_font_color = "#ff6666";
+                tableSettings.table_highlight_row_bg = "#3a2525";
+            } else {
+                settings.bg_main = "#ebedf0";
+                settings.month_cell_color = "#ebedf0";
+                settings.weekday_cell_color = "#ebedf0";
+                settings.day_cell_color = "#ffffff";
+                settings.day_font_color = "#1a202c";
+                settings.month_font_color = "#1c2536";
+                settings.weekday_font_color = "#4a5568";
+                settings.other_cell_color = "#e6e8ec";
+                settings.other_day_font_color = "#a0aec0";
+                settings.weekend_cell_color = "#ffe3e3";
+                settings.weekend_font_color = "#9b1c1c";
+
+                tableSettings.table_bg = "#ebedf0";
+                tableSettings.table_header_bg = "#e1e3e7";
+                tableSettings.table_header_font_color = "#2d3748";
+                tableSettings.table_month_cell_bg = "#ffffff";
+                tableSettings.table_month_font_color = "#1a202c";
+                tableSettings.table_cell_bg = "#ffffff";
+                tableSettings.table_cell_font_color = "#1a202c";
+                tableSettings.table_result_cell_bg = "#f0f2f5";
+                tableSettings.table_result_font_color = "#2b82fb";
+                tableSettings.table_total_cell_bg = "#e1e3e7";
+                tableSettings.table_total_font_color = "#e53e3e";
+                tableSettings.table_highlight_row_bg = "#fff5f5";
             }
         }
 
@@ -992,7 +1049,7 @@
             renderCalendar();
         }
 
-        // АБСОЛЮТНО НАДЕЖНЫЙ ЭКСПОРТ ДЛЯ ANDROID APK (ЧЕРЕЗ DATA URI)
+        /* НАДЕЖНЫЙ ЭКСПОРТ ДЛЯ APK И БРАУЗЕРА (ДВОЙНОЙ МЕТОД: BLOB + DATA URI С ОКНОМ) */
         function exportData() {
             let jsonStr = JSON.stringify(db, null, 4);
             document.getElementById('export-text-area').value = jsonStr;
@@ -1001,16 +1058,26 @@
 
         function downloadBackupFile() {
             let jsonStr = JSON.stringify(db, null, 4);
-            let dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(jsonStr);
+            let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+            let url = URL.createObjectURL(blob);
             
             let dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataUri);
-            dlAnchor.setAttribute("download", "calendar_backup.json");
+            dlAnchor.href = url;
+            dlAnchor.download = "calendar_backup.json";
+            dlAnchor.style.display = "none";
             document.body.appendChild(dlAnchor);
-            dlAnchor.click();
+            
+            try {
+                dlAnchor.click();
+            } catch(e) {
+                // Запасной вариант для APK WebView
+                window.open(url, '_blank');
+            }
+            
             setTimeout(() => {
                 document.body.removeChild(dlAnchor);
-            }, 100);
+                URL.revokeObjectURL(url);
+            }, 200);
         }
 
         function copyExportText() {
@@ -1021,7 +1088,7 @@
                 navigator.clipboard.writeText(textArea.value);
                 alert("Резервная копия скопирована в буфер обмена!");
             } catch (err) {
-                alert("Не удалось скопировать автоматически. Выделите текст и скопируйте вручную.");
+                alert("Не удалось скопировать автоматически.");
             }
         }
 
@@ -1051,6 +1118,20 @@
             let container = document.getElementById('settings-controls');
             container.innerHTML = '';
             
+            // Карточка переключения темы
+            let themeDiv = document.createElement('div');
+            themeDiv.className = "modal-item-card";
+            themeDiv.innerHTML = `
+                <b style="font-size:11px;">Глобальная тема оформления</b>
+                <div style="font-size:11px; margin-top:4px;">
+                    Режим: <select class="modal-input" id="st_theme_mode">
+                        <option ${settings.theme_mode==="Светлая"?"selected":""}>Светлая</option>
+                        <option ${settings.theme_mode==="Темная"?"selected":""}>Темная</option>
+                    </select>
+                </div>
+            `;
+            container.appendChild(themeDiv);
+
             let items = [
                 { label: "Общий фон приложения", cell: "bg_main" },
                 { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_weight", cell: "month_cell_color" },
@@ -1064,7 +1145,7 @@
             items.forEach(item => {
                 let div = document.createElement('div');
                 div.className = "modal-item-card";
-                div.innerHTML = `<b style="font-size:11px; color:#2d3748;">${item.label}</b>`;
+                div.innerHTML = `<b style="font-size:11px;">${item.label}</b>`;
                 
                 if (item.sz) {
                     div.innerHTML += `
@@ -1091,7 +1172,7 @@
             let dotDiv = document.createElement('div');
             dotDiv.className = "modal-item-card";
             dotDiv.innerHTML = `
-                <b style="font-size:11px; color:#2d3748;">Параметры заметок на календаре</b>
+                <b style="font-size:11px;">Параметры заметок на календаре</b>
                 <div style="display:flex; flex-direction:column; gap:6px; font-size:11px; margin-top:4px;">
                     <div>Режим: <select class="modal-input" id="st_note_display_mode"><option ${settings.note_display_mode==="Цветные точки"?"selected":""}>Цветные точки</option><option ${settings.note_display_mode==="Текст заметки"?"selected":""}>Текст заметки</option></select></div>
                     <div>Размер точки: <input type="number" class="modal-input" id="st_dot_size" value="${settings.dot_size}" style="width:50px;"></div>
@@ -1106,6 +1187,12 @@
         function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
 
         function saveSettings() {
+            let themeModeEl = document.getElementById('st_theme_mode');
+            if (themeModeEl) {
+                settings.theme_mode = themeModeEl.value;
+                applyThemePreset(settings.theme_mode);
+            }
+
             let keys = [
                 "bg_main",
                 "month_font_size", "month_font_color", "month_font_weight", "month_cell_color",
@@ -1152,7 +1239,7 @@
             items.forEach(item => {
                 let div = document.createElement('div');
                 div.className = "modal-item-card";
-                div.innerHTML = `<b style="font-size:11px; color:#2d3748;">${item.label}</b>`;
+                div.innerHTML = `<b style="font-size:11px;">${item.label}</b>`;
                 
                 if (item.sz) {
                     div.innerHTML += `
@@ -1198,6 +1285,7 @@
             applySettings();
         }
 
+        applyThemePreset(settings.theme_mode);
         initTable();
         renderCalendar();
         calcAllTime();
