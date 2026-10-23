@@ -95,21 +95,21 @@
             font-weight: 800;
             font-size: 18px;
             color: #2d3748;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.12), -4px -4px 8px rgba(255,255,255,0.05);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.1s ease;
         }
         .btn-3d:active { 
-            box-shadow: inset 2px 2px 5px #c2c4c9, inset -2px -2px 5px #ffffff;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.2), inset -2px -2px 5px rgba(255,255,255,0.05);
             transform: scale(0.96);
         }
 
         .btn-close { 
             background: linear-gradient(145deg, #ff6b6b, #d32f2f);
             color: white;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.12), -4px -4px 8px rgba(255,255,255,0.05);
         }
         
         #header-label {
@@ -447,15 +447,15 @@
         </div>
     </div>
 
-    <!-- Модальное окно экспорта (гарантированное сохранение для APK через Blob + DataURI) -->
+    <!-- Модальное окно экспорта (через системный диалог / Web Share или скачивание) -->
     <div class="modal" id="export-modal">
         <div class="modal-content">
             <h3 style="font-weight:800;">ЭКСПОРТ ДАННЫХ</h3>
-            <div style="font-size: 11px;">Нажмите кнопку «СКАЧАТЬ ФАЙЛ» для сохранения бэкапа:</div>
-            <textarea id="export-text-area" readonly style="height: 120px;"></textarea>
-            <div style="display: flex; gap: 8px;">
-                <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; flex-grow:1; height:40px;" onclick="downloadBackupFile()">СКАЧАТЬ ФАЙЛ</button>
-                <button class="action-btn" style="background: linear-gradient(145deg, #e0f7fa, #b2ebf2); color:#006064; flex-grow:1; height:40px;" onclick="copyExportText()">СКОПИРОВАТЬ</button>
+            <div style="font-size: 11px;">Выберите способ сохранения бэкапа:</div>
+            <textarea id="export-text-area" readonly style="height: 100px;"></textarea>
+            <div style="display: flex; gap: 8px; flex-direction: column;">
+                <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:42px;" onclick="saveFileViaSystemPicker()">СОХРАНИТЬ В ПАПКУ (ФАЙЛ)</button>
+                <button class="action-btn" style="background: linear-gradient(145deg, #e0f7fa, #b2ebf2); color:#006064; height:42px;" onclick="copyExportText()">СКОПИРОВАТЬ ТЕКСТ</button>
             </div>
             <button class="action-btn" onclick="closeExportModal()">ЗАКРЫТЬ</button>
         </div>
@@ -1049,31 +1049,66 @@
             renderCalendar();
         }
 
-        /* НАДЕЖНЫЙ ЭКСПОРТ ДЛЯ APK И БРАУЗЕРА (ДВОЙНОЙ МЕТОД: BLOB + DATA URI С ОКНОМ) */
+        /* СОХРАНЕНИЕ ФАЙЛА ЧЕРЕЗ СИСТЕМНЫЙ ДИАЛОГ (ШЕРИНГ ИЛИ ФАЙЛОВЫЙ МЕНЕДЖЕР) */
         function exportData() {
             let jsonStr = JSON.stringify(db, null, 4);
             document.getElementById('export-text-area').value = jsonStr;
             document.getElementById('export-modal').style.display = 'flex';
         }
 
-        function downloadBackupFile() {
+        async function saveFileViaSystemPicker() {
             let jsonStr = JSON.stringify(db, null, 4);
-            let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+            let blob = new Blob([jsonStr], { type: "application/json" });
+            let file = new File([blob], "calendar_backup.json", { type: "application/json" });
+
+            // Если устройство поддерживает системный диалог выбора папки (File System Access API)
+            if (window.showSaveFilePicker) {
+                try {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: 'calendar_backup.json',
+                        types: [{
+                            description: 'JSON Files',
+                            accept: { 'application/json': ['.json'] },
+                        }],
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(blob);
+                    await writable.close();
+                    alert("Файл успешно сохранен!");
+                    return;
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.log("File Picker отклонен или не поддерживается, переходим к системному меню...");
+                    } else {
+                        return;
+                    }
+                }
+            }
+
+            // Универсальный вариант через системное меню «Поделиться / Сохранить в файлы» устройства
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: 'Резервная копия календаря',
+                        files: [file]
+                    });
+                    return;
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        console.log("Share API ошибка");
+                    } else {
+                        return;
+                    }
+                }
+            }
+
+            // Запасной классический вариант со скачиванием
             let url = URL.createObjectURL(blob);
-            
             let dlAnchor = document.createElement('a');
             dlAnchor.href = url;
             dlAnchor.download = "calendar_backup.json";
-            dlAnchor.style.display = "none";
             document.body.appendChild(dlAnchor);
-            
-            try {
-                dlAnchor.click();
-            } catch(e) {
-                // Запасной вариант для APK WebView
-                window.open(url, '_blank');
-            }
-            
+            dlAnchor.click();
             setTimeout(() => {
                 document.body.removeChild(dlAnchor);
                 URL.revokeObjectURL(url);
@@ -1118,7 +1153,6 @@
             let container = document.getElementById('settings-controls');
             container.innerHTML = '';
             
-            // Карточка переключения темы
             let themeDiv = document.createElement('div');
             themeDiv.className = "modal-item-card";
             themeDiv.innerHTML = `
