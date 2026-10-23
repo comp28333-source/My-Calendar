@@ -35,7 +35,6 @@
             --other-day-font-color: #a0aec0;
             --other-day-font-weight: 600;
 
-            /* Переменные для таблицы */
             --table-bg: #ebedf0;
             --table-header-bg: #e1e3e7;
             --table-header-font-size: 12px;
@@ -68,7 +67,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: var(--bg-main); display: flex; flex-direction: column; height: 100vh; padding: 12px; overflow: hidden; }
 
-        /* Верхняя панель */
         .nav-frame {
             background-color: var(--month-cell-color);
             padding: 4px 8px 12px 8px;
@@ -120,7 +118,6 @@
             letter-spacing: -0.5px;
         }
 
-        /* Главный блок */
         .main-frame { 
             background: var(--bg-main);
             border-radius: 20px;
@@ -131,7 +128,6 @@
             overflow-y: auto;
         }
         
-        /* Сетка календаря */
         .cal-frame { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
         
         .cal-header-cell {
@@ -187,7 +183,6 @@
             box-shadow: 4px 4px 10px rgba(43, 130, 251, 0.4), -2px -2px 6px rgba(255,255,255,0.1) !important;
         }
         
-        /* Стили неоморфной таблицы */
         .table-container {
             background: var(--table-bg);
             padding: 12px;
@@ -269,7 +264,6 @@
             box-shadow: 0 0 0 2px #2b82fb inset, 3px 3px 6px rgba(0,0,0,0.1) !important; 
         }
 
-        /* Нижняя панель */
         .ctrl-frame { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding: 8px 4px 4px 4px; gap: 6px; flex-wrap: wrap; }
         .left-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         
@@ -308,7 +302,6 @@
             transform: scale(0.97);
         }
 
-        /* Модальные окна */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 3000; }
         .modal-content { 
             background: var(--bg-main); 
@@ -346,7 +339,6 @@
             font-size: 12px;
         }
         
-        /* Полноэкранное окно таблицы */
         .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 2000; flex-direction: column; padding: 12px; overflow: hidden; }
         .fullscreen-header { 
             display: flex; 
@@ -444,20 +436,6 @@
             <textarea id="note-text" placeholder="Введите заметку..."></textarea>
             <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:40px;" onclick="saveNote()">СОХРАНИТЬ</button>
             <button class="action-btn" onclick="closeNoteModal()">ОТМЕНА</button>
-        </div>
-    </div>
-
-    <!-- Модальное окно экспорта (через системный диалог / Web Share или скачивание) -->
-    <div class="modal" id="export-modal">
-        <div class="modal-content">
-            <h3 style="font-weight:800;">ЭКСПОРТ ДАННЫХ</h3>
-            <div style="font-size: 11px;">Выберите способ сохранения бэкапа:</div>
-            <textarea id="export-text-area" readonly style="height: 100px;"></textarea>
-            <div style="display: flex; gap: 8px; flex-direction: column;">
-                <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:42px;" onclick="saveFileViaSystemPicker()">СОХРАНИТЬ В ПАПКУ (ФАЙЛ)</button>
-                <button class="action-btn" style="background: linear-gradient(145deg, #e0f7fa, #b2ebf2); color:#006064; height:42px;" onclick="copyExportText()">СКОПИРОВАТЬ ТЕКСТ</button>
-            </div>
-            <button class="action-btn" onclick="closeExportModal()">ЗАКРЫТЬ</button>
         </div>
     </div>
 
@@ -692,7 +670,6 @@
             r.style.setProperty('--other-day-font-color', settings.other_day_font_color);
             r.style.setProperty('--other-day-font-weight', settings.other_day_font_weight ? '600' : 'normal');
 
-            /* Применение настроек таблицы */
             r.style.setProperty('--table-bg', tableSettings.table_bg);
             r.style.setProperty('--table-header-bg', tableSettings.table_header_bg);
             r.style.setProperty('--table-header-font-size', tableSettings.table_header_font_size + 'px');
@@ -902,7 +879,6 @@
             renderCalendar();
         }
 
-        /* Управление окном таблицы */
         function openTableModal() {
             tempDbRanges = JSON.parse(JSON.stringify(db.table_ranges));
             document.getElementById('table-modal-year-title').innerText = `${year} ГОД`;
@@ -1049,86 +1025,24 @@
             renderCalendar();
         }
 
-        /* СОХРАНЕНИЕ ФАЙЛА ЧЕРЕЗ СИСТЕМНЫЙ ДИАЛОГ (ШЕРИНГ ИЛИ ФАЙЛОВЫЙ МЕНЕДЖЕР) */
+        /* ПРЯМОЙ ЭКСПОРТ (СРАЗУ СОХРАНЯЕТ ФАЙЛ В ЗАГРУЗКИ УСТРОЙСТВА) */
         function exportData() {
             let jsonStr = JSON.stringify(db, null, 4);
-            document.getElementById('export-text-area').value = jsonStr;
-            document.getElementById('export-modal').style.display = 'flex';
-        }
-
-        async function saveFileViaSystemPicker() {
-            let jsonStr = JSON.stringify(db, null, 4);
-            let blob = new Blob([jsonStr], { type: "application/json" });
-            let file = new File([blob], "calendar_backup.json", { type: "application/json" });
-
-            // Если устройство поддерживает системный диалог выбора папки (File System Access API)
-            if (window.showSaveFilePicker) {
-                try {
-                    const handle = await window.showSaveFilePicker({
-                        suggestedName: 'calendar_backup.json',
-                        types: [{
-                            description: 'JSON Files',
-                            accept: { 'application/json': ['.json'] },
-                        }],
-                    });
-                    const writable = await handle.createWritable();
-                    await writable.write(blob);
-                    await writable.close();
-                    alert("Файл успешно сохранен!");
-                    return;
-                } catch (err) {
-                    if (err.name !== 'AbortError') {
-                        console.log("File Picker отклонен или не поддерживается, переходим к системному меню...");
-                    } else {
-                        return;
-                    }
-                }
-            }
-
-            // Универсальный вариант через системное меню «Поделиться / Сохранить в файлы» устройства
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        title: 'Резервная копия календаря',
-                        files: [file]
-                    });
-                    return;
-                } catch (err) {
-                    if (err.name !== 'AbortError') {
-                        console.log("Share API ошибка");
-                    } else {
-                        return;
-                    }
-                }
-            }
-
-            // Запасной классический вариант со скачиванием
+            let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
             let url = URL.createObjectURL(blob);
+            
             let dlAnchor = document.createElement('a');
             dlAnchor.href = url;
             dlAnchor.download = "calendar_backup.json";
             document.body.appendChild(dlAnchor);
+            
+            // Программный клик для запуска скачивания
             dlAnchor.click();
+            
             setTimeout(() => {
                 document.body.removeChild(dlAnchor);
                 URL.revokeObjectURL(url);
             }, 200);
-        }
-
-        function copyExportText() {
-            let textArea = document.getElementById('export-text-area');
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-            try {
-                navigator.clipboard.writeText(textArea.value);
-                alert("Резервная копия скопирована в буфер обмена!");
-            } catch (err) {
-                alert("Не удалось скопировать автоматически.");
-            }
-        }
-
-        function closeExportModal() {
-            document.getElementById('export-modal').style.display = 'none';
         }
 
         function importDataTrigger() { document.getElementById('import-file').click(); }
@@ -1255,7 +1169,6 @@
             renderCalendar();
         }
 
-        /* Настройки таблицы */
         function openTableSettings() {
             let container = document.getElementById('table-settings-controls');
             container.innerHTML = '';
