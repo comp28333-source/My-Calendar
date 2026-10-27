@@ -68,11 +68,11 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: var(--bg-main); display: flex; flex-direction: column; height: 100vh; padding: 12px; overflow: hidden; position: relative; }
 
-        /* ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» СТРОГО В ЛЕВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕХ СЛОЕВ */
+        /* ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» СТРОГО В ПРАВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕХ СЛОЕВ */
         .watermark-blik {
             position: fixed;
             bottom: 12px;
-            left: 16px;
+            right: 16px;
             opacity: 0.35;
             pointer-events: none;
             z-index: 9999;
@@ -286,13 +286,13 @@
             box-shadow: 0 0 0 2px #2b82fb inset, 3px 3px 6px #c8cace !important; 
         }
 
-        /* Нижняя панель с отступом слева под знак */
+        /* Нижняя панель */
         .ctrl-frame { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             margin-top: auto; 
-            padding: 8px 4px 4px 90px; 
+            padding: 8px 4px 4px 4px; 
             gap: 6px; 
             flex-wrap: wrap; 
         }
@@ -393,7 +393,7 @@
 </head>
 <body>
 
-    <!-- ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» В ЛЕВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕГО -->
+    <!-- ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» В ПРАВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕГО -->
     <div class="watermark-blik" aria-hidden="true">БЛiК</div>
 
     <div class="nav-frame" id="nav-frame">
@@ -955,9 +955,9 @@
             for (let i = 1; i <= 12; i++) {
                 let mData = yearData[i] || {};
                 document.getElementById(`f1_${i}`).value = mData.from1 || '';
-                document.getElementById(`t1_${i}`).value = mData.to1 || '';
+                document.getElementById(`t1_${i}`).value = mData.t1 || '';
                 document.getElementById(`f2_${i}`).value = mData.from2 || '';
-                document.getElementById(`t2_${i}`).value = mData.to2 || '';
+                document.getElementById(`t2_${i}`).value = mData.t2 || '';
             }
             updateTableCalculations();
         }
