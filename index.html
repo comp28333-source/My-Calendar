@@ -66,7 +66,24 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-main); display: flex; flex-direction: column; height: 100vh; padding: 12px; overflow: hidden; }
+        body { background-color: var(--bg-main); display: flex; flex-direction: column; height: 100vh; padding: 12px; overflow: hidden; position: relative; }
+
+        /* ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» СТРОГО В ЛЕВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕХ СЛОЕВ */
+        .watermark-blik {
+            position: fixed;
+            bottom: 12px;
+            left: 16px;
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 9999;
+            user-select: none;
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 900;
+            font-size: 26px;
+            letter-spacing: 0.12em;
+            color: var(--month-font-color);
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.15);
+        }
 
         /* Верхняя панель */
         .nav-frame {
@@ -269,8 +286,16 @@
             box-shadow: 0 0 0 2px #2b82fb inset, 3px 3px 6px #c8cace !important; 
         }
 
-        /* Нижняя панель */
-        .ctrl-frame { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding: 8px 4px 4px 4px; gap: 6px; flex-wrap: wrap; }
+        /* Нижняя панель с отступом слева под знак */
+        .ctrl-frame { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-top: auto; 
+            padding: 8px 4px 4px 90px; 
+            gap: 6px; 
+            flex-wrap: wrap; 
+        }
         .left-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         
         .action-btn {
@@ -367,6 +392,9 @@
     </style>
 </head>
 <body>
+
+    <!-- ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» В ЛЕВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕГО -->
+    <div class="watermark-blik" aria-hidden="true">БЛiК</div>
 
     <div class="nav-frame" id="nav-frame">
         <div class="center-nav">
@@ -725,7 +753,6 @@
                 createDayCell(calFrame, d, nextY, nextM, true, false, colIdx >= 5);
             }
             
-            // Загружаем данные таблицы для выбранного года в календаре
             if (document.getElementById('table-modal').style.display === 'flex') {
                 loadTableData();
             }
@@ -850,7 +877,6 @@
             renderCalendar();
         }
 
-        /* Управление окном таблицы */
         function openTableModal() {
             document.getElementById('table-modal-year-title').innerText = `${year} ГОД`;
             loadTableData();
@@ -923,14 +949,13 @@
             return sum;
         }
 
-        /* ИСПРАВЛЕННОЕ ЧТЕНИЕ ДАННЫХ ИЗ БАЗЫ */
         function loadTableData() {
             let yearStr = year.toString();
             let yearData = db.table_ranges[yearStr] || {};
             for (let i = 1; i <= 12; i++) {
                 let mData = yearData[i] || {};
                 document.getElementById(`f1_${i}`).value = mData.from1 || '';
-                document.getElementById(`t1_${i}`).value = mData.to1 || ''; // ИСПРАВЛЕНО: раньше стояла опечатка mData.t1
+                document.getElementById(`t1_${i}`).value = mData.to1 || '';
                 document.getElementById(`f2_${i}`).value = mData.from2 || '';
                 document.getElementById(`t2_${i}`).value = mData.to2 || '';
             }
@@ -985,7 +1010,6 @@
             renderCalendar();
         }
 
-        // ЭКСПОРТ (ГАРАНТИРОВАННЫЙ СБОР ВСЕХ ДАННЫХ)
         function getFullExportPayload() {
             collectTableInputs();
             return {
@@ -1168,7 +1192,6 @@
             renderCalendar();
         }
 
-        /* Настройки таблицы */
         function openTableSettings() {
             let container = document.getElementById('table-settings-controls');
             container.innerHTML = '';
