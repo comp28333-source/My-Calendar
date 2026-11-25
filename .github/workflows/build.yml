@@ -39,7 +39,7 @@ jobs:
             sed -i '/<\/widget>/i \    <icon src="../icon.png" />' config.xml
           fi
 
-          sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="none" />' config.xml
+          sed -i '/<\/widget>/i \    <preference name="SplashScreen" value="0" />' config.xml
           sed -i '/<\/widget>/i \    <preference name="SplashMaintainScrollPosition" value="true" />' config.xml
 
           cordova build android
