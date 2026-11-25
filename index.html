@@ -1,135 +1,210 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>КАЛЕНДАРЬ С ЗАМЕТКАМИ</title>
+    <title>Календарь с заметками — БЛiК</title>
     <style>
-        :root {
-            --bg-main: #ebedf0;
-            --month-cell-color: #ebedf0;
-            --weekday-cell-color: #ebedf0;
-            --day-cell-color: #ffffff;
-            --today-cell-color: #2b82fb;
-            --other-cell-color: #e6e8ec;
-            --weekend-cell-color: #ffe3e3;
-            --weekend-font-color: #9b1c1c;
-            
-            --month-font-size: 24px;
-            --month-font-color: #1c2536;
-            --month-font-weight: 800;
-
-            --weekday-font-size: 14px;
-            --weekday-font-color: #4a5568;
-            --weekday-font-weight: 700;
-
-            --day-font-size: 16px;
-            --day-font-color: #1a202c;
-            --day-font-weight: 700;
-
-            --today-font-size: 16px;
-            --today-font-color: #ffffff;
-            --today-font-weight: 800;
-
-            --other-day-font-size: 15px;
-            --other-day-font-color: #a0aec0;
-            --other-day-font-weight: 600;
-
-            /* Переменные для таблицы */
-            --table-bg: #ebedf0;
-            --table-header-bg: #e1e3e7;
-            --table-header-font-size: 12px;
-            --table-header-font-color: #2d3748;
-            --table-header-font-weight: bold;
-
-            --table-month-cell-bg: #ffffff;
-            --table-month-font-size: 12px;
-            --table-month-font-color: #1a202c;
-            --table-month-font-weight: bold;
-
-            --table-cell-bg: #ffffff;
-            --table-cell-font-size: 12px;
-            --table-cell-font-color: #1a202c;
-            --table-cell-font-weight: normal;
-
-            --table-result-cell-bg: #f0f2f5;
-            --table-result-font-size: 12px;
-            --table-result-font-color: #2b82fb;
-            --table-result-font-weight: bold;
-
-            --table-total-cell-bg: #e1e3e7;
-            --table-total-font-size: 12px;
-            --table-total-font-color: #e53e3e;
-            --table-total-font-weight: bold;
-
-            --table-highlight-row-bg: #fff5f5;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--bg-main); display: flex; flex-direction: column; height: 100vh; padding: 12px; overflow: hidden; position: relative; }
-
-        /* ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» СТРОГО В ПРАВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕГО С ОТСТУПОМ СПРАВА ДЛЯ КНОПОК */
-        .watermark-blik {
-            position: fixed;
-            bottom: 12px;
-            right: 75px;
-            opacity: 0.35;
-            pointer-events: none;
-            z-index: 9999;
+        *, ::before, ::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             user-select: none;
-            font-family: system-ui, -apple-system, sans-serif;
-            font-weight: 900;
-            font-size: 26px;
-            letter-spacing: 0.12em;
-            color: var(--month-font-color);
-            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8), -1px -1px 2px rgba(0, 0, 0, 0.15);
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: var(--font-family);
         }
 
-        /* Верхняя панель */
-        .nav-frame {
+        :root {
+            --bg-color: #e0e5ec;
+            --card-bg: #e0e5ec;
+            --text-color: #334155;
+            --text-muted: #64748b;
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --accent-color: #007aff;
+            --accent-text: #ffffff;
+            --border-radius: 18px;
+            --shadow-blur: 10px;
+            --shadow-dist: 5px;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-size: 15px;
+            --letter-spacing: 0.5px;
+            --text-shadow-style: none;
+            --alert-bg: #fff5f5;
+            --alert-text: #e53e3e;
+            --reset-color: #e53e3e;
+        }
+
+        [data-theme="dark"], .dark {
+            --bg-color: #1e2530;
+            --card-bg: #1e2530;
+            --text-color: #e2e8f0;
+            --text-muted: #94a3b8;
+            --shadow-light: #283242;
+            --shadow-dark: #14181e;
+            --alert-bg: #2d3748;
+            --alert-text: #fc8181;
+            --reset-color: #fc8181;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            min-height: 100dvh;
+            background-color: var(--bg-main, var(--bg-color));
+            color: var(--text-color);
+            font-size: var(--font-size);
+            letter-spacing: var(--letter-spacing);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            text-transform: uppercase;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            padding: clamp(8px, 1.8vw, 18px);
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 14px;
+            left: 16px;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 50;
+            user-select: none;
+        }
+
+        /* Полноэкранный адаптивный контейнер */
+        .app-card {
+            background: var(--bg-main, var(--card-bg));
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            padding: clamp(10px, 2vw, 20px);
+            border-radius: calc(var(--border-radius) + 6px);
+            box-shadow: calc(var(--shadow-dist) * 1.5) calc(var(--shadow-dist) * 1.5) calc(var(--shadow-blur) * 1.5) var(--shadow-dark),
+                        calc(var(--shadow-dist) * -1.5) calc(var(--shadow-dist) * -1.5) calc(var(--shadow-blur) * 1.5) var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(8px, 1.5vh, 14px);
+            position: relative;
+            transition: all 0.3s ease;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .header-title {
+            font-size: clamp(15px, 2.2vw, 20px);
+            font-weight: 800;
+            color: var(--text-color);
+            text-shadow: var(--text-shadow-style);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .neu-btn {
+            background: var(--card-bg);
+            border: none;
+            outline: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-dist) var(--shadow-dist) var(--shadow-blur) var(--shadow-dark),
+                        calc(var(--shadow-dist) * -1) calc(var(--shadow-dist) * -1) var(--shadow-blur) var(--shadow-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: var(--font-size);
+            letter-spacing: var(--letter-spacing);
+        }
+
+        .neu-btn:active, .neu-btn.active {
+            box-shadow: inset var(--shadow-dist) var(--shadow-dist) var(--shadow-blur) var(--shadow-dark),
+                        inset calc(var(--shadow-dist) * -1) calc(var(--shadow-dist) * -1) var(--shadow-blur) var(--shadow-light);
+            color: var(--accent-color);
+        }
+
+        .icon-btn {
+            width: clamp(38px, 5vw, 44px);
+            height: clamp(38px, 5vw, 44px);
+            border-radius: 50%;
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        input[type="number"], input[type="date"], input[type="text"], select {
+            width: 100%;
+            padding: 10px 12px;
+            border: none;
+            border-radius: calc(var(--border-radius) - 4px);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: var(--font-size);
+            box-shadow: inset calc(var(--shadow-dist) * 0.7) calc(var(--shadow-dist) * 0.7) var(--shadow-blur) var(--shadow-dark),
+                        inset calc(var(--shadow-dist) * -0.7) calc(var(--shadow-dist) * -0.7) var(--shadow-blur) var(--shadow-light);
+            outline: none;
+            text-transform: uppercase;
+        }
+
+        /* Полноэкранный адаптивный календарь */
+        .cal-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1.2vh, 12px);
+            width: 100%;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .cal-nav-frame {
             background-color: var(--month-cell-color);
-            padding: 4px 8px 12px 8px;
+            color: var(--month-font-color);
+            padding: clamp(6px, 1vh, 12px) clamp(8px, 1.5vw, 16px);
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-radius: 14px;
-        }
-        .center-nav { display: flex; align-items: center; gap: 12px; flex-grow: 1; justify-content: space-between; }
-        
-        .header-title-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+            flex-shrink: 0;
         }
 
-        .btn-3d { 
-            background: linear-gradient(145deg, #ffffff, #e1e3e7);
-            border: none;
-            border-radius: 12px;
-            width: 42px;
-            height: 42px;
-            cursor: pointer;
-            font-weight: 800;
-            font-size: 18px;
-            color: #2d3748;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
+        .cal-center-nav {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.1s ease;
-        }
-        .btn-3d:active { 
-            box-shadow: inset 2px 2px 5px #c2c4c9, inset -2px -2px 5px #ffffff;
-            transform: scale(0.96);
+            gap: 12px;
+            flex-grow: 1;
+            justify-content: space-between;
         }
 
-        .btn-close { 
-            background: linear-gradient(145deg, #ff6b6b, #d32f2f);
-            color: white;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
-        }
-        
-        #header-label {
+        #cal-header-label {
             font-size: var(--month-font-size);
             color: var(--month-font-color);
             font-weight: var(--month-font-weight);
@@ -137,29 +212,29 @@
             letter-spacing: -0.5px;
         }
 
-        /* Главный блок */
-        .main-frame { 
-            background: var(--bg-main);
-            border-radius: 20px;
-            padding: 8px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
+        /* Сетка дней растягивается на всю доступную высоту экрана */
+        .cal-grid-frame {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            grid-template-rows: auto repeat(6, minmax(0, 1fr));
+            gap: clamp(4px, 1vw, 10px);
+            flex: 1;
+            min-height: 0;
+            width: 100%;
         }
-        
-        /* Сетка календаря */
-        .cal-frame { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-        
+
         .cal-header-cell {
             background: var(--weekday-cell-color);
             color: var(--weekday-font-color);
             font-size: var(--weekday-font-size);
             font-weight: var(--weekday-font-weight);
             text-align: center;
-            padding: 10px 0;
+            padding: clamp(5px, 0.9vh, 10px) 0;
             border-radius: 10px;
-            box-shadow: 2px 2px 5px #d1d3d8, -2px -2px 5px #ffffff;
+            box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .cal-day-cell {
@@ -167,20 +242,24 @@
             color: var(--day-font-color);
             font-size: var(--day-font-size);
             font-weight: var(--day-font-weight);
-            aspect-ratio: 1.05;
+            width: 100%;
+            height: 100%;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 14px;
+            border-radius: clamp(8px, 1.5vw, 14px);
             cursor: pointer;
             position: relative;
-            box-shadow: 4px 4px 8px #c8cace, -4px -4px 8px #ffffff;
+            overflow: hidden;
+            padding: 2px;
+            box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
             transition: all 0.1s ease;
         }
 
         .cal-day-cell:active {
-            box-shadow: inset 2px 2px 5px #b8babe, inset -2px -2px 5px #ffffff;
+            box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
         }
 
         .cal-day-cell.weekend {
@@ -193,46 +272,78 @@
             color: var(--other-day-font-color);
             font-size: var(--other-day-font-size);
             font-weight: var(--other-day-font-weight);
-            box-shadow: 2px 2px 5px #d1d3d8, -2px -2px 5px #ffffff;
+            box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
         }
 
-        .cal-day-cell.today { 
-            background: var(--today-cell-color) !important; 
-            color: var(--today-font-color) !important; 
+        .cal-day-cell.today {
+            background: var(--today-cell-color) !important;
+            color: var(--today-font-color) !important;
             font-size: var(--today-font-size) !important;
             font-weight: var(--today-font-weight) !important;
-            box-shadow: 4px 4px 10px rgba(43, 130, 251, 0.4), -2px -2px 6px #ffffff !important;
+            box-shadow: 3px 3px 8px rgba(43, 130, 251, 0.4), -2px -2px 5px var(--shadow-light) !important;
         }
-        
-        /* Стили неоморфной таблицы */
+
+        .cal-ctrl-frame {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .cal-left-actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: clamp(6px, 1.2vw, 12px);
+            width: 100%;
+        }
+
+        .cal-action-btn {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 10px;
+            padding: clamp(9px, 1.3vh, 13px) 6px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: clamp(11px, 1.7vw, 13px);
+            color: var(--text-color);
+            box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+            transition: all 0.1s ease;
+            text-align: center;
+        }
+
+        .cal-action-btn:active {
+            box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+        }
+
+        /* Стили таблицы */
         .table-container {
             background: var(--table-bg);
-            padding: 12px;
-            border-radius: 18px;
-            box-shadow: inset 4px 4px 8px #c8cace, inset -4px -4px 8px #ffffff;
+            padding: 10px;
+            border-radius: 14px;
+            box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
             overflow-x: auto;
         }
 
-        .table-frame { 
-            background: transparent; 
-            border-collapse: separate; 
-            border-spacing: 6px; 
-            width: 100%; 
+        .table-frame {
+            border-collapse: separate;
+            border-spacing: 5px;
+            width: 100%;
         }
-        
-        .table-frame th, .table-frame td { 
-            border: none; 
-            padding: 8px 6px; 
-            text-align: center; 
-            border-radius: 10px;
+
+        .table-frame th, .table-frame td {
+            border: none;
+            padding: 6px 4px;
+            text-align: center;
+            border-radius: 8px;
         }
-        
-        .table-frame th { 
-            background: var(--table-header-bg); 
-            font-size: var(--table-header-font-size); 
-            color: var(--table-header-font-color); 
-            font-weight: var(--table-header-font-weight); 
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+
+        .table-frame th {
+            background: var(--table-header-bg);
+            font-size: var(--table-header-font-size);
+            color: var(--table-header-font-color);
+            font-weight: var(--table-header-font-weight);
+            box-shadow: 1px 1px 3px var(--shadow-dark), -1px -1px 3px var(--shadow-light);
         }
 
         .table-month-name {
@@ -241,13 +352,13 @@
             color: var(--table-month-font-color);
             font-weight: var(--table-month-font-weight);
             text-align: left;
-            padding-left: 10px;
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            padding-left: 8px;
+            box-shadow: 1px 1px 3px var(--shadow-dark), -1px -1px 3px var(--shadow-light);
         }
 
         .table-data-cell {
             background: var(--table-cell-bg);
-            box-shadow: inset 2px 2px 4px #c8cace, inset -2px -2px 4px #ffffff;
+            box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light);
             padding: 2px;
         }
 
@@ -256,7 +367,7 @@
             font-size: var(--table-result-font-size);
             color: var(--table-result-font-color);
             font-weight: var(--table-result-font-weight);
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            box-shadow: 1px 1px 3px var(--shadow-dark), -1px -1px 3px var(--shadow-light);
         }
 
         .table-total-cell {
@@ -264,97 +375,72 @@
             font-size: var(--table-total-font-size);
             color: var(--table-total-font-color);
             font-weight: var(--table-total-font-weight);
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            box-shadow: 1px 1px 3px var(--shadow-dark), -1px -1px 3px var(--shadow-light);
         }
 
-        .table-frame input { 
-            width: 100%; 
+        .table-frame input {
+            width: 100%;
             height: 100%;
-            text-align: center; 
-            border: none; 
+            text-align: center;
+            border: none;
             outline: none;
-            border-radius: 8px; 
-            font-size: var(--table-cell-font-size); 
+            border-radius: 6px;
+            font-size: var(--table-cell-font-size);
             font-weight: var(--table-cell-font-weight);
-            color: var(--table-cell-font-color); 
-            padding: 6px 2px; 
-            background: transparent; 
+            color: var(--table-cell-font-color);
+            padding: 6px 2px;
+            background: var(--table-cell-bg);
+            box-shadow: inset 1px 1px 2px var(--shadow-dark), inset -1px -1px 2px var(--shadow-light);
+            text-transform: uppercase;
         }
 
-        .highlight-row td { 
+        .table-frame input:focus {
+            color: var(--accent-color);
+            box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+        }
+
+        .highlight-row td {
             background-color: var(--table-highlight-row-bg) !important;
-            box-shadow: 0 0 0 2px #2b82fb inset, 3px 3px 6px #c8cace !important; 
-        }
-
-        /* Нижняя панель с отступом справа под водяной знак */
-        .ctrl-frame { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-top: auto; 
-            padding: 8px 55px 4px 4px; 
-            gap: 6px; 
-            flex-wrap: wrap; 
-        }
-        .left-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-        
-        .action-btn {
-            background: linear-gradient(145deg, #ffffff, #e1e3e7);
-            border: none;
-            border-radius: 12px;
-            padding: 10px 16px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 13px;
-            color: #2d3748;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
-            transition: all 0.1s ease;
-        }
-        .action-btn:active {
-            box-shadow: inset 2px 2px 5px #c2c4c9, inset -2px -2px 5px #ffffff;
-            transform: scale(0.97);
-        }
-
-        .gear-btn {
-            width: 44px;
-            height: 42px;
-            background: linear-gradient(145deg, #ffffff, #e1e3e7);
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 4px 4px 8px #d1d3d8, -4px -4px 8px #ffffff;
-            transition: all 0.1s ease;
-        }
-        .gear-btn:active {
-            box-shadow: inset 2px 2px 5px #c2c4c9, inset -2px -2px 5px #ffffff;
-            transform: scale(0.97);
+            box-shadow: 0 0 0 2px #2b82fb inset, 1px 1px 3px var(--shadow-dark) !important;
         }
 
         /* Модальные окна */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 3000; }
-        .modal-content { 
-            background: #ebedf0; 
-            padding: 20px; 
-            border-radius: 20px; 
-            width: 92%; 
-            max-width: 480px; 
-            max-height: 90vh; 
-            overflow-y: auto; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 12px; 
-            box-shadow: 10px 10px 30px rgba(0,0,0,0.25), -6px -6px 20px #ffffff; 
-            border: 1px solid rgba(255,255,255,0.6);
+        .modal-overlay-custom {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            padding: 12px;
+        }
+
+        .modal-content-custom {
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 18px;
+            border-radius: 18px;
+            width: 94%;
+            max-width: 460px;
+            max-height: 88vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.25), -6px -6px 20px var(--shadow-light);
         }
 
         .modal-item-card {
-            background: #ebedf0;
-            padding: 10px;
-            border-radius: 12px;
-            box-shadow: 3px 3px 6px #c8cace, -3px -3px 6px #ffffff;
+            background: var(--card-bg);
+            color: var(--text-color);
+            padding: 8px 10px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -363,83 +449,231 @@
         .modal-input {
             border: none;
             outline: none;
-            background: #f0f2f5;
-            padding: 6px 10px;
-            border-radius: 8px;
-            box-shadow: inset 2px 2px 4px #c8cace, inset -2px -2px 4px #ffffff;
-            font-size: 12px;
+            background: var(--card-bg);
+            padding: 5px 8px;
+            border-radius: 6px;
+            box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+            font-size: 11px;
+            color: var(--text-color);
+            user-select: text;
+            -webkit-user-select: text;
         }
-        
-        /* Полноэкранное окно таблицы */
-        .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ebedf0; z-index: 2000; flex-direction: column; padding: 12px; overflow: hidden; }
-        .fullscreen-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 12px; 
-            background: #ebedf0; 
-            padding: 10px 14px; 
-            border-radius: 16px; 
-            box-shadow: 5px 5px 10px #d1d3d8, -5px -5px 10px #ffffff; 
-        }
-        .fullscreen-body { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
 
-        .palette { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 8px; }
-        .color-btn { width: 100%; aspect-ratio: 1.4; border-radius: 8px; border: none; cursor: pointer; box-shadow: 3px 3px 6px rgba(0,0,0,0.15), -2px -2px 4px #ffffff; }
-        .color-btn.selected { border: 2px solid #2d3748; transform: scale(1.08); }
-        
-        textarea { width: 100%; height: 95px; padding: 10px; font-size: 13px; border: none; border-radius: 12px; background: #f0f2f5; box-shadow: inset 3px 3px 6px #c8cace, inset -3px -3px 6px #ffffff; resize: none; outline: none; }
+        .color-swatch-input {
+            width: 26px;
+            height: 26px;
+            border: none;
+            border-radius: 6px;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        .palette {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .color-btn {
+            width: 100%;
+            aspect-ratio: 1.4;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15), -1px -1px 3px var(--shadow-light);
+        }
+
+        .color-btn.selected {
+            border: 2px solid var(--accent-color);
+            transform: scale(1.08);
+        }
+
+        textarea.cal-textarea {
+            width: 100%;
+            height: 110px;
+            padding: 10px;
+            font-size: 13px;
+            border: none;
+            border-radius: 10px;
+            background: var(--card-bg);
+            box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
+            resize: none;
+            outline: none;
+            color: var(--text-color);
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: var(--bg-color);
+            z-index: 2000;
+            flex-direction: column;
+            padding: 12px;
+            overflow: hidden;
+        }
+
+        .fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            background: var(--card-bg);
+            padding: 8px 12px;
+            border-radius: 14px;
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            flex-shrink: 0;
+        }
+
+        .fullscreen-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Мини-сетка выбора даты в таблице */
+        #range-picker-grid {
+            grid-template-rows: auto repeat(6, 36px);
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 16px 24px;
+            }
+            .cal-action-btn {
+                font-size: 13px;
+                padding: 12px 10px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ЭТАЛОННЫЙ ВОДЯНОЙ ЗНАК «БЛiК» В ПРАВОМ НИЖНЕМ УГЛУ И ПОВЕРХ ВСЕГО -->
-    <div class="watermark-blik" aria-hidden="true">БЛiК</div>
+    <div class="watermark">БЛiК</div>
 
-    <div class="nav-frame" id="nav-frame">
-        <div class="center-nav">
-            <button class="btn-3d" onclick="prevMonth()">&lt;</button>
-            <div class="header-title-block">
-                <div id="header-label">Март 2025</div>
+    <div class="app-card" id="mainAppCard">
+        <div class="header">
+            <h1 class="header-title">КАЛЕНДАРЬ С ЗАМЕТКАМИ</h1>
+            <div class="header-controls">
+                <button class="neu-btn icon-btn" id="themeToggle" title="Переключить тему">
+                    <svg id="themeIcon" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+                    </svg>
+                </button>
+                <button class="neu-btn icon-btn" onclick="openSettingsModal()" title="Настройки календаря">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                </button>
             </div>
-            <button class="btn-3d" onclick="nextMonth()">&gt;</button>
         </div>
 
+        <div class="cal-wrapper">
+            <div class="cal-nav-frame">
+                <div class="cal-center-nav">
+                    <button class="neu-btn" style="width:42px; height:42px; font-size:18px;" onclick="prevMonth()">&lt;</button>
+                    <div id="cal-header-label">МАРТ 2025</div>
+                    <button class="neu-btn" style="width:42px; height:42px; font-size:18px;" onclick="nextMonth()">&gt;</button>
+                </div>
+            </div>
+
+            <div class="cal-grid-frame" id="cal-frame"></div>
+
+            <div class="cal-ctrl-frame">
+                <div class="cal-left-actions">
+                    <button class="cal-action-btn" onclick="openTableModal()">ТАБЛ.</button>
+                    <button class="cal-action-btn" onclick="openExportModal()">ЭКСП.</button>
+                    <button class="cal-action-btn" onclick="importCalendarDataTrigger()">ИМП.</button>
+                    <button class="cal-action-btn" style="color:var(--reset-color);" onclick="clearCalendarMonth()">ЧИСТ.</button>
+                    <button class="cal-action-btn" onclick="openSettingsModal()" title="Настройки календаря">⚙️</button>
+                </div>
+                <input type="file" id="cal-import-file" style="display:none" onchange="importCalendarData(event)">
+            </div>
+        </div>
     </div>
 
-    <div class="main-frame">
-        <div class="cal-frame" id="cal-frame"></div>
-    </div>
-
-    <div class="ctrl-frame">
-        <div class="left-actions">
-            <button class="action-btn" onclick="openTableModal()" style="background: linear-gradient(145deg, #e0f7fa, #b2ebf2); color:#006064;">ТАБЛИЦА</button>
-        </div>
-            
-        <div class="left-actions">
-            <button class="action-btn" onclick="exportData()">ЭКСПОРТ</button>
-            <button class="action-btn" onclick="importDataTrigger()">ИМПОРТ</button>
-            <button class="action-btn" style="background: linear-gradient(145deg, #ffebee, #ffcdd2); color:#b71c1c;" onclick="clearMonth()">ОЧИСТИТЬ</button>
-            <input type="file" id="import-file" style="display:none" onchange="importData(event)">
-        </div>
-        <div class="gear-btn" onclick="openSettings()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#4a5568">
-                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-            </svg>
+    <!-- МОДАЛЬНОЕ ОКНО ЭКСПОРТА КАЛЕНДАРЯ -->
+    <div class="modal-overlay-custom" id="export-modal">
+        <div class="modal-content-custom" style="max-width: 360px; text-align: center;">
+            <h3 style="color:var(--text-color); font-weight:800; font-size: 15px; margin-bottom: 4px;">ЭКСПОРТ ДАННЫХ</h3>
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 10px;">Выберите удобный способ сохранения:</div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="cal-action-btn" style="padding: 12px; font-size: 13px;" onclick="exportAsFile()">СКАЧАТЬ ФАЙЛ JSON</button>
+                <button class="cal-action-btn" style="padding: 12px; font-size: 13px;" onclick="exportAsClipboard()">КОПИРОВАТЬ В БУФЕР ОБМЕНА</button>
+            </div>
+            <button class="cal-action-btn" style="margin-top: 6px; height: 34px;" onclick="closeExportModal()">ЗАКРЫТЬ</button>
         </div>
     </div>
 
-    <!-- Полноэкранное окно таблицы -->
+    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК КАЛЕНДАРЯ -->
+    <div class="modal-overlay-custom" id="settings-modal">
+        <div class="modal-content-custom" style="max-width: 440px;">
+            <h3 style="color:var(--text-color); font-weight:800;">НАСТРОЙКИ КАЛЕНДАРЯ</h3>
+            <div style="font-size: 11px; color: var(--text-muted);">Настройте внешний вид под себя:</div>
+            <div style="display:flex; flex-direction:column; gap:8px;" id="settings-controls"></div>
+            <button class="cal-action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:40px; font-weight:bold;" onclick="saveCalendarSettings()">СОХРАНИТЬ</button>
+            <button class="cal-action-btn" style="background: linear-gradient(145deg, #90caf9, #42a5f5); color:white; height:36px; font-weight:bold;" onclick="resetCalendarSettings()">СБРОСИТЬ ПО УМОЛЧАНИЮ</button>
+            <button class="cal-action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white; height:36px;" onclick="closeCalendarSettingsModal()">ОТМЕНИТЬ</button>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ЗАМЕТКИ -->
+    <div class="modal-overlay-custom" id="note-modal">
+        <div class="modal-content-custom">
+            <h3 id="modal-date-title" style="font-size: 14px; color: var(--text-color); font-weight:800;">Заметка</h3>
+            <div>
+                <label style="font-size: 11px; font-weight: bold; color: var(--text-muted);">ЦВЕТ ТОЧКИ:</label>
+                <div class="palette" id="color-palette" style="margin-top:4px;"></div>
+            </div>
+            <textarea class="cal-textarea" id="note-text" placeholder="Введите заметку..."></textarea>
+            <button class="cal-action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:36px; font-weight:bold;" onclick="saveCalendarNote()">СОХРАНИТЬ</button>
+            <button class="cal-action-btn" onclick="closeNoteModal()" style="height:32px;">ОТМЕНА</button>
+        </div>
+    </div>
+
+    <!-- ПОЛНОЭКРАННОЕ ОКНО ТАБЛИЦЫ -->
     <div class="fullscreen-modal" id="table-modal">
         <div class="fullscreen-header">
             <div style="display:flex; gap:8px;">
-                <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white;" onclick="saveTableChanges()">СОХРАНИТЬ</button>
-                <button class="action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white;" onclick="closeTableModal()">ЗАКРЫТЬ</button>
+                <button class="cal-action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; width:38px; height:38px; padding:0; display:flex; align-items:center; justify-content:center; font-size:16px;" onclick="saveTableChanges()" title="Сохранить">💾</button>
+                <button class="cal-action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white; width:38px; height:38px; padding:0; display:flex; align-items:center; justify-content:center; font-size:16px;" onclick="closeTableModal()" title="Закрыть">✕</button>
             </div>
-            <div style="font-weight:800; font-size:15px; color:#2d3748;" id="table-modal-year-title">ГОД</div>
-            <button class="action-btn" onclick="openTableSettings()">НАСТРОЙКИ</button>
+            <div style="font-weight:800; font-size:14px; color:var(--text-color);" id="table-modal-year-title">ГОД</div>
+            <button class="cal-action-btn" style="width:38px; height:38px; padding:0; display:flex; align-items:center; justify-content:center; font-size:16px;" onclick="openTableSettings()" title="Настройки">⚙️</button>
         </div>
         <div class="fullscreen-body">
+            <div class="table-container" id="table-range-calc-box" style="padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;">
+                <div style="font-size: 14px; font-weight: 800; color: var(--accent-color); text-align: center;">ПОДСЧЕТ КОЛ-ВА ДНЕЙ ЗА ПЕРИОД:</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 4px; flex: 1; min-width: 130px;">
+                        <span style="font-size: 14px; font-weight: 700; white-space: nowrap;">С -</span>
+                        <input type="text" id="rangeStartDisplay" readonly placeholder="дд.мм.гг" onclick="openRangeCalendarPicker('start')" style="padding: 7px 8px; font-size: 14px; text-align: center; cursor: pointer; font-weight: 700;">
+                        <button type="button" class="cal-action-btn" style="padding: 7px 9px; font-size: 13px;" onclick="openRangeCalendarPicker('start')" title="Выбрать дату С с календаря">📅</button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px; flex: 1; min-width: 130px;">
+                        <span style="font-size: 14px; font-weight: 700; white-space: nowrap;">ПО -</span>
+                        <input type="text" id="rangeEndDisplay" readonly placeholder="дд.мм.гг" onclick="openRangeCalendarPicker('end')" style="padding: 7px 8px; font-size: 14px; text-align: center; cursor: pointer; font-weight: 700;">
+                        <button type="button" class="cal-action-btn" style="padding: 7px 9px; font-size: 13px;" onclick="openRangeCalendarPicker('end')" title="Выбрать дату ПО с календаря">📅</button>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px; justify-content: center; flex: 1; min-width: 110px;">
+                        <div class="table-result-cell" style="padding: 7px 10px; border-radius: 8px; font-size: 16px; font-weight: 800; white-space: nowrap;">
+                            ДНЕЙ: <span id="rangeCalcResultDays" style="color: var(--accent-color);">0</span>
+                        </div>
+                        <button type="button" class="cal-action-btn" style="padding: 7px 9px; font-size: 12px; color: var(--reset-color);" onclick="clearRangeCalendarDates()" title="Очистить период">✕</button>
+                    </div>
+                </div>
+            </div>
             <div class="table-container" id="table-container-box">
                 <table class="table-frame" id="stats-table">
                     <thead>
@@ -450,12 +684,12 @@
                     <tbody id="table-body"></tbody>
                     <tfoot>
                         <tr>
-                            <td class="table-total-cell" style="text-align:left; padding-left:10px;">ГОД:</td>
+                            <td class="table-total-cell" style="text-align:left; padding-left:8px;">ГОД:</td>
                             <td colspan="5" id="total-year-days" class="table-total-cell" style="text-align:center;">0</td>
                         </tr>
                         <tr>
-                            <td class="table-total-cell" style="text-align:left; padding-left:10px; color:#2b82fb;">ВСЕ ВРЕМЯ:</td>
-                            <td colspan="5" id="total-all-days" class="table-total-cell" style="text-align:center; color:#2b82fb;">0</td>
+                            <td class="table-total-cell" style="text-align:left; padding-left:8px; color:var(--accent-color);">ВСЕ ВРЕМЯ:</td>
+                            <td colspan="5" id="total-all-days" class="table-total-cell" style="text-align:center; color:var(--accent-color);">0</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -463,209 +697,182 @@
         </div>
     </div>
 
-    <!-- Модальное окно заметки -->
-    <div class="modal" id="note-modal">
-        <div class="modal-content">
-            <h3 id="modal-date-title" style="font-size: 15px; color: #1c2536; font-weight:800;">Заметка</h3>
-            <div>
-                <label style="font-size: 11px; font-weight: bold; color: #4a5568;">ЦВЕТ ТОЧКИ:</label>
-                <div class="palette" id="color-palette" style="margin-top:6px;"></div>
+    <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА ДАТЫ С КАЛЕНДАРЯ ДЛЯ ТАБЛИЦЫ -->
+    <div class="modal-overlay-custom" id="range-cal-picker-modal" style="z-index: 3500;">
+        <div class="modal-content-custom" style="max-width: 360px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 id="range-picker-title" style="color:var(--text-color); font-weight:800; font-size: 13px;">ВЫБЕРИТЕ ДАТУ</h3>
+                <button class="cal-action-btn" style="padding: 4px 8px; color: var(--reset-color);" onclick="closeRangeCalendarPicker()">✕</button>
             </div>
-            <textarea id="note-text" placeholder="Введите заметку..."></textarea>
-            <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:40px;" onclick="saveNote()">СОХРАНИТЬ</button>
-            <button class="action-btn" onclick="closeNoteModal()">ОТМЕНА</button>
-        </div>
-    </div>
-
-    <!-- Модальное окно экспорта -->
-    <div class="modal" id="export-modal">
-        <div class="modal-content">
-            <h3 style="color:#1c2536; font-weight:800;">ЭКСПОРТ ДАННЫХ</h3>
-            <div style="font-size: 11px; color: #718096;">Скачайте файл бэкапа или скопируйте текст:</div>
-            <textarea id="export-text-area" readonly style="height: 100px;"></textarea>
-            <div style="display: flex; gap: 8px;">
-                <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; flex-grow:1; height:40px;" onclick="downloadBackupFile()">СКАЧАТЬ ФАЙЛ</button>
-                <button class="action-btn" style="background: linear-gradient(145deg, #e0f7fa, #b2ebf2); color:#006064; flex-grow:1; height:40px;" onclick="copyExportText()">СКОПИРОВАТЬ</button>
+            <div class="cal-nav-frame" style="padding: 4px 6px 8px 6px;">
+                <div class="cal-center-nav">
+                    <button class="neu-btn" style="width:34px; height:34px; font-size:14px;" onclick="rangePickerPrevMonth()">&lt;</button>
+                    <div id="range-picker-header-label" style="font-size: 15px; font-weight: 800;">МАРТ 2025</div>
+                    <button class="neu-btn" style="width:34px; height:34px; font-size:14px;" onclick="rangePickerNextMonth()">&gt;</button>
+                </div>
             </div>
-            <button class="action-btn" onclick="closeExportModal()">ЗАКРЫТЬ</button>
+            <div class="cal-grid-frame" id="range-picker-grid" style="gap: 4px;"></div>
+            <button class="cal-action-btn" style="margin-top: 4px; height: 34px;" onclick="closeRangeCalendarPicker()">ОТМЕНА</button>
         </div>
     </div>
 
-    <!-- Модальное окно настроек календаря -->
-    <div class="modal" id="settings-modal">
-        <div class="modal-content" style="max-width: 480px;">
-            <h3 style="color:#1c2536; font-weight:800;">НАСТРОЙКИ КАЛЕНДАРЯ</h3>
-            <div style="font-size: 11px; color: #718096;">Настройте внешний вид под себя:</div>
-            <div style="display:flex; flex-direction:column; gap:8px;" id="settings-controls"></div>
-            <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:40px;" onclick="saveSettings()">СОХРАНИТЬ</button>
-            <button class="action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white;" onclick="closeSettings()">ОТМЕНИТЬ</button>
-        </div>
-    </div>
-
-    <!-- Модальное окно настроек таблицы -->
-    <div class="modal" id="table-settings-modal">
-        <div class="modal-content" style="max-width: 480px;">
-            <h3 style="color:#1c2536; font-weight:800;">НАСТРОЙКИ ТАБЛИЦЫ</h3>
-            <div style="font-size: 11px; color: #718096;">Настройте внешний вид элементов таблицы:</div>
-            <div style="display:flex; flex-direction:column; gap:8px;" id="table-settings-controls"></div>
-            <button class="action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:40px;" onclick="saveTableSettings()">СОХРАНИТЬ</button>
-            <button class="action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white;" onclick="closeTableSettings()">ОТМЕНИТЬ</button>
+    <!-- МОДАЛЬНОЕ ОКНО НАСТРОЕК ТАБЛИЦЫ -->
+    <div class="modal-overlay-custom" id="table-settings-modal">
+        <div class="modal-content-custom" style="max-width: 420px;">
+            <h3 style="color:var(--text-color); font-weight:800; font-size:14px;">НАСТРОЙКИ ТАБЛИЦЫ</h3>
+            <div style="display:flex; flex-direction:column; gap:6px;" id="table-settings-controls"></div>
+            <button class="cal-action-btn" style="background: linear-gradient(145deg, #a5d6a7, #66bb6a); color:white; height:36px; font-weight:bold;" onclick="saveTableSettings()">СОХРАНИТЬ</button>
+            <button class="cal-action-btn" style="background: linear-gradient(145deg, #ef9a9a, #ef5350); color:white; height:32px;" onclick="closeTableSettings()">ОТМЕНИТЬ</button>
         </div>
     </div>
 
     <script>
+        let settings = JSON.parse(localStorage.getItem('app_settings')) || {
+            theme: 'dark',
+            accent: '#007aff',
+            radius: 18,
+            shadow: 5,
+            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            fontSize: 15,
+            letterSpacing: 0.5,
+            textShadow: false
+        };
+
         const DISPLAY_MONTHS = ["ЯНВАРЬ", "ФЕВРАЛЬ", "МАРТ", "АПРЕЛЬ", "МАЙ", "ИЮНЬ", "ИЮЛЬ", "АВГУСТ", "СЕНТЯБРЬ", "ОКТЯБРЬ", "НОЯБРЬ", "ДЕКАБРЬ"];
         const DOT_COLORS = ["#00E676", "#29B6F6", "#EF5350", "#FFEE58", "#AB47BC", "#FFA726", "#26A69A", "#EC407A", "#8D6E63", "#78909C", "#FF7043", "#66BB6A", "#42A5F5", "#E57373", "#FFF176", "#BA68C8", "#FFB74D", "#4DB6AC", "#F06292", "#A1887F", "#90A4AE", "#FF8A65"];
-        
-        let currentDate = new Date();
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth() + 1;
+
+        let calCurrentDate = new Date();
+        let calYear = calCurrentDate.getFullYear();
+        let calMonth = calCurrentDate.getMonth() + 1;
         let selectedDateStr = "";
         let selectedColor = DOT_COLORS[0];
 
-        let db = JSON.parse(localStorage.getItem('calendar_db')) || { notes: {}, table_ranges: {} };
-        if (!db.notes) db.notes = {};
-        if (!db.table_ranges) db.table_ranges = {};
+        let calDb = JSON.parse(localStorage.getItem('calendar_db')) || { notes: {}, table_ranges: {} };
+        if (!calDb.notes) calDb.notes = {};
+        if (!calDb.table_ranges) calDb.table_ranges = {};
 
-        let savedSettings = JSON.parse(localStorage.getItem('calendar_settings'));
-        let settings = savedSettings && typeof savedSettings === 'object' ? {
-            bg_main: savedSettings.bg_main || "#ebedf0",
-            month_font_size: Number(savedSettings.month_font_size) || 24,
-            month_font_color: savedSettings.month_font_color || "#1c2536",
-            month_font_weight: Boolean(savedSettings.month_font_weight),
-            
-            weekday_font_size: Number(savedSettings.weekday_font_size) || 14,
-            weekday_font_color: savedSettings.weekday_font_color || "#4a5568",
-            weekday_font_weight: Boolean(savedSettings.weekday_font_weight),
-            
-            day_font_size: Number(savedSettings.day_font_size) || 16,
-            day_font_color: savedSettings.day_font_color || "#1a202c",
-            day_font_weight: Boolean(savedSettings.day_font_weight),
-            
-            today_font_size: Number(savedSettings.today_font_size) || 16,
-            today_font_color: savedSettings.today_font_color || "#ffffff",
-            today_font_weight: Boolean(savedSettings.today_font_weight),
-            
-            other_day_font_size: Number(savedSettings.other_day_font_size) || 15,
-            other_day_font_color: savedSettings.other_day_font_color || "#a0aec0",
-            other_day_font_weight: Boolean(savedSettings.other_day_font_weight),
-            
-            month_cell_color: savedSettings.month_cell_color || "#ebedf0",
-            weekday_cell_color: savedSettings.weekday_cell_color || "#ebedf0",
-            day_cell_color: savedSettings.day_cell_color || "#ffffff",
-            today_cell_color: savedSettings.today_cell_color || "#2b82fb",
-            other_cell_color: savedSettings.other_cell_color || "#e6e8ec",
-            weekend_cell_color: savedSettings.weekend_cell_color || "#ffe3e3",
-            weekend_font_color: savedSettings.weekend_font_color || "#9b1c1c",
-            
-            dot_size: Number(savedSettings.dot_size) || 12,
-            dot_relief_sunken: Number(savedSettings.dot_relief_sunken) || 1,
-            dot_relief_raised: Number(savedSettings.dot_relief_raised) || 2,
-            dot_3d_style: savedSettings.dot_3d_style || "Сфера с бликом",
-            note_display_mode: savedSettings.note_display_mode || "Цветные точки",
-            note_font_size: Number(savedSettings.note_font_size) || 10
-        } : {
-            bg_main: "#ebedf0",
+        const lightCalDefaults = {
+            bg_main: "#ebedf0", month_cell_color: "#ebedf0", weekday_cell_color: "#ebedf0", day_cell_color: "#ffffff", today_cell_color: "#2b82fb", other_cell_color: "#e6e8ec", weekend_cell_color: "#ffe3e3", weekend_font_color: "#9b1c1c",
             month_font_size: 24, month_font_color: "#1c2536", month_font_weight: true,
             weekday_font_size: 14, weekday_font_color: "#4a5568", weekday_font_weight: true,
             day_font_size: 16, day_font_color: "#1a202c", day_font_weight: true,
             today_font_size: 16, today_font_color: "#ffffff", today_font_weight: true,
             other_day_font_size: 15, other_day_font_color: "#a0aec0", other_day_font_weight: true,
-            month_cell_color: "#ebedf0", weekday_cell_color: "#ebedf0", day_cell_color: "#ffffff", today_cell_color: "#2b82fb", other_cell_color: "#e6e8ec",
-            weekend_cell_color: "#ffe3e3", weekend_font_color: "#9b1c1c",
             dot_size: 12, dot_relief_sunken: 1, dot_relief_raised: 2, dot_3d_style: "Сфера с бликом", note_display_mode: "Цветные точки", note_font_size: 10
         };
 
-        let savedTableSettings = JSON.parse(localStorage.getItem('table_settings'));
-        let tableSettings = savedTableSettings && typeof savedTableSettings === 'object' ? {
-            table_bg: savedTableSettings.table_bg || "#ebedf0",
-            table_header_bg: savedTableSettings.table_header_bg || "#e1e3e7",
-            table_header_font_size: Number(savedTableSettings.table_header_font_size) || 12,
-            table_header_font_color: savedTableSettings.table_header_font_color || "#2d3748",
-            table_header_font_weight: Boolean(savedTableSettings.table_header_font_weight),
+        const darkCalDefaults = {
+            bg_main: "#1e2530", month_cell_color: "#1e2530", weekday_cell_color: "#1e2530", day_cell_color: "#242c38", today_cell_color: "#2563eb", other_cell_color: "#181f28", weekend_cell_color: "#3b2020", weekend_font_color: "#fc8181",
+            month_font_size: 24, month_font_color: "#e2e8f0", month_font_weight: true,
+            weekday_font_size: 14, weekday_font_color: "#94a3b8", weekday_font_weight: true,
+            day_font_size: 16, day_font_color: "#e2e8f0", day_font_weight: true,
+            today_font_size: 16, today_font_color: "#ffffff", today_font_weight: true,
+            other_day_font_size: 15, other_day_font_color: "#64748b", other_day_font_weight: true,
+            dot_size: 12, dot_relief_sunken: 1, dot_relief_raised: 2, dot_3d_style: "Сфера с бликом", note_display_mode: "Цветные точки", note_font_size: 10
+        };
 
-            table_month_cell_bg: savedTableSettings.table_month_cell_bg || "#ffffff",
-            table_month_font_size: Number(savedTableSettings.table_month_font_size) || 12,
-            table_month_font_color: savedTableSettings.table_month_font_color || "#1a202c",
-            table_month_font_weight: Boolean(savedTableSettings.table_month_font_weight),
+        function getStoredCalendarSettings(theme) {
+            const defaults = theme === 'dark' ? darkCalDefaults : lightCalDefaults;
+            let saved = localStorage.getItem('calendar_settings_' + theme);
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    return Object.assign({}, defaults, parsed);
+                } catch(e) {}
+            }
+            return Object.assign({}, defaults);
+        }
 
-            table_cell_bg: savedTableSettings.table_cell_bg || "#ffffff",
-            table_cell_font_size: Number(savedTableSettings.table_cell_font_size) || 12,
-            table_cell_font_color: savedTableSettings.table_cell_font_color || "#1a202c",
-            table_cell_font_weight: Boolean(savedTableSettings.table_cell_font_weight),
+        let calSettings = getStoredCalendarSettings(settings.theme);
 
-            table_result_cell_bg: savedTableSettings.table_result_cell_bg || "#f0f2f5",
-            table_result_font_size: Number(savedTableSettings.table_result_font_size) || 12,
-            table_result_font_color: savedTableSettings.table_result_font_color || "#2b82fb",
-            table_result_font_weight: Boolean(savedTableSettings.table_result_font_weight),
-
-            table_total_cell_bg: savedTableSettings.table_total_cell_bg || "#e1e3e7",
-            table_total_font_size: Number(savedTableSettings.table_total_font_size) || 12,
-            table_total_font_color: savedTableSettings.table_total_font_color || "#e53e3e",
-            table_total_font_weight: Boolean(savedTableSettings.table_total_font_weight),
-
-            table_highlight_row_bg: savedTableSettings.table_highlight_row_bg || "#fff5f5"
-        } : {
-            table_bg: "#ebedf0",
-            table_header_bg: "#e1e3e7",
-            table_header_font_size: 12,
-            table_header_font_color: "#2d3748",
-            table_header_font_weight: true,
-            table_month_cell_bg: "#ffffff",
-            table_month_font_size: 12,
-            table_month_font_color: "#1a202c",
-            table_month_font_weight: true,
-            table_cell_bg: "#ffffff",
-            table_cell_font_size: 12,
-            table_cell_font_color: "#1a202c",
-            table_cell_font_weight: false,
-            table_result_cell_bg: "#f0f2f5",
-            table_result_font_size: 12,
-            table_result_font_color: "#2b82fb",
-            table_result_font_weight: true,
-            table_total_cell_bg: "#e1e3e7",
-            table_total_font_size: 12,
-            table_total_font_color: "#e53e3e",
-            table_total_font_weight: true,
+        const lightTableDefaults = {
+            table_bg: "#ebedf0", table_header_bg: "#e1e3e7", table_header_font_size: 12, table_header_font_color: "#2d3748", table_header_font_weight: true,
+            table_month_cell_bg: "#ffffff", table_month_font_size: 12, table_month_font_color: "#1a202c", table_month_font_weight: true,
+            table_cell_bg: "#ffffff", table_cell_font_size: 12, table_cell_font_color: "#1a202c", table_cell_font_weight: false,
+            table_result_cell_bg: "#f0f2f5", table_result_font_size: 12, table_result_font_color: "#2b82fb", table_result_font_weight: true,
+            table_total_cell_bg: "#e1e3e7", table_total_font_size: 12, table_total_font_color: "#e53e3e", table_total_font_weight: true,
             table_highlight_row_bg: "#fff5f5"
         };
 
-        function closeApp() {
-            if (confirm("Вы действительно хотите выйти из приложения?")) {
-                try { window.close(); } catch(e) {}
+        const darkTableDefaults = {
+            table_bg: "#1e2530", table_header_bg: "#283242", table_header_font_size: 12, table_header_font_color: "#94a3b8", table_header_font_weight: true,
+            table_month_cell_bg: "#242c38", table_month_font_size: 12, table_month_font_color: "#e2e8f0", table_month_font_weight: true,
+            table_cell_bg: "#242c38", table_cell_font_size: 12, table_cell_font_color: "#e2e8f0", table_cell_font_weight: false,
+            table_result_cell_bg: "#181f28", table_result_font_size: 12, table_result_font_color: "#60a5fa", table_result_font_weight: true,
+            table_total_cell_bg: "#283242", table_total_font_size: 12, table_total_font_color: "#fc8181", table_total_font_weight: true,
+            table_highlight_row_bg: "#3b2020"
+        };
+
+        function getStoredTableSettings(theme) {
+            const defaults = theme === 'dark' ? darkTableDefaults : lightTableDefaults;
+            let saved = localStorage.getItem('table_settings_' + theme);
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    return Object.assign({}, defaults, parsed);
+                } catch(e) {}
             }
+            return Object.assign({}, defaults);
+        }
+
+        let tableSettings = getStoredTableSettings(settings.theme);
+
+        function init() {
+            applySettings();
+            initTable();
+            renderCalendar();
+            calcAllTime();
         }
 
         function applySettings() {
+            document.body.setAttribute('data-theme', settings.theme);
             let r = document.documentElement;
-            r.style.setProperty('--bg-main', settings.bg_main);
-            r.style.setProperty('--month-cell-color', settings.month_cell_color);
-            r.style.setProperty('--weekday-cell-color', settings.weekday_cell_color);
-            r.style.setProperty('--day-cell-color', settings.day_cell_color);
-            r.style.setProperty('--today-cell-color', settings.today_cell_color);
-            r.style.setProperty('--other-cell-color', settings.other_cell_color);
-            r.style.setProperty('--weekend-cell-color', settings.weekend_cell_color);
-            r.style.setProperty('--weekend-font-color', settings.weekend_font_color);
+            r.style.setProperty('--accent-color', settings.accent);
+            r.style.setProperty('--border-radius', settings.radius + 'px');
+            r.style.setProperty('--shadow-dist', settings.shadow + 'px');
+            r.style.setProperty('--shadow-blur', (settings.shadow * 2) + 'px');
+            r.style.setProperty('--font-family', settings.fontFamily);
+            r.style.setProperty('--font-size', settings.fontSize + 'px');
+            r.style.setProperty('--letter-spacing', settings.letterSpacing + 'px');
+            r.style.setProperty('--text-shadow-style', settings.textShadow ? '1px 1px 2px rgba(0,0,0,0.2)' : 'none');
 
-            r.style.setProperty('--month-font-size', settings.month_font_size + 'px');
-            r.style.setProperty('--month-font-color', settings.month_font_color);
-            r.style.setProperty('--month-font-weight', settings.month_font_weight ? '800' : 'normal');
+            const themeIcon = document.getElementById('themeIcon');
+            if (settings.theme === 'dark') {
+                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
+                r.classList.add('dark');
+            } else {
+                themeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>';
+                r.classList.remove('dark');
+            }
 
-            r.style.setProperty('--weekday-font-size', settings.weekday_font_size + 'px');
-            r.style.setProperty('--weekday-font-color', settings.weekday_font_color);
-            r.style.setProperty('--weekday-font-weight', settings.weekday_font_weight ? '700' : 'normal');
+            r.style.setProperty('--bg-main', calSettings.bg_main);
+            r.style.setProperty('--month-cell-color', calSettings.month_cell_color);
+            r.style.setProperty('--weekday-cell-color', calSettings.weekday_cell_color);
+            r.style.setProperty('--day-cell-color', calSettings.day_cell_color);
+            r.style.setProperty('--today-cell-color', calSettings.today_cell_color);
+            r.style.setProperty('--other-cell-color', calSettings.other_cell_color);
+            r.style.setProperty('--weekend-cell-color', calSettings.weekend_cell_color);
+            r.style.setProperty('--weekend-font-color', calSettings.weekend_font_color);
 
-            r.style.setProperty('--day-font-size', settings.day_font_size + 'px');
-            r.style.setProperty('--day-font-color', settings.day_font_color);
-            r.style.setProperty('--day-font-weight', settings.day_font_weight ? '700' : 'normal');
+            r.style.setProperty('--month-font-size', calSettings.month_font_size + 'px');
+            r.style.setProperty('--month-font-color', calSettings.month_font_color);
+            r.style.setProperty('--month-font-weight', calSettings.month_font_weight ? '800' : 'normal');
 
-            r.style.setProperty('--today-font-size', settings.today_font_size + 'px');
-            r.style.setProperty('--today-font-color', settings.today_font_color);
-            r.style.setProperty('--today-font-weight', settings.today_font_weight ? '800' : 'normal');
+            r.style.setProperty('--weekday-font-size', calSettings.weekday_font_size + 'px');
+            r.style.setProperty('--weekday-font-color', calSettings.weekday_font_color);
+            r.style.setProperty('--weekday-font-weight', calSettings.weekday_font_weight ? '700' : 'normal');
 
-            r.style.setProperty('--other-day-font-size', settings.other_day_font_size + 'px');
-            r.style.setProperty('--other-day-font-color', settings.other_day_font_color);
-            r.style.setProperty('--other-day-font-weight', settings.other_day_font_weight ? '600' : 'normal');
+            r.style.setProperty('--day-font-size', calSettings.day_font_size + 'px');
+            r.style.setProperty('--day-font-color', calSettings.day_font_color);
+            r.style.setProperty('--day-font-weight', calSettings.day_font_weight ? '700' : 'normal');
+
+            r.style.setProperty('--today-font-size', calSettings.today_font_size + 'px');
+            r.style.setProperty('--today-font-color', calSettings.today_font_color);
+            r.style.setProperty('--today-font-weight', calSettings.today_font_weight ? '800' : 'normal');
+
+            r.style.setProperty('--other-day-font-size', calSettings.other_day_font_size + 'px');
+            r.style.setProperty('--other-day-font-color', calSettings.other_day_font_color);
+            r.style.setProperty('--other-day-font-weight', calSettings.other_day_font_weight ? '600' : 'normal');
 
             r.style.setProperty('--table-bg', tableSettings.table_bg);
             r.style.setProperty('--table-header-bg', tableSettings.table_header_bg);
@@ -696,6 +903,15 @@
             r.style.setProperty('--table-highlight-row-bg', tableSettings.table_highlight_row_bg);
         }
 
+        document.getElementById('themeToggle').onclick = () => {
+            settings.theme = settings.theme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('app_settings', JSON.stringify(settings));
+            calSettings = getStoredCalendarSettings(settings.theme);
+            tableSettings = getStoredTableSettings(settings.theme);
+            applySettings();
+            renderCalendar();
+        };
+
         function initTable() {
             let tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
@@ -708,7 +924,7 @@
                     <td class="table-data-cell"><input type="number" id="t1_${i}" oninput="onTableInput()"></td>
                     <td class="table-data-cell"><input type="number" id="f2_${i}" oninput="onTableInput()"></td>
                     <td class="table-data-cell"><input type="number" id="t2_${i}" oninput="onTableInput()"></td>
-                    <td id="res_${i}" class="table-result-cell"></td>
+                    <td id="res_${i}" class="table-result-cell" style="color: var(--table-result-font-color) !important;">0</td>
                 `;
                 tbody.appendChild(tr);
             }
@@ -716,8 +932,7 @@
         }
 
         function renderCalendar() {
-            applySettings();
-            document.getElementById('header-label').innerText = `${DISPLAY_MONTHS[month-1]} ${year}`;
+            document.getElementById('cal-header-label').innerText = `${DISPLAY_MONTHS[calMonth-1]} ${calYear}`;
             let calFrame = document.getElementById('cal-frame');
             calFrame.innerHTML = '';
 
@@ -729,33 +944,33 @@
                 calFrame.appendChild(div);
             });
 
-            let firstDayIndex = (new Date(year, month - 1, 1).getDay() + 6) % 7;
-            let totalDays = new Date(year, month, 0).getDate();
-            let prevTotalDays = new Date(year, month - 1, 0).getDate();
+            let firstDayIndex = (new Date(calYear, calMonth - 1, 1).getDay() + 6) % 7;
+            let totalDays = new Date(calYear, calMonth, 0).getDate();
+            let prevTotalDays = new Date(calYear, calMonth - 1, 0).getDate();
             let now = new Date();
 
             for (let i = firstDayIndex - 1; i >= 0; i--) {
                 let d = prevTotalDays - i;
-                let prevM = month === 1 ? 12 : month - 1;
-                let prevY = month === 1 ? year - 1 : year;
+                let prevM = calMonth === 1 ? 12 : calMonth - 1;
+                let prevY = calMonth === 1 ? calYear - 1 : calYear;
                 let colIdx = (firstDayIndex - 1 - i) % 7;
                 createDayCell(calFrame, d, prevY, prevM, true, false, colIdx >= 5);
             }
 
             for (let d = 1; d <= totalDays; d++) {
                 let colIdx = (firstDayIndex + d - 1) % 7;
-                let isToday = (d === now.getDate() && month === now.getMonth() + 1 && year === now.getFullYear());
-                createDayCell(calFrame, d, year, month, false, isToday, colIdx >= 5);
+                let isToday = (d === now.getDate() && calMonth === now.getMonth() + 1 && calYear === now.getFullYear());
+                createDayCell(calFrame, d, calYear, calMonth, false, isToday, colIdx >= 5);
             }
 
             let remainingCells = 42 - (firstDayIndex + totalDays);
             for (let d = 1; d <= remainingCells; d++) {
-                let nextM = month === 12 ? 1 : month + 1;
-                let nextY = month === 12 ? year + 1 : year;
+                let nextM = calMonth === 12 ? 1 : calMonth + 1;
+                let nextY = calMonth === 12 ? calYear + 1 : calYear;
                 let colIdx = (firstDayIndex + totalDays + d - 1) % 7;
                 createDayCell(calFrame, d, nextY, nextM, true, false, colIdx >= 5);
             }
-            
+
             if (document.getElementById('table-modal').style.display === 'flex') {
                 loadTableData();
             }
@@ -767,11 +982,11 @@
             if (isOther) classes.push('other-month');
             else if (isToday) classes.push('today');
             else if (isWeekend) classes.push('weekend');
-            
+
             cell.className = classes.join(' ');
-            
+
             let dateStr = `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            let noteInfo = db.notes[dateStr];
+            let noteInfo = calDb.notes[dateStr];
             let hasNote = false;
             let noteText = "";
             let dotColor = "#00E676";
@@ -787,37 +1002,37 @@
                 }
             }
 
-            if (settings.note_display_mode === "Текст заметки" && hasNote && !isOther) {
+            if (calSettings.note_display_mode === "Текст заметки" && hasNote && !isOther) {
                 cell.innerHTML = `
                     <div>${day}</div>
-                    <div style="font-size:${settings.note_font_size}px; font-weight:bold; color:${dotColor}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:95%;">${noteText}</div>
+                    <div style="font-size:${calSettings.note_font_size}px; font-weight:bold; color:${dotColor}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; width:95%; text-align:center;">${noteText}</div>
                 `;
             } else {
                 cell.innerText = day;
-                if (hasNote && settings.note_display_mode === "Цветные точки") {
+                if (hasNote && calSettings.note_display_mode === "Цветные точки") {
                     let canvas = document.createElement('canvas');
-                    let sz = settings.dot_size + 4;
+                    let sz = calSettings.dot_size + 4;
                     canvas.width = sz;
                     canvas.height = sz;
                     canvas.style.position = 'absolute';
                     canvas.style.bottom = '3px';
                     canvas.style.left = '50%';
                     canvas.style.transform = 'translateX(-50%)';
-                    
+
                     let ctx = canvas.getContext('2d');
-                    let r = settings.dot_size / 2;
+                    let r = calSettings.dot_size / 2;
                     let cx = sz / 2, cy = sz / 2;
-                    
+
                     ctx.beginPath();
                     ctx.arc(cx, cy, r, 0, 2 * Math.PI);
                     ctx.fillStyle = dotColor;
                     ctx.fill();
-                    if (settings.dot_relief_sunken > 0) {
-                        ctx.lineWidth = settings.dot_relief_sunken;
+                    if (calSettings.dot_relief_sunken > 0) {
+                        ctx.lineWidth = calSettings.dot_relief_sunken;
                         ctx.strokeStyle = "rgba(0,0,0,0.2)";
                         ctx.stroke();
                     }
-                    if (settings.dot_3d_style === "Сфера с бликом" && settings.dot_relief_raised > 0) {
+                    if (calSettings.dot_3d_style === "Сфера с бликом" && calSettings.dot_relief_raised > 0) {
                         ctx.beginPath();
                         ctx.arc(cx - r/3, cy - r/3, r/3, 0, 2 * Math.PI);
                         ctx.fillStyle = "#ffffff";
@@ -832,21 +1047,21 @@
         }
 
         function prevMonth() {
-            month--;
-            if (month < 1) { month = 12; year--; }
+            calMonth--;
+            if (calMonth < 1) { calMonth = 12; calYear--; }
             renderCalendar();
         }
 
         function nextMonth() {
-            month++;
-            if (month > 12) { month = 1; year++; }
+            calMonth++;
+            if (calMonth > 12) { calMonth = 1; calYear++; }
             renderCalendar();
         }
 
         function openNoteModal(dateStr) {
             selectedDateStr = dateStr;
             document.getElementById('modal-date-title').innerText = `ЗАМЕТКА НА ${dateStr}`;
-            let noteData = db.notes[dateStr] || { text: '', color: DOT_COLORS[0] };
+            let noteData = calDb.notes[dateStr] || { text: '', color: DOT_COLORS[0] };
             document.getElementById('note-text').value = typeof noteData === 'object' ? noteData.text : noteData;
             selectedColor = typeof noteData === 'object' ? noteData.color : DOT_COLORS[0];
 
@@ -868,26 +1083,213 @@
 
         function closeNoteModal() { document.getElementById('note-modal').style.display = 'none'; }
 
-        function saveNote() {
+        function saveCalendarNote() {
             let text = document.getElementById('note-text').value.trim();
             if (text) {
-                db.notes[selectedDateStr] = { text: text, color: selectedColor };
+                calDb.notes[selectedDateStr] = { text: text, color: selectedColor };
             } else {
-                delete db.notes[selectedDateStr];
+                delete calDb.notes[selectedDateStr];
             }
-            localStorage.setItem('calendar_db', JSON.stringify(db));
+            localStorage.setItem('calendar_db', JSON.stringify(calDb));
             closeNoteModal();
             renderCalendar();
         }
 
+        let rangePickerTarget = 'start';
+        let rangePickerYear = calYear;
+        let rangePickerMonth = calMonth;
+        let rangeStartDateObj = null;
+        let rangeEndDateObj = null;
+
+        function formatShortDDMMYY(dateObj) {
+            if (!dateObj) return '';
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const yy = String(dateObj.getFullYear()).slice(-2);
+            return `${dd}.${mm}.${yy}`;
+        }
+
+        function parseISODateLocal(isoStr) {
+            if (!isoStr) return null;
+            const parts = isoStr.split('-');
+            if (parts.length !== 3) return null;
+            return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        }
+
+        function toISODateLocal(dateObj) {
+            if (!dateObj) return '';
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function loadRangePeriodState() {
+            if (calDb.custom_range_period) {
+                rangeStartDateObj = parseISODateLocal(calDb.custom_range_period.start);
+                rangeEndDateObj = parseISODateLocal(calDb.custom_range_period.end);
+            }
+            updateRangePeriodUI();
+        }
+
+        function saveRangePeriodState() {
+            calDb.custom_range_period = {
+                start: toISODateLocal(rangeStartDateObj),
+                end: toISODateLocal(rangeEndDateObj)
+            };
+            localStorage.setItem('calendar_db', JSON.stringify(calDb));
+        }
+
+        function updateRangePeriodUI() {
+            const startEl = document.getElementById('rangeStartDisplay');
+            const endEl = document.getElementById('rangeEndDisplay');
+            const resEl = document.getElementById('rangeCalcResultDays');
+            if (startEl) startEl.value = formatShortDDMMYY(rangeStartDateObj);
+            if (endEl) endEl.value = formatShortDDMMYY(rangeEndDateObj);
+
+            if (rangeStartDateObj && rangeEndDateObj) {
+                const d1 = new Date(rangeStartDateObj.getFullYear(), rangeStartDateObj.getMonth(), rangeStartDateObj.getDate());
+                const d2 = new Date(rangeEndDateObj.getFullYear(), rangeEndDateObj.getMonth(), rangeEndDateObj.getDate());
+                const diffDays = Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
+                if (resEl) {
+                    if (diffDays >= 1) {
+                        resEl.innerText = diffDays;
+                        resEl.style.color = 'var(--accent-color)';
+                    } else {
+                        resEl.innerText = 'ОШИБКА (<0)';
+                        resEl.style.color = 'var(--reset-color)';
+                    }
+                }
+            } else {
+                if (resEl) {
+                    resEl.innerText = '0';
+                    resEl.style.color = 'var(--accent-color)';
+                }
+            }
+        }
+
+        function clearRangeCalendarDates() {
+            rangeStartDateObj = null;
+            rangeEndDateObj = null;
+            saveRangePeriodState();
+            updateRangePeriodUI();
+        }
+
+        function openRangeCalendarPicker(target) {
+            rangePickerTarget = target;
+            const refDate = (target === 'start' ? rangeStartDateObj : rangeEndDateObj) || new Date(calYear, calMonth - 1, 1);
+            rangePickerYear = refDate.getFullYear();
+            rangePickerMonth = refDate.getMonth() + 1;
+            document.getElementById('range-picker-title').innerText = target === 'start' ? 'ВЫБЕРИТЕ ДАТУ «С»' : 'ВЫБЕРИТЕ ДАТУ «ПО»';
+            renderRangeCalendarPicker();
+            document.getElementById('range-cal-picker-modal').style.display = 'flex';
+        }
+
+        function closeRangeCalendarPicker() {
+            document.getElementById('range-cal-picker-modal').style.display = 'none';
+        }
+
+        function rangePickerPrevMonth() {
+            rangePickerMonth--;
+            if (rangePickerMonth < 1) { rangePickerMonth = 12; rangePickerYear--; }
+            renderRangeCalendarPicker();
+        }
+
+        function rangePickerNextMonth() {
+            rangePickerMonth++;
+            if (rangePickerMonth > 12) { rangePickerMonth = 1; rangePickerYear++; }
+            renderRangeCalendarPicker();
+        }
+
+        function renderRangeCalendarPicker() {
+            document.getElementById('range-picker-header-label').innerText = `${DISPLAY_MONTHS[rangePickerMonth - 1]} ${rangePickerYear}`;
+            const grid = document.getElementById('range-picker-grid');
+            grid.innerHTML = '';
+
+            const daysOfWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+            daysOfWeek.forEach(d => {
+                const div = document.createElement('div');
+                div.className = 'cal-header-cell';
+                div.style.padding = '5px 0';
+                div.style.fontSize = '11px';
+                div.innerText = d;
+                grid.appendChild(div);
+            });
+
+            const firstDayIndex = (new Date(rangePickerYear, rangePickerMonth - 1, 1).getDay() + 6) % 7;
+            const totalDays = new Date(rangePickerYear, rangePickerMonth, 0).getDate();
+            const prevTotalDays = new Date(rangePickerYear, rangePickerMonth - 1, 0).getDate();
+            const now = new Date();
+
+            const createPickerCell = (day, y, m, isOther, isWeekend) => {
+                const cell = document.createElement('div');
+                const classes = ['cal-day-cell'];
+                const isToday = (day === now.getDate() && m === now.getMonth() + 1 && y === now.getFullYear());
+                if (isOther) classes.push('other-month');
+                else if (isToday) classes.push('today');
+                else if (isWeekend) classes.push('weekend');
+
+                const cellDate = new Date(y, m - 1, day);
+                const isSelectedStart = rangeStartDateObj && cellDate.getTime() === new Date(rangeStartDateObj.getFullYear(), rangeStartDateObj.getMonth(), rangeStartDateObj.getDate()).getTime();
+                const isSelectedEnd = rangeEndDateObj && cellDate.getTime() === new Date(rangeEndDateObj.getFullYear(), rangeEndDateObj.getMonth(), rangeEndDateObj.getDate()).getTime();
+
+                cell.className = classes.join(' ');
+                cell.style.fontSize = '13px';
+                cell.innerText = day;
+
+                if (isSelectedStart || isSelectedEnd) {
+                    cell.style.outline = '2px solid var(--accent-color)';
+                    cell.style.fontWeight = '900';
+                }
+
+                cell.onclick = () => {
+                    if (rangePickerTarget === 'start') {
+                        rangeStartDateObj = cellDate;
+                        if (rangeEndDateObj && rangeStartDateObj > rangeEndDateObj) {
+                            rangeEndDateObj = null;
+                        }
+                    } else {
+                        rangeEndDateObj = cellDate;
+                    }
+                    saveRangePeriodState();
+                    updateRangePeriodUI();
+                    closeRangeCalendarPicker();
+                };
+                grid.appendChild(cell);
+            };
+
+            for (let i = firstDayIndex - 1; i >= 0; i--) {
+                const d = prevTotalDays - i;
+                const prevM = rangePickerMonth === 1 ? 12 : rangePickerMonth - 1;
+                const prevY = rangePickerMonth === 1 ? rangePickerYear - 1 : rangePickerYear;
+                const colIdx = (firstDayIndex - 1 - i) % 7;
+                createPickerCell(d, prevY, prevM, true, colIdx >= 5);
+            }
+
+            for (let d = 1; d <= totalDays; d++) {
+                const colIdx = (firstDayIndex + d - 1) % 7;
+                createPickerCell(d, rangePickerYear, rangePickerMonth, false, colIdx >= 5);
+            }
+
+            const remainingCells = 42 - (firstDayIndex + totalDays);
+            for (let d = 1; d <= remainingCells; d++) {
+                const nextM = rangePickerMonth === 12 ? 1 : rangePickerMonth + 1;
+                const nextY = rangePickerMonth === 12 ? rangePickerYear + 1 : rangePickerYear;
+                const colIdx = (firstDayIndex + totalDays + d - 1) % 7;
+                createPickerCell(d, nextY, nextM, true, colIdx >= 5);
+            }
+        }
+
         function openTableModal() {
-            document.getElementById('table-modal-year-title').innerText = `${year} ГОД`;
+            document.getElementById('table-modal-year-title').innerText = `${calYear} ГОД`;
+            loadRangePeriodState();
             loadTableData();
             highlightActiveTableRow();
             document.getElementById('table-modal').style.display = 'flex';
         }
 
         function closeTableModal() {
+            collectTableInputs();
             document.getElementById('table-modal').style.display = 'none';
         }
 
@@ -903,81 +1305,106 @@
         }
 
         function collectTableInputs() {
-            let yearStr = year.toString();
-            if (!db.table_ranges[yearStr]) db.table_ranges[yearStr] = {};
+            let yearStr = calYear.toString();
+            if (!calDb.table_ranges[yearStr]) calDb.table_ranges[yearStr] = {};
 
             for (let i = 1; i <= 12; i++) {
-                let f1 = document.getElementById(`f1_${i}`).value.trim();
-                let t1 = document.getElementById(`t1_${i}`).value.trim();
-                let f2 = document.getElementById(`f2_${i}`).value.trim();
-                let t2 = document.getElementById(`t2_${i}`).value.trim();
+                let f1El = document.getElementById(`f1_${i}`);
+                let t1El = document.getElementById(`t1_${i}`);
+                let f2El = document.getElementById(`f2_${i}`);
+                let t2El = document.getElementById(`t2_${i}`);
+
+                if (!f1El) continue;
+
+                let f1 = f1El.value.trim();
+                let t1 = t1El.value.trim();
+                let f2 = f2El.value.trim();
+                let t2 = t2El.value.trim();
 
                 if (f1 || t1 || f2 || t2) {
-                    db.table_ranges[yearStr][i] = { from1: f1, to1: t1, from2: f2, to2: t2 };
+                    calDb.table_ranges[yearStr][i] = { from1: f1, to1: t1, from2: f2, to2: t2 };
                 } else {
-                    delete db.table_ranges[yearStr][i];
+                    delete calDb.table_ranges[yearStr][i];
                 }
             }
-            localStorage.setItem('calendar_db', JSON.stringify(db));
+            localStorage.setItem('calendar_db', JSON.stringify(calDb));
         }
 
         function updateTableCalculations() {
-            let yearStr = year.toString();
-            let yearData = db.table_ranges[yearStr] || {};
             let totalYear = 0;
 
             for (let i = 1; i <= 12; i++) {
-                let mData = yearData[i] || {};
-                let monthSum = calcMonthDays(i, mData.from1, mData.to1, mData.from2, mData.to2);
-                document.getElementById(`res_${i}`).innerText = monthSum > 0 ? monthSum : '';
+                let f1 = document.getElementById(`f1_${i}`)?.value.trim() || '';
+                let t1 = document.getElementById(`t1_${i}`)?.value.trim() || '';
+                let f2 = document.getElementById(`f2_${i}`)?.value.trim() || '';
+                let t2 = document.getElementById(`t2_${i}`)?.value.trim() || '';
+
+                let monthSum = calcMonthDays(i, f1, t1, f2, t2);
+                let resCell = document.getElementById(`res_${i}`);
+                if (resCell) {
+                    resCell.innerText = monthSum > 0 ? monthSum : '0';
+                    resCell.style.color = 'var(--table-result-font-color)';
+                }
                 totalYear += monthSum;
             }
 
-            document.getElementById('total-year-days').innerText = totalYear;
+            let totalYearEl = document.getElementById('total-year-days');
+            if (totalYearEl) {
+                totalYearEl.innerText = totalYear;
+                totalYearEl.style.color = 'var(--table-total-font-color)';
+            }
             calcAllTime();
         }
 
         function calcMonthDays(m, f1, t1, f2, t2) {
             let sum = 0;
             if (f1 && t1) {
-                let d1 = new Date(year, m - 1, parseInt(f1));
-                let d2 = new Date(year, m - 1, parseInt(t1));
+                let d1 = new Date(calYear, m - 1, parseInt(f1));
+                let d2 = new Date(calYear, m - 1, parseInt(t1));
                 if (d1 <= d2) sum += Math.round((d2 - d1) / (1000 * 60 * 60 * 24)) + 1;
             }
             if (f2 && t2) {
-                let d3 = new Date(year, m - 1, parseInt(f2));
-                let d4 = new Date(year, m - 1, parseInt(t2));
+                let d3 = new Date(calYear, m - 1, parseInt(f2));
+                let d4 = new Date(calYear, m - 1, parseInt(t2));
                 if (d3 <= d4) sum += Math.round((d4 - d3) / (1000 * 60 * 60 * 24)) + 1;
             }
             return sum;
         }
 
         function loadTableData() {
-            let yearStr = year.toString();
-            let yearData = db.table_ranges[yearStr] || {};
+            let yearStr = calYear.toString();
+            let yearData = calDb.table_ranges[yearStr] || {};
             for (let i = 1; i <= 12; i++) {
                 let mData = yearData[i] || {};
-                document.getElementById(`f1_${i}`).value = mData.from1 || '';
-                document.getElementById(`t1_${i}`).value = mData.to1 || '';
-                document.getElementById(`f2_${i}`).value = mData.from2 || '';
-                document.getElementById(`t2_${i}`).value = mData.to2 || '';
+                let f1 = document.getElementById(`f1_${i}`);
+                let t1 = document.getElementById(`t1_${i}`);
+                let f2 = document.getElementById(`f2_${i}`);
+                let t2 = document.getElementById(`t2_${i}`);
+                if (f1) f1.value = mData.from1 || '';
+                if (t1) t1.value = mData.to1 || '';
+                if (f2) f2.value = mData.from2 || '';
+                if (t2) t2.value = mData.to2 || '';
             }
             updateTableCalculations();
         }
 
         function calcAllTime() {
             let allTime = 0;
-            for (let yStr in db.table_ranges) {
+            for (let yStr in calDb.table_ranges) {
                 let yVal = parseInt(yStr);
-                for (let mStr in db.table_ranges[yStr]) {
+                for (let mStr in calDb.table_ranges[yStr]) {
                     let mVal = parseInt(mStr);
-                    let r = db.table_ranges[yStr][mStr];
+                    let r = calDb.table_ranges[yStr][mStr];
                     if (r) {
                         allTime += calcMonthDaysForYear(yVal, mVal, r.from1, r.to1, r.from2, r.to2);
                     }
                 }
             }
-            document.getElementById('total-all-days').innerText = allTime;
+            let totalAll = document.getElementById('total-all-days');
+            if (totalAll) {
+                totalAll.innerText = allTime;
+                totalAll.style.color = 'var(--accent-color)';
+            }
         }
 
         function calcMonthDaysForYear(y, m, f1, t1, f2, t2) {
@@ -998,120 +1425,122 @@
         function highlightActiveTableRow() {
             for (let i = 1; i <= 12; i++) {
                 let row = document.getElementById(`row-month-${i}`);
-                if (i === month) row.classList.add('highlight-row');
-                else row.classList.remove('highlight-row');
+                if (row) {
+                    if (i === calMonth) row.classList.add('highlight-row');
+                    else row.classList.remove('highlight-row');
+                }
             }
         }
 
-        function clearMonth() {
-            if (!confirm(`Удалить все заметки за ${DISPLAY_MONTHS[month-1]} ${year}?`)) return;
-            let prefix = `${year}-${String(month).padStart(2, '0')}-`;
-            for (let k in db.notes) {
-                if (k.startsWith(prefix)) delete db.notes[k];
+        function clearCalendarMonth() {
+            if (!confirm(`Удалить все заметки за ${DISPLAY_MONTHS[calMonth-1]} ${calYear}?`)) return;
+            let prefix = `${calYear}-${String(calMonth).padStart(2, '0')}-`;
+            for (let k in calDb.notes) {
+                if (k.startsWith(prefix)) delete calDb.notes[k];
             }
-            localStorage.setItem('calendar_db', JSON.stringify(db));
+            localStorage.setItem('calendar_db', JSON.stringify(calDb));
             renderCalendar();
         }
 
-        function getFullExportPayload() {
+        function openExportModal() {
             collectTableInputs();
-            return {
-                calendar_db: db,
-                calendar_settings: settings,
-                table_settings: tableSettings
-            };
-        }
-
-        function exportData() {
-            let payload = getFullExportPayload();
-            let jsonStr = JSON.stringify(payload, null, 4);
-            document.getElementById('export-text-area').value = jsonStr;
             document.getElementById('export-modal').style.display = 'flex';
         }
 
-        function downloadBackupFile() {
-            let payload = getFullExportPayload();
-            let jsonStr = JSON.stringify(payload, null, 4);
-            let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
-            let url = URL.createObjectURL(blob);
-            
-            let dlAnchor = document.createElement('a');
-            dlAnchor.href = url;
-            dlAnchor.download = "calendar_backup.json";
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            
-            setTimeout(() => {
-                document.body.removeChild(dlAnchor);
-                URL.revokeObjectURL(url);
-            }, 200);
+        function closeExportModal() { document.getElementById('export-modal').style.display = 'none'; }
+
+        function getExportPayloadString() {
+            let payload = { calendar_db: calDb, calendar_settings: calSettings, table_settings: tableSettings };
+            return JSON.stringify(payload, null, 4);
         }
 
-        function copyExportText() {
-            let textArea = document.getElementById('export-text-area');
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
+        function exportAsFile() {
             try {
-                let success = document.execCommand('copy');
-                if (success) {
-                    alert("Резервная копия скопирована в буфер обмена!");
-                } else {
-                    alert("Не удалось скопировать автоматически. Выделите текст в поле выше и скопируйте вручную.");
-                }
-            } catch (err) {
-                alert("Не удалось скопировать автоматически. Выделите текст в поле выше и скопируйте вручную.");
+                let jsonStr = getExportPayloadString();
+                let blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+                let url = URL.createObjectURL(blob);
+                let dlAnchor = document.createElement('a');
+                dlAnchor.href = url;
+                dlAnchor.download = `calendar_backup_${calYear}.json`;
+                document.body.appendChild(dlAnchor);
+                dlAnchor.click();
+                setTimeout(() => { document.body.removeChild(dlAnchor); URL.revokeObjectURL(url); }, 500);
+                closeExportModal();
+            } catch(e) {
+                alert("Ошибка сохранения файла.");
             }
         }
 
-        function closeExportModal() {
-            document.getElementById('export-modal').style.display = 'none';
+        function exportAsClipboard() {
+            let jsonStr = getExportPayloadString();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(jsonStr).then(() => {
+                    alert("Все данные успешно скопированы в буфер обмена!");
+                    closeExportModal();
+                }).catch(err => { fallbackCopyTextToClipboard(jsonStr); });
+            } else {
+                fallbackCopyTextToClipboard(jsonStr);
+            }
         }
 
-        function importDataTrigger() { document.getElementById('import-file').click(); }
-        
-        function importData(e) {
+        function fallbackCopyTextToClipboard(text) {
+            let textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                let successful = document.execCommand('copy');
+                if (successful) alert("Данные скопированы в буфер обмена!");
+                else alert("Не удалось скопировать.");
+            } catch (err) { alert("Ошибка копирования."); }
+            document.body.removeChild(textArea);
+            closeExportModal();
+        }
+
+        function importCalendarDataTrigger() { document.getElementById('cal-import-file').click(); }
+
+        function importCalendarData(e) {
             let file = e.target.files[0];
             if (!file) return;
             let reader = new FileReader();
             reader.onload = function(event) {
                 try {
                     let imported = JSON.parse(event.target.result);
-                    
                     if (imported.calendar_db) {
-                        db = imported.calendar_db;
+                        calDb = imported.calendar_db;
                     } else if (imported.notes || imported.table_ranges) {
-                        db = imported;
+                        calDb = imported;
                     }
-
-                    if (!db.notes) db.notes = {};
-                    if (!db.table_ranges) db.table_ranges = {};
-
-                    localStorage.setItem('calendar_db', JSON.stringify(db));
+                    if (!calDb.notes) calDb.notes = {};
+                    if (!calDb.table_ranges) calDb.table_ranges = {};
+                    localStorage.setItem('calendar_db', JSON.stringify(calDb));
 
                     if (imported.calendar_settings) {
-                        settings = imported.calendar_settings;
-                        localStorage.setItem('calendar_settings', JSON.stringify(settings));
+                        calSettings = Object.assign({}, settings.theme === 'dark' ? darkCalDefaults : lightCalDefaults, imported.calendar_settings);
+                        localStorage.setItem('calendar_settings_' + settings.theme, JSON.stringify(calSettings));
                     }
-
                     if (imported.table_settings) {
-                        tableSettings = imported.table_settings;
-                        localStorage.setItem('table_settings', JSON.stringify(tableSettings));
+                        tableSettings = Object.assign({}, settings.theme === 'dark' ? darkTableDefaults : lightTableDefaults, imported.table_settings);
+                        localStorage.setItem('table_settings_' + settings.theme, JSON.stringify(tableSettings));
                     }
-
                     applySettings();
                     renderCalendar();
                     calcAllTime();
                     loadTableData();
-                    alert("Все данные и настройки успешно импортированы!");
-                } catch(err) { alert("Ошибка чтения файла! Неверный формат JSON."); }
+                    alert("Данные и настройки успешно импортированы!");
+                } catch(err) { alert("Ошибка чтения файла!"); }
             };
             reader.readAsText(file);
         }
 
-        function openSettings() {
+        function openSettingsModal() {
             let container = document.getElementById('settings-controls');
             container.innerHTML = '';
-            
             let items = [
                 { label: "Общий фон приложения", cell: "bg_main" },
                 { label: "Шрифт месяца", sz: "month_font_size", col: "month_font_color", b: "month_font_weight", cell: "month_cell_color" },
@@ -1119,32 +1548,40 @@
                 { label: "Шрифт чисел календаря", sz: "day_font_size", col: "day_font_color", b: "day_font_weight", cell: "day_cell_color" },
                 { label: "Шрифт текущего дня", sz: "today_font_size", col: "today_font_color", b: "today_font_weight", cell: "today_cell_color" },
                 { label: "Шрифт чужих дней", sz: "other_day_font_size", col: "other_day_font_color", b: "other_day_font_weight", cell: "other_cell_color" },
-                { label: "Выходные дни (суббота/воскресенье)", col: "weekend_font_color", cell: "weekend_cell_color" }
+                { label: "Выходные дни", col: "weekend_font_color", cell: "weekend_cell_color" }
             ];
 
             items.forEach(item => {
                 let div = document.createElement('div');
                 div.className = "modal-item-card";
-                div.innerHTML = `<b style="font-size:11px; color:#2d3748;">${item.label}</b>`;
-                
+                div.innerHTML = `<b style="font-size:11px; color:var(--text-color);">${item.label}</b>`;
                 if (item.sz) {
                     div.innerHTML += `
                         <div style="display:flex; gap:6px; align-items:center; font-size:11px; flex-wrap:wrap;">
-                            Размер: <input type="number" class="modal-input" id="st_${item.sz}" value="${settings[item.sz]}" style="width:45px;">
-                            Жирный: <input type="checkbox" id="st_${item.b}" ${settings[item.b] ? 'checked' : ''}>
-                            Цвет: <input type="text" class="modal-input" id="st_${item.col}" value="${settings[item.col]}" style="width:65px;">
-                            Фон: <input type="text" class="modal-input" id="st_${item.cell}" value="${settings[item.cell]}" style="width:65px;">
+                            Размер: <input type="number" class="modal-input" id="st_${item.sz}" value="${calSettings[item.sz]}" style="width:48px;">
+                            Жирный: <input type="checkbox" id="st_${item.b}" ${calSettings[item.b] ? 'checked' : ''}>
+                            Цвет: <input type="color" class="color-swatch-input" value="${calSettings[item.col]}" oninput="document.getElementById('st_${item.col}').value = this.value">
+                            <input type="text" class="modal-input" id="st_${item.col}" value="${calSettings[item.col]}" style="width:68px;">
+                            Фон: <input type="color" class="color-swatch-input" value="${calSettings[item.cell]}" oninput="document.getElementById('st_${item.cell}').value = this.value">
+                            <input type="text" class="modal-input" id="st_${item.cell}" value="${calSettings[item.cell]}" style="width:68px;">
                         </div>
                     `;
                 } else if (item.col && item.cell) {
                     div.innerHTML += `
                         <div style="display:flex; gap:6px; align-items:center; font-size:11px; flex-wrap:wrap;">
-                            Цвет текста: <input type="text" class="modal-input" id="st_${item.col}" value="${settings[item.col]}" style="width:75px;">
-                            Цвет фона: <input type="text" class="modal-input" id="st_${item.cell}" value="${settings[item.cell]}" style="width:75px;">
+                            Текст: <input type="color" class="color-swatch-input" value="${calSettings[item.col]}" oninput="document.getElementById('st_${item.col}').value = this.value">
+                            <input type="text" class="modal-input" id="st_${item.col}" value="${calSettings[item.col]}" style="width:72px;">
+                            Фон: <input type="color" class="color-swatch-input" value="${calSettings[item.cell]}" oninput="document.getElementById('st_${item.cell}').value = this.value">
+                            <input type="text" class="modal-input" id="st_${item.cell}" value="${calSettings[item.cell]}" style="width:72px;">
                         </div>
                     `;
                 } else {
-                    div.innerHTML += `<div style="font-size:11px;">HEX цвет: <input type="text" class="modal-input" id="st_${item.cell}" value="${settings[item.cell]}" style="width:85px;"></div>`;
+                    div.innerHTML += `
+                        <div style="display:flex; gap:6px; align-items:center; font-size:11px;">
+                            Цвет фона: <input type="color" class="color-swatch-input" value="${calSettings[item.cell]}" oninput="document.getElementById('st_${item.cell}').value = this.value">
+                            <input type="text" class="modal-input" id="st_${item.cell}" value="${calSettings[item.cell]}" style="width:85px;">
+                        </div>
+                    `;
                 }
                 container.appendChild(div);
             });
@@ -1152,11 +1589,11 @@
             let dotDiv = document.createElement('div');
             dotDiv.className = "modal-item-card";
             dotDiv.innerHTML = `
-                <b style="font-size:11px; color:#2d3748;">Параметры заметок на календаре</b>
+                <b style="font-size:11px; color:var(--text-color);">Параметры заметок на календаре</b>
                 <div style="display:flex; flex-direction:column; gap:6px; font-size:11px; margin-top:4px;">
-                    <div>Режим: <select class="modal-input" id="st_note_display_mode"><option ${settings.note_display_mode==="Цветные точки"?"selected":""}>Цветные точки</option><option ${settings.note_display_mode==="Текст заметки"?"selected":""}>Текст заметки</option></select></div>
-                    <div>Размер точки: <input type="number" class="modal-input" id="st_dot_size" value="${settings.dot_size}" style="width:50px;"></div>
-                    <div>Шрифт текста: <input type="number" class="modal-input" id="st_note_font_size" value="${settings.note_font_size}" style="width:50px;"></div>
+                    <div>Режим: <select class="modal-input" id="st_note_display_mode" style="width:auto;"><option ${calSettings.note_display_mode==="Цветные точки"?"selected":""}>Цветные точки</option><option ${calSettings.note_display_mode==="Текст заметки"?"selected":""}>Текст заметки</option></select></div>
+                    <div>Размер точки: <input type="number" class="modal-input" id="st_dot_size" value="${calSettings.dot_size}" style="width:55px;"></div>
+                    <div>Шрифт текста: <input type="number" class="modal-input" id="st_note_font_size" value="${calSettings.note_font_size}" style="width:55px;"></div>
                 </div>
             `;
             container.appendChild(dotDiv);
@@ -1164,9 +1601,18 @@
             document.getElementById('settings-modal').style.display = 'flex';
         }
 
-        function closeSettings() { document.getElementById('settings-modal').style.display = 'none'; }
+        function closeCalendarSettingsModal() { document.getElementById('settings-modal').style.display = 'none'; }
 
-        function saveSettings() {
+        function resetCalendarSettings() {
+            if (!confirm('Сбросить настройки календаря для текущей темы по умолчанию?')) return;
+            localStorage.removeItem('calendar_settings_' + settings.theme);
+            calSettings = getStoredCalendarSettings(settings.theme);
+            closeCalendarSettingsModal();
+            applySettings();
+            renderCalendar();
+        }
+
+        function saveCalendarSettings() {
             let keys = [
                 "bg_main",
                 "month_font_size", "month_font_color", "month_font_weight", "month_cell_color",
@@ -1177,58 +1623,60 @@
                 "weekend_cell_color", "weekend_font_color",
                 "dot_size", "note_font_size"
             ];
-
             keys.forEach(key => {
                 let el = document.getElementById(`st_${key}`);
                 if (el) {
-                    if (key.includes('weight')) settings[key] = el.checked;
-                    else if (key.includes('size')) settings[key] = parseInt(el.value) || 12;
-                    else settings[key] = el.value;
+                    if (key.includes('weight')) calSettings[key] = el.checked;
+                    else if (key.includes('size')) calSettings[key] = parseInt(el.value, 10) || 12;
+                    else calSettings[key] = el.value.trim();
                 }
             });
-
             let modeEl = document.getElementById('st_note_display_mode');
-            if (modeEl) settings.note_display_mode = modeEl.value;
+            if (modeEl) calSettings.note_display_mode = modeEl.value;
 
-            localStorage.setItem('calendar_settings', JSON.stringify(settings));
-            closeSettings();
+            localStorage.setItem('calendar_settings_' + settings.theme, JSON.stringify(calSettings));
+            closeCalendarSettingsModal();
+            applySettings();
             renderCalendar();
         }
 
         function openTableSettings() {
             let container = document.getElementById('table-settings-controls');
             container.innerHTML = '';
-            
             let items = [
                 { label: "Фон контейнера таблицы", cell: "table_bg" },
-                { label: "Шапка таблицы (заголовки)", sz: "table_header_font_size", col: "table_header_font_color", b: "table_header_font_weight", cell: "table_header_bg" },
-                { label: "Ячейки месяцев (левый столбец)", sz: "table_month_font_size", col: "table_month_font_color", b: "table_month_font_weight", cell: "table_month_cell_bg" },
-                { label: "Ячейки диапазона дат (ввод)", sz: "table_cell_font_size", col: "table_cell_font_color", b: "table_cell_font_weight", cell: "table_cell_bg" },
-                { label: "Ячейки результатов (ДНЕЙ)", sz: "table_result_font_size", col: "table_result_font_color", b: "table_result_font_weight", cell: "table_result_cell_bg" },
-                { label: "Итоговые строки (ГОД / ВСЕ ВРЕМЯ)", sz: "table_total_font_size", col: "table_total_font_color", b: "table_total_font_weight", cell: "table_total_cell_bg" },
-                { label: "Цвет подсветки текущей строки месяца", cell: "table_highlight_row_bg" }
+                { label: "Шапка таблицы", sz: "table_header_font_size", col: "table_header_font_color", b: "table_header_font_weight", cell: "table_header_bg" },
+                { label: "Ячейки месяцев", sz: "table_month_font_size", col: "table_month_font_color", b: "table_month_font_weight", cell: "table_month_cell_bg" },
+                { label: "Ячейки диапазона дат", sz: "table_cell_font_size", col: "table_cell_font_color", b: "table_cell_font_weight", cell: "table_cell_bg" },
+                { label: "Ячейки результатов", sz: "table_result_font_size", col: "table_result_font_color", b: "table_result_font_weight", cell: "table_result_cell_bg" },
+                { label: "Итоговые строки", sz: "table_total_font_size", col: "table_total_font_color", b: "table_total_font_weight", cell: "table_total_cell_bg" },
+                { label: "Цвет подсветки строки", cell: "table_highlight_row_bg" }
             ];
-
             items.forEach(item => {
                 let div = document.createElement('div');
                 div.className = "modal-item-card";
-                div.innerHTML = `<b style="font-size:11px; color:#2d3748;">${item.label}</b>`;
-                
+                div.innerHTML = `<b style="font-size:11px; color:var(--text-color);">${item.label}</b>`;
                 if (item.sz) {
                     div.innerHTML += `
-                        <div style="display:flex; gap:6px; align-items:center; font-size:11px; flex-wrap:wrap;">
-                            Размер: <input type="number" class="modal-input" id="tst_${item.sz}" value="${tableSettings[item.sz]}" style="width:45px;">
-                            Жирный: <input type="checkbox" id="tst_${item.b}" ${tableSettings[item.b] ? 'checked' : ''}>
-                            Цвет: <input type="text" class="modal-input" id="tst_${item.col}" value="${tableSettings[item.col]}" style="width:65px;">
-                            Фон: <input type="text" class="modal-input" id="tst_${item.cell}" value="${tableSettings[item.cell]}" style="width:65px;">
+                        <div style="display:flex; gap:4px; align-items:center; font-size:11px; flex-wrap:wrap;">
+                            Р-р: <input type="number" class="modal-input" id="tst_${item.sz}" value="${tableSettings[item.sz]}" style="width:45px;">
+                            Жирн: <input type="checkbox" id="tst_${item.b}" ${tableSettings[item.b] ? 'checked' : ''}>
+                            Цвет: <input type="color" class="color-swatch-input" value="${tableSettings[item.col]}" oninput="document.getElementById('tst_${item.col}').value = this.value">
+                            <input type="text" class="modal-input" id="tst_${item.col}" value="${tableSettings[item.col]}" style="width:65px;">
+                            Фон: <input type="color" class="color-swatch-input" value="${tableSettings[item.cell]}" oninput="document.getElementById('tst_${item.cell}').value = this.value">
+                            <input type="text" class="modal-input" id="tst_${item.cell}" value="${tableSettings[item.cell]}" style="width:65px;">
                         </div>
                     `;
                 } else {
-                    div.innerHTML += `<div style="font-size:11px;">HEX цвет: <input type="text" class="modal-input" id="tst_${item.cell}" value="${tableSettings[item.cell]}" style="width:85px;"></div>`;
+                    div.innerHTML += `
+                        <div style="display:flex; gap:6px; align-items:center; font-size:11px;">
+                            HEX: <input type="color" class="color-swatch-input" value="${tableSettings[item.cell]}" oninput="document.getElementById('tst_${item.cell}').value = this.value">
+                            <input type="text" class="modal-input" id="tst_${item.cell}" value="${tableSettings[item.cell]}" style="width:80px;">
+                        </div>
+                    `;
                 }
                 container.appendChild(div);
             });
-
             document.getElementById('table-settings-modal').style.display = 'flex';
         }
 
@@ -1243,24 +1691,20 @@
                 "table_total_cell_bg", "table_total_font_size", "table_total_font_color", "table_total_font_weight",
                 "table_highlight_row_bg"
             ];
-
             keys.forEach(key => {
                 let el = document.getElementById(`tst_${key}`);
                 if (el) {
                     if (key.includes('weight')) tableSettings[key] = el.checked;
-                    else if (key.includes('size')) tableSettings[key] = parseInt(el.value) || 11;
-                    else tableSettings[key] = el.value;
+                    else if (key.includes('size')) tableSettings[key] = parseInt(el.value, 10) || 12;
+                    else tableSettings[key] = el.value.trim();
                 }
             });
-
-            localStorage.setItem('table_settings', JSON.stringify(tableSettings));
+            localStorage.setItem('table_settings_' + settings.theme, JSON.stringify(tableSettings));
             closeTableSettings();
             applySettings();
         }
 
-        initTable();
-        renderCalendar();
-        calcAllTime();
+        init();
     </script>
 </body>
 </html>
